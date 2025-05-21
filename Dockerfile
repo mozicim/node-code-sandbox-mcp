@@ -4,7 +4,7 @@ WORKDIR /app
 
 # 1. Copy package files and tsconfig to install devDependencies (including tsc)
 COPY package*.json tsconfig.json tsconfig.build.json ./
-RUN npm ci
+RUN npm install
 
 # 2. Copy all source (including src/tools/initialize.ts) and compile
 COPY src ./src
@@ -21,7 +21,7 @@ RUN apt-get update && \
 
 # 4. Copy only package files & install production deps
 COPY package*.json ./
-RUN  npm pkg delete scripts.prepare && npm ci --production
+RUN  npm pkg delete scripts.prepare && npm install --production
 
 # 5. Pull in the compiled output from builder
 COPY --from=builder /app/dist ./dist
