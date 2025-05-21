@@ -117,6 +117,7 @@ The project includes a built-in `aiGenerate` tool for text generation using Goog
 - All arguments are validated using Zod schemas for type safety and security.
 
 **How to use:**
+
 - The tool is available as an MCP tool when the server is running.
 - You can call it from any MCP-compatible client by invoking the `ai_generate` tool and passing a prompt (and optionally, model and maxTokens).
 - Example arguments:
@@ -130,6 +131,7 @@ The project includes a built-in `aiGenerate` tool for text generation using Goog
 - The tool will return the generated text or an error message if the Gemini API call fails.
 
 **Use cases:**
+
 - Text generation, summarization, creative writing, code generation, and more—powered by Gemini LLMs.
 
 ---
