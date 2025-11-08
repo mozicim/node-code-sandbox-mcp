@@ -5,6 +5,10 @@
 
 Welcome to the Node Code Sandbox MCP! This repository provides a secure Node.js execution environment tailored for AI applications. It allows coding agents and large language models (LLMs) to run JavaScript dynamically, install NPM packages, and retrieve results. This functionality facilitates code generation, testing, and interactive assistance, all while adhering to the Model Control Protocol (MCP).
 
+<a href="https://glama.ai/mcp/servers/@mozicim/node-code-sandbox-mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@mozicim/node-code-sandbox-mcp/badge" alt="Node Code Sandbox MCP server" />
+</a>
+
 ## Table of Contents
 
 - [Features](#features)
@@ -64,7 +68,7 @@ Now, your Node Code Sandbox MCP is up and running!
 
 ## Usage 📖
 
-Once the server is running, you can start executing JavaScript code. Here’s a simple example:
+Once the server is running, you can start executing JavaScript code. Here's a simple example:
 
 1. Open your browser and navigate to `http://localhost:3000`.
 2. You will see an interface where you can input JavaScript code.
