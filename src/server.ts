@@ -119,6 +119,24 @@ server.tool(
   (await import('./tools/aiGenerate.ts')).default
 );
 
+// Register Cinematic Video Prompt Engineer tool
+server.tool(
+  'cinematic_prompt_engineer',
+  `Expert Cinematic Video Prompt Engineer that analyzes images and generates professional video generation prompts.
+
+  Provide an image via URL (imageUrl) or base64-encoded data (imageBase64). The tool will:
+  1. Deeply analyze the image (subject, atmosphere, lighting, depth, setting)
+  2. Select the 2 most suitable camera movements from a curated list of 38 cinematic movements
+  3. Return a structured response with:
+     - Image Analysis (2-3 sentences)
+     - Option 1 (Main Recommendation): best-fit camera movement with Why, Technique, and ready-to-copy Production Prompt
+     - Option 2 (Dynamic Alternative): alternative camera movement with Why, Technique, and Production Prompt
+
+  Production prompts are optimized for AI video generation tools like Veo, Sora, and Runway.`,
+  (await import('./tools/cinematicPromptEngineer.ts')).argSchema,
+  (await import('./tools/cinematicPromptEngineer.ts')).default
+);
+
 server.resource(
   'file',
   new ResourceTemplate('file://{+filepath}', { list: undefined }),
