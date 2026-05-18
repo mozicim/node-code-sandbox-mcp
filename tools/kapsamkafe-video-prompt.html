@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KapsamKafe · Duvar Yazısı Video Üreteci</title>
+    <style>
+        :root {
+            --coffee-dark:   #1E1208;
+            --coffee-brown:  #3B1F0E;
+            --coffee-medium: #6B3A24;
+            --coffee-light:  #9C6B47;
+            --cream:         #F2E0C8;
+            --warm-white:    #FDF6EC;
+            --chalk:         #EDE8DE;
+            --accent:        #C8853A;
+            --accent-hover:  #A86C28;
+            --text:          #1A0E06;
+            --text-muted:    #7A6050;
+            --border:        #D5B99A;
+            --success:       #4CAF76;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: var(--coffee-dark);
+            color: var(--text);
+            min-height: 100vh;
+            background-image:
+                radial-gradient(ellipse at 20% 50%, rgba(107,58,36,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(200,133,58,0.08) 0%, transparent 50%);
+        }
+
+        /* ─── HEADER ─────────────────────────────────── */
+        header {
+            background: linear-gradient(135deg, var(--coffee-brown) 0%, var(--coffee-dark) 100%);
+            border-bottom: 2px solid var(--coffee-medium);
+            padding: 28px 40px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 20px,
+                rgba(255,255,255,0.012) 20px,
+                rgba(255,255,255,0.012) 40px
+            );
+        }
+        .brand {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .brand-icon {
+            font-size: 38px;
+            filter: drop-shadow(0 2px 8px rgba(200,133,58,0.4));
+            animation: steam 3s ease-in-out infinite;
+        }
+        @keyframes steam {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(-4px); }
+        }
+        .brand-text h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: var(--cream);
+            text-transform: uppercase;
+            text-shadow: 0 2px 12px rgba(200,133,58,0.5);
+        }
+        .brand-text p {
+            font-size: 11px;
+            color: var(--coffee-light);
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+        .tagline {
+            margin-top: 10px;
+            font-size: 13px;
+            color: rgba(242,224,200,0.55);
+            letter-spacing: 1px;
+            font-style: italic;
+        }
+
+        /* ─── MAIN LAYOUT ─────────────────────────────── */
+        main {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 40px 24px 60px;
+        }
+
+        /* ─── CARD ────────────────────────────────────── */
+        .card {
+            background: var(--warm-white);
+            border-radius: 16px;
+            padding: 36px;
+            box-shadow:
+                0 4px 6px rgba(0,0,0,0.3),
+                0 20px 60px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.6);
+            border: 1px solid var(--border);
+        }
+
+        /* ─── SECTION LABEL ───────────────────────────── */
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--coffee-medium);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ─── INPUT ───────────────────────────────────── */
+        .input-group { margin-bottom: 28px; }
+
+        textarea#sentence {
+            width: 100%;
+            padding: 16px 18px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 17px;
+            font-family: 'Georgia', serif;
+            color: var(--text);
+            background: #fff;
+            resize: vertical;
+            min-height: 90px;
+            line-height: 1.6;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+        textarea#sentence:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(200,133,58,0.15);
+        }
+        textarea#sentence::placeholder { color: #BBA89A; font-style: italic; }
+
+        .char-count {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-align: right;
+            margin-top: 6px;
+        }
+
+        /* ─── STYLE GRID ──────────────────────────────── */
+        .style-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+        @media (max-width: 560px) {
+            .style-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .style-card {
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.18s ease;
+            background: #fff;
+            user-select: none;
+        }
+        .style-card:hover {
+            border-color: var(--accent);
+            background: rgba(200,133,58,0.06);
+            transform: translateY(-1px);
+        }
+        .style-card.selected {
+            border-color: var(--accent);
+            background: rgba(200,133,58,0.1);
+            box-shadow: 0 0 0 3px rgba(200,133,58,0.2);
+        }
+        .style-card input[type=radio] { display: none; }
+        .style-card .style-emoji { font-size: 26px; margin-bottom: 6px; display: block; }
+        .style-card .style-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--coffee-dark);
+            letter-spacing: 0.3px;
+        }
+        .style-card .style-desc {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 3px;
+            font-style: italic;
+        }
+
+        /* ─── TONE SELECTOR ───────────────────────────── */
+        .tone-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+        .tone-btn {
+            padding: 7px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            background: #fff;
+            color: var(--text-muted);
+            transition: all 0.15s;
+            font-family: 'Georgia', serif;
+        }
+        .tone-btn:hover  { border-color: var(--accent); color: var(--coffee-medium); }
+        .tone-btn.active { border-color: var(--accent); background: var(--accent); color: #fff; font-weight: 700; }
+
+        /* ─── GENERATE BUTTON ─────────────────────────── */
+        .btn-generate {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--coffee-medium) 0%, var(--accent) 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: 'Georgia', serif;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            box-shadow: 0 4px 16px rgba(107,58,36,0.35);
+        }
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(107,58,36,0.45);
+        }
+        .btn-generate:active { transform: translateY(0); }
+        .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* ─── OUTPUT ──────────────────────────────────── */
+        #output-section {
+            margin-top: 28px;
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--border), transparent);
+            margin-bottom: 24px;
+        }
+
+        .prompt-box {
+            background: var(--coffee-dark);
+            border: 1px solid var(--coffee-medium);
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            margin-bottom: 12px;
+        }
+        .prompt-label {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--coffee-light);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .prompt-text {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: var(--cream);
+            line-height: 1.7;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: var(--coffee-medium);
+            color: var(--cream);
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all 0.15s;
+        }
+        .copy-btn:hover { background: var(--coffee-light); }
+        .copy-btn.copied { background: var(--success); color: #fff; }
+
+        .style-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(200,133,58,0.12);
+            border: 1px solid rgba(200,133,58,0.3);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 11px;
+            color: var(--coffee-medium);
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .tips {
+            background: rgba(200,133,58,0.06);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            margin-top: 16px;
+        }
+        .tips p {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .tips strong { color: var(--coffee-medium); }
+
+        /* ─── PLATFORM BADGES ─────────────────────────── */
+        .platforms {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .platform-badge {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .pb-runway  { background: #1a1a2e; color: #e94560; }
+        .pb-kling   { background: #0f3460; color: #e94560; }
+        .pb-sora    { background: #1a1a1a; color: #fff; }
+        .pb-pika    { background: #6c3fe0; color: #fff; }
+
+        /* ─── FOOTER ──────────────────────────────────── */
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--coffee-medium);
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand">
+        <span class="brand-icon">☕</span>
+        <div class="brand-text">
+            <h1>KapsamKafe</h1>
+            <p>Duvar Yazısı Video Üreteci</p>
+        </div>
+    </div>
+    <div class="tagline">Cümlenizi girin · Stil seçin · Video promptu üretin</div>
+</header>
+
+<main>
+<div class="card">
+
+    <!-- CÜMLE GİRİŞİ -->
+    <div class="input-group">
+        <div class="section-label">✍️ Cümlenizi Yazın</div>
+        <textarea id="sentence" placeholder="Örn: Bugün güzel bir gün, kahven sıcaksa sorun yok..." maxlength="200"></textarea>
+        <div class="char-count"><span id="charCount">0</span> / 200 karakter</div>
+    </div>
+
+    <!-- DUVAR STİLİ -->
+    <div class="section-label">🎨 Duvar Stili</div>
+    <div class="style-grid" id="styleGrid">
+
+        <label class="style-card selected">
+            <input type="radio" name="wallStyle" value="tahta" checked>
+            <span class="style-emoji">🖊️</span>
+            <div class="style-name">Kara Tahta</div>
+            <div class="style-desc">Tebeşir yazısı</div>
+        </label>
+
+        <label class="style-card">
+            <input type="radio" name="wallStyle" value="tugla">
+            <span class="style-emoji">🧱</span>
+            <div class="style-name">Tuğla Duvar</div>
+            <div class="style-desc">Boyalı el yazısı</div>
+        </label>
+
+        <label class="style-card">
+            <input type="radio" name="wallStyle" value="neon">
+            <span class="style-emoji">💡</span>
+            <div class="style-name">Neon Tabela</div>
+            <div class="style-desc">Parlayan ışık</div>
+        </label>
+
+        <label class="style-card">
+            <input type="radio" name="wallStyle" value="ahsap">
+            <span class="style-emoji">🪵</span>
+            <div class="style-name">Ahşap Levha</div>
+            <div class="style-desc">Oymalı / yazılı</div>
+        </label>
+
+        <label class="style-card">
+            <input type="radio" name="wallStyle" value="sprey">
+            <span class="style-emoji">🎭</span>
+            <div class="style-name">Sprey Grafiti</div>
+            <div class="style-desc">Sokak sanatı</div>
+        </label>
+
+        <label class="style-card">
+            <input type="radio" name="wallStyle" value="vintage">
+            <span class="style-emoji">📜</span>
+            <div class="style-name">Vintage Tabela</div>
+            <div class="style-desc">Eski metal/emaye</div>
+        </label>
+
+    </div>
+
+    <!-- ATMOSFER TONU -->
+    <div class="section-label">🌡️ Atmosfer</div>
+    <div class="tone-row" id="toneRow">
+        <button class="tone-btn active" data-tone="sicak">☕ Sıcak & Samimi</button>
+        <button class="tone-btn" data-tone="huzurlu">🌿 Huzurlu & Sakin</button>
+        <button class="tone-btn" data-tone="nostaljik">📷 Nostaljik</button>
+        <button class="tone-btn" data-tone="modern">✨ Modern & Şık</button>
+        <button class="tone-btn" data-tone="dramatik">🎬 Dramatik</button>
+    </div>
+
+    <!-- OLUŞTUR -->
+    <button class="btn-generate" onclick="generatePrompt()">
+        ☕ Video Promptu Üret
+    </button>
+
+    <!-- ÇIKTI -->
+    <div id="output-section">
+        <div class="divider"></div>
+
+        <div id="style-badge-row"></div>
+
+        <div class="prompt-box" id="promptBoxEN">
+            <div class="prompt-label">🇬🇧 English Prompt (AI Video için)</div>
+            <button class="copy-btn" onclick="copyPrompt('promptEN', this)">Kopyala</button>
+            <div class="prompt-text" id="promptEN"></div>
+        </div>
+
+        <div class="prompt-box" id="promptBoxTR">
+            <div class="prompt-label">🇹🇷 Türkçe Prompt</div>
+            <button class="copy-btn" onclick="copyPrompt('promptTR', this)">Kopyala</button>
+            <div class="prompt-text" id="promptTR"></div>
+        </div>
+
+        <div class="platforms">
+            <span style="font-size:11px;color:var(--text-muted);align-self:center;">Uyumlu:</span>
+            <span class="platform-badge pb-runway">Runway Gen-3</span>
+            <span class="platform-badge pb-kling">Kling AI</span>
+            <span class="platform-badge pb-sora">Sora</span>
+            <span class="platform-badge pb-pika">Pika 2.0</span>
+        </div>
+
+        <div class="tips" id="tipBox"></div>
+    </div>
+
+</div>
+</main>
+
+<footer>KapsamKafe · Duvar Yazısı Video Üreteci · Sadece size özel ☕</footer>
+
+<script>
+/* ─────────────────────────────────────────────────
+   STYLE DEFINITIONS
+───────────────────────────────────────────────── */
+const STYLES = {
+    tahta: {
+        label: '🖊️ Kara Tahta · Tebeşir',
+        en: (txt, tone) => `
+Cinematic short video. Interior of a cozy, warmly lit Istanbul coffee shop called "KapsamKafe". ${TONES[tone].en}
+
+The camera starts with a soft bokeh shot of steaming coffee cups, then slowly pans and pulls back to reveal a large vintage blackboard wall. Written in imperfect, handcrafted white chalk lettering, the following text is clearly legible:
+
+"${txt}"
+
+The chalk letters are slightly uneven, warm and human. Small chalk dust particles float in the air, caught in the warm Edison bulb light streaming from above. The text "${txt}" remains the focal point throughout.
+
+Camera movement: slow, gentle dolly backward reveal. Shallow depth of field. Grain texture. Warm golden hour lighting. 4K cinematic quality. No people in frame.
+        `.trim(),
+        tr: (txt, tone) => `
+Kısa sinematik video. "${txt}" yazısının kara tahta üzerine tebeşirle yazıldığı ${TONES[tone].tr} İstanbul kahvesi "KapsamKafe" iç mekanı.
+
+Kamera önce buğulu kahve fincanlarından başlar, yavaşça geri çekilerek büyük vintage kara tahtayı açığa çıkarır. Tahtada net okunan el yazısıyla: "${txt}"
+
+Işıklandırma: Edison ampullerinin sıcak sarı ışığı. Hafif tahta tozu. 4K sinematik kalite.
+        `.trim(),
+        tip: 'Kara tahta stili için <strong>Runway Gen-3</strong> veya <strong>Kling AI</strong> önerilir. Prompt\'u "Reference motion: slow pull-back" ile başlatın.'
+    },
+
+    tugla: {
+        label: '🧱 Tuğla Duvar · Boya',
+        en: (txt, tone) => `
+Cinematic video. Close-up of a rustic exposed brick wall inside a charming Istanbul café, "KapsamKafe". ${TONES[tone].en}
+
+Painted directly onto the warm terracotta brick wall in flowing hand-lettered white paint, the words read:
+
+"${txt}"
+
+The letters are artfully brushed, slightly imperfect—clearly painted by a human hand. The brick texture shows through the paint. Soft warm side-lighting highlights the texture. The camera slowly tracks across the wall, keeping "${txt}" centered and legible throughout.
+
+Camera: slow horizontal tracking shot. Depth of field blurs café interior behind. Warm ambient light. Film grain. Cinematic 4K.
+        `.trim(),
+        tr: (txt, tone) => `
+Sinematik video. "KapsamKafe" iç mekanında eski tuğla duvar üzerine el yazısıyla boyayla yazılmış: "${txt}"
+
+${TONES[tone].tr} Sıcak yan ışıklandırma. Kamera yavaşça duvarda yatay hareket eder, "${txt}" yazısı her zaman odakta kalır. Film tahıllı görüntü. 4K kalite.
+        `.trim(),
+        tip: 'Tuğla duvar için görseli <strong>referans image</strong> olarak yüklerseniz sonuç çok daha gerçekçi olur. Pika veya Runway önerilir.'
+    },
+
+    neon: {
+        label: '💡 Neon Tabela',
+        en: (txt, tone) => `
+Cinematic video. A glowing neon sign inside KapsamKafe Istanbul café. ${TONES[tone].en}
+
+The neon sign reads: "${txt}"
+
+The letters glow in warm amber / soft white neon light, mounted against a dark exposed brick wall. The neon tubes buzz softly with a slight flicker—authentic vintage neon. The glow reflects off nearby coffee cups and wooden surfaces. Camera slowly pushes in toward the sign. The text "${txt}" pulses softly with warm light throughout the video.
+
+Lighting: neon glow as primary source, deep shadows, moody atmosphere. Bokeh café background. Cinematic 4K. Slight lens flare on neon tubes.
+        `.trim(),
+        tr: (txt, tone) => `
+Sinematik video. KapsamKafe'de neon tabela: "${txt}" yazısı sıcak kehribar/beyaz neon ışığıyla parlıyor. ${TONES[tone].tr} Karanlık tuğla duvar arka planı. Neon ışığın kahve fincanlarına yansıması. Kamera yavaşça yaklaşır. 4K sinematik, hafif lens parlaması.
+        `.trim(),
+        tip: '<strong>Neon efekti</strong> için Runway Gen-3 çok başarılı sonuçlar veriyor. "flickering neon, vintage neon sign" anahtar kelimelerini ekleyin.'
+    },
+
+    ahsap: {
+        label: '🪵 Ahşap Levha',
+        en: (txt, tone) => `
+Cinematic video. KapsamKafe café interior. A large reclaimed wood sign hangs on the wall. ${TONES[tone].en}
+
+Carved or hand-painted in dark ink onto warm weathered wood, the sign reads:
+
+"${txt}"
+
+The wood grain is visible. The letters have depth—carved into the surface or painted with thick brushstrokes. Warm overhead lighting casts gentle shadows that emphasize the texture. The sign sways almost imperceptibly. Camera: gentle zoom-in. The text "${txt}" is the clear focal point.
+
+Material: aged oak or pine, natural wood tones, slight patina. Cinematic 4K. Intimate café atmosphere.
+        `.trim(),
+        tr: (txt, tone) => `
+Sinematik video. KapsamKafe'de duvara asılı eski ahşap levha. Kazınmış ya da el boyasıyla yazılmış: "${txt}" ${TONES[tone].tr} Ahşap dokusu, sıcak üst ışıklandırma. Kamera yavaş zoom. 4K sinematik.
+        `.trim(),
+        tip: 'Ahşap levha için <strong>Kling AI</strong> veya <strong>Sora</strong> önerilir. "reclaimed wood, hand-painted sign" ifadelerini mutlaka ekleyin.'
+    },
+
+    sprey: {
+        label: '🎭 Sprey Grafiti',
+        en: (txt, tone) => `
+Cinematic time-lapse / slow-motion video. KapsamKafe Istanbul. An artistic spray-painted mural being revealed on a wall. ${TONES[tone].en}
+
+The text appears painted with street-art style spray technique on a rough concrete or plaster wall:
+
+"${txt}"
+
+The letters are bold, artistic, slightly distressed—spray paint style with subtle drips and texture. The video begins with the wall empty, then reveals the complete text through a cinematic pan. Warm café lighting softens the graffiti aesthetic. The text "${txt}" is large, prominent and fully readable.
+
+Style: urban art meets café warmth. Cinematic 4K. Cool-to-warm color grade.
+        `.trim(),
+        tr: (txt, tone) => `
+Sinematik video. KapsamKafe beton duvarı üzerinde sprey boya grafiti: "${txt}" ${TONES[tone].tr} Kentsel sanat estetiği. Kamera boş duvardan başlayıp yazıyı açığa çıkaran bir pan yapar. 4K, serin-sıcak renk gradasyonu.
+        `.trim(),
+        tip: '<strong>Grafiti stili</strong> için Pika 2.0 veya Runway önerilir. "spray paint reveal, street art" ekleyebilirsiniz.'
+    },
+
+    vintage: {
+        label: '📜 Vintage Metal Tabela',
+        en: (txt, tone) => `
+Cinematic video. A beautiful vintage enamel or tin sign hanging in KapsamKafe, an atmospheric Istanbul café. ${TONES[tone].en}
+
+The sign features retro hand-lettered typography from the 1950s–60s era. The text on the sign reads:
+
+"${txt}"
+
+The sign has aged patina—slight rust spots, chipped enamel edges, authentic vintage wear. Warm directional lighting creates depth. The camera slowly orbits or tracks across the sign. The text "${txt}" is elegantly legible throughout the video.
+
+Color palette: cream, dark green, warm gold. Sepia-warm cinematic grade. 4K quality. Nostalgic, timeless mood.
+        `.trim(),
+        tr: (txt, tone) => `
+Sinematik video. KapsamKafe'de 1950'ler tarzı vintage emaye tabela. Retro el yazısı tipografisiyle: "${txt}" ${TONES[tone].tr} Hafif paslanmış, çiplenmiş emaye kenarlar. Sıcak ışıklandırma. Krem-koyu yeşil-altın renk paleti. 4K nostaljik sinematik görüntü.
+        `.trim(),
+        tip: '<strong>Vintage tabela</strong> için Kling AI mükemmel sonuçlar üretiyor. "1950s enamel sign, vintage patina" ekleyin.'
+    }
+};
+
+/* ─────────────────────────────────────────────────
+   TONES
+───────────────────────────────────────────────── */
+const TONES = {
+    sicak: {
+        en: 'The mood is warm, intimate, welcoming—like your favorite corner table on a rainy afternoon.',
+        tr: 'Sıcak, samimi, davetkar bir atmosfer. Yağmurlu bir öğleden sonranın favori köşe masası gibi.'
+    },
+    huzurlu: {
+        en: 'The atmosphere is calm, peaceful, meditative—the gentle hum of an afternoon café.',
+        tr: 'Sakin, huzurlu, meditasyona açık bir atmosfer. Öğleden sonra bir kafeye özgü sessiz ritim.'
+    },
+    nostaljik: {
+        en: 'A nostalgic, bittersweet mood—like revisiting a beloved old memory through warm sepia hues.',
+        tr: 'Nostaljik, tatlı-hüzünlü bir atmosfer. Sıcak sepya tonlarında eski bir anıya dönüş gibi.'
+    },
+    modern: {
+        en: 'Sleek, contemporary aesthetic—minimal yet warm, a modern café with personality.',
+        tr: 'Şık, çağdaş estetik. Minimal ama sıcak, kişilikli modern kafe havası.'
+    },
+    dramatik: {
+        en: 'Dramatic, cinematic mood—strong contrast, moody shadows, the café as a stage.',
+        tr: 'Dramatik, sinematik atmosfer. Güçlü kontrast, kaygılı gölgeler, sahne olarak kafe.'
+    }
+};
+
+/* ─────────────────────────────────────────────────
+   STATE
+───────────────────────────────────────────────── */
+let selectedTone = 'sicak';
+
+/* ─────────────────────────────────────────────────
+   INIT
+───────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Char counter
+    const ta = document.getElementById('sentence');
+    const cc = document.getElementById('charCount');
+    ta.addEventListener('input', () => {
+        cc.textContent = ta.value.length;
+    });
+
+    // Style cards
+    document.querySelectorAll('.style-card').forEach(card => {
+        card.addEventListener('click', () => {
+            document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+        });
+    });
+
+    // Tone buttons
+    document.querySelectorAll('.tone-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedTone = btn.dataset.tone;
+        });
+    });
+});
+
+/* ─────────────────────────────────────────────────
+   GENERATE
+───────────────────────────────────────────────── */
+function generatePrompt() {
+    const txt = document.getElementById('sentence').value.trim();
+    if (!txt) {
+        document.getElementById('sentence').focus();
+        document.getElementById('sentence').style.borderColor = '#e74c3c';
+        setTimeout(() => document.getElementById('sentence').style.borderColor = '', 1200);
+        return;
+    }
+
+    const styleKey = document.querySelector('input[name="wallStyle"]:checked').value;
+    const style = STYLES[styleKey];
+    const tone  = selectedTone;
+
+    const promptEN = style.en(txt, tone);
+    const promptTR = style.tr(txt, tone);
+
+    document.getElementById('promptEN').textContent = promptEN;
+    document.getElementById('promptTR').textContent = promptTR;
+
+    // Badge
+    document.getElementById('style-badge-row').innerHTML =
+        `<div class="style-badge">${style.label}</div>`;
+
+    // Tip
+    document.getElementById('tipBox').innerHTML =
+        `<p>💡 <strong>İpucu:</strong> ${style.tip}</p>`;
+
+    // Show
+    const out = document.getElementById('output-section');
+    out.style.display = 'block';
+    out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ─────────────────────────────────────────────────
+   COPY
+───────────────────────────────────────────────── */
+function copyPrompt(id, btn) {
+    const text = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+        const original = btn.textContent;
+        btn.textContent = '✓ Kopyalandı';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = original;
+            btn.classList.remove('copied');
+        }, 2000);
+    });
+}
+</script>
+
+</body>
+</html>
