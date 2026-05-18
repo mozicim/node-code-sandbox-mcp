@@ -12,7 +12,6 @@
             --coffee-light:  #9C6B47;
             --cream:         #F2E0C8;
             --warm-white:    #FDF6EC;
-            --chalk:         #EDE8DE;
             --accent:        #C8853A;
             --accent-hover:  #A86C28;
             --text:          #1A0E06;
@@ -20,9 +19,7 @@
             --border:        #D5B99A;
             --success:       #4CAF76;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
             font-family: 'Georgia', serif;
             background: var(--coffee-dark);
@@ -33,12 +30,11 @@
                 radial-gradient(ellipse at 80% 20%, rgba(200,133,58,0.08) 0%, transparent 50%);
         }
 
-        /* ─── HEADER ─────────────────────────────────── */
+        /* ── HEADER ─────────────────────────────── */
         header {
             background: linear-gradient(135deg, var(--coffee-brown) 0%, var(--coffee-dark) 100%);
             border-bottom: 2px solid var(--coffee-medium);
-            padding: 28px 40px 24px;
-            text-align: center;
+            padding: 24px 32px 20px;
             position: relative;
             overflow: hidden;
         }
@@ -46,22 +42,21 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 20px,
-                rgba(255,255,255,0.012) 20px,
-                rgba(255,255,255,0.012) 40px
-            );
+            background: repeating-linear-gradient(45deg, transparent, transparent 20px,
+                rgba(255,255,255,0.012) 20px, rgba(255,255,255,0.012) 40px);
         }
-        .brand {
+        .header-inner {
             position: relative;
-            display: inline-flex;
+            max-width: 820px;
+            margin: 0 auto;
+            display: flex;
             align-items: center;
-            gap: 14px;
+            justify-content: space-between;
+            gap: 16px;
         }
+        .brand { display: flex; align-items: center; gap: 14px; }
         .brand-icon {
-            font-size: 38px;
+            font-size: 36px;
             filter: drop-shadow(0 2px 8px rgba(200,133,58,0.4));
             animation: steam 3s ease-in-out infinite;
         }
@@ -70,7 +65,7 @@
             50%       { transform: translateY(-4px); }
         }
         .brand-text h1 {
-            font-size: 26px;
+            font-size: 22px;
             font-weight: 700;
             letter-spacing: 4px;
             color: var(--cream);
@@ -78,40 +73,57 @@
             text-shadow: 0 2px 12px rgba(200,133,58,0.5);
         }
         .brand-text p {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--coffee-light);
             letter-spacing: 2.5px;
             text-transform: uppercase;
             margin-top: 2px;
         }
+        .btn-download-html {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(200,133,58,0.18);
+            border: 1.5px solid rgba(200,133,58,0.5);
+            color: var(--cream);
+            border-radius: 8px;
+            padding: 9px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: 'Georgia', serif;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.18s;
+            text-decoration: none;
+        }
+        .btn-download-html:hover {
+            background: rgba(200,133,58,0.32);
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
         .tagline {
+            text-align: center;
             margin-top: 10px;
-            font-size: 13px;
-            color: rgba(242,224,200,0.55);
+            font-size: 12px;
+            color: rgba(242,224,200,0.5);
             letter-spacing: 1px;
             font-style: italic;
+            position: relative;
         }
 
-        /* ─── MAIN LAYOUT ─────────────────────────────── */
-        main {
-            max-width: 820px;
-            margin: 0 auto;
-            padding: 40px 24px 60px;
-        }
+        /* ── MAIN ────────────────────────────────── */
+        main { max-width: 820px; margin: 0 auto; padding: 36px 24px 60px; }
 
-        /* ─── CARD ────────────────────────────────────── */
         .card {
             background: var(--warm-white);
             border-radius: 16px;
-            padding: 36px;
-            box-shadow:
-                0 4px 6px rgba(0,0,0,0.3),
-                0 20px 60px rgba(0,0,0,0.4),
-                inset 0 1px 0 rgba(255,255,255,0.6);
+            padding: 34px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3), 0 20px 60px rgba(0,0,0,0.4),
+                        inset 0 1px 0 rgba(255,255,255,0.6);
             border: 1px solid var(--border);
         }
 
-        /* ─── SECTION LABEL ───────────────────────────── */
         .section-label {
             font-size: 11px;
             font-weight: 700;
@@ -123,19 +135,13 @@
             align-items: center;
             gap: 8px;
         }
-        .section-label::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
+        .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-        /* ─── INPUT ───────────────────────────────────── */
-        .input-group { margin-bottom: 28px; }
-
+        /* ── INPUT ───────────────────────────────── */
+        .input-group { margin-bottom: 26px; }
         textarea#sentence {
             width: 100%;
-            padding: 16px 18px;
+            padding: 15px 17px;
             border: 2px solid var(--border);
             border-radius: 10px;
             font-size: 17px;
@@ -143,7 +149,7 @@
             color: var(--text);
             background: #fff;
             resize: vertical;
-            min-height: 90px;
+            min-height: 88px;
             line-height: 1.6;
             transition: border-color 0.2s, box-shadow 0.2s;
             outline: none;
@@ -153,67 +159,35 @@
             box-shadow: 0 0 0 3px rgba(200,133,58,0.15);
         }
         textarea#sentence::placeholder { color: #BBA89A; font-style: italic; }
+        .char-count { font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 5px; }
 
-        .char-count {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-align: right;
-            margin-top: 6px;
-        }
-
-        /* ─── STYLE GRID ──────────────────────────────── */
+        /* ── STYLE GRID ──────────────────────────── */
         .style-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            margin-bottom: 28px;
+            margin-bottom: 26px;
         }
-        @media (max-width: 560px) {
-            .style-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
+        @media (max-width: 560px) { .style-grid { grid-template-columns: repeat(2, 1fr); } }
         .style-card {
             border: 2px solid var(--border);
             border-radius: 10px;
-            padding: 14px 12px;
+            padding: 13px 10px;
             cursor: pointer;
             text-align: center;
-            transition: all 0.18s ease;
+            transition: all 0.18s;
             background: #fff;
             user-select: none;
         }
-        .style-card:hover {
-            border-color: var(--accent);
-            background: rgba(200,133,58,0.06);
-            transform: translateY(-1px);
-        }
-        .style-card.selected {
-            border-color: var(--accent);
-            background: rgba(200,133,58,0.1);
-            box-shadow: 0 0 0 3px rgba(200,133,58,0.2);
-        }
+        .style-card:hover { border-color: var(--accent); background: rgba(200,133,58,0.06); transform: translateY(-1px); }
+        .style-card.selected { border-color: var(--accent); background: rgba(200,133,58,0.1); box-shadow: 0 0 0 3px rgba(200,133,58,0.2); }
         .style-card input[type=radio] { display: none; }
-        .style-card .style-emoji { font-size: 26px; margin-bottom: 6px; display: block; }
-        .style-card .style-name {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--coffee-dark);
-            letter-spacing: 0.3px;
-        }
-        .style-card .style-desc {
-            font-size: 10px;
-            color: var(--text-muted);
-            margin-top: 3px;
-            font-style: italic;
-        }
+        .style-card .style-emoji { font-size: 24px; margin-bottom: 5px; display: block; }
+        .style-card .style-name { font-size: 12px; font-weight: 700; color: var(--coffee-dark); }
+        .style-card .style-desc { font-size: 10px; color: var(--text-muted); margin-top: 2px; font-style: italic; }
 
-        /* ─── TONE SELECTOR ───────────────────────────── */
-        .tone-row {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 28px;
-        }
+        /* ── TONE ────────────────────────────────── */
+        .tone-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 26px; }
         .tone-btn {
             padding: 7px 14px;
             border: 1.5px solid var(--border);
@@ -228,10 +202,10 @@
         .tone-btn:hover  { border-color: var(--accent); color: var(--coffee-medium); }
         .tone-btn.active { border-color: var(--accent); background: var(--accent); color: #fff; font-weight: 700; }
 
-        /* ─── GENERATE BUTTON ─────────────────────────── */
+        /* ── GENERATE BUTTON ─────────────────────── */
         .btn-generate {
             width: 100%;
-            padding: 16px;
+            padding: 15px;
             background: linear-gradient(135deg, var(--coffee-medium) 0%, var(--accent) 100%);
             color: #fff;
             border: none;
@@ -241,74 +215,27 @@
             font-family: 'Georgia', serif;
             letter-spacing: 1px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
             text-transform: uppercase;
             box-shadow: 0 4px 16px rgba(107,58,36,0.35);
         }
-        .btn-generate:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(107,58,36,0.45);
-        }
+        .btn-generate:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(107,58,36,0.45); }
         .btn-generate:active { transform: translateY(0); }
-        .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-        /* ─── OUTPUT ──────────────────────────────────── */
-        #output-section {
-            margin-top: 28px;
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
+        /* ── OUTPUT ──────────────────────────────── */
+        #output-section { margin-top: 26px; display: none; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
 
-        .divider {
-            height: 1px;
-            background: linear-gradient(to right, transparent, var(--border), transparent);
-            margin-bottom: 24px;
-        }
+        .divider { height: 1px; background: linear-gradient(to right, transparent, var(--border), transparent); margin-bottom: 22px; }
 
-        .prompt-box {
-            background: var(--coffee-dark);
-            border: 1px solid var(--coffee-medium);
-            border-radius: 10px;
-            padding: 20px;
-            position: relative;
-            margin-bottom: 12px;
+        .output-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
         }
-        .prompt-label {
-            font-size: 10px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--coffee-light);
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        .prompt-text {
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            color: var(--cream);
-            line-height: 1.7;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        .copy-btn {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            background: var(--coffee-medium);
-            color: var(--cream);
-            border: none;
-            border-radius: 6px;
-            padding: 6px 12px;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            letter-spacing: 0.5px;
-            transition: all 0.15s;
-        }
-        .copy-btn:hover { background: var(--coffee-light); }
-        .copy-btn.copied { background: var(--success); color: #fff; }
-
         .style-badge {
             display: inline-flex;
             align-items: center;
@@ -320,126 +247,138 @@
             font-size: 11px;
             color: var(--coffee-medium);
             font-weight: 700;
-            margin-bottom: 16px;
+        }
+        .seed-badge {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-style: italic;
+            background: rgba(0,0,0,0.04);
+            padding: 3px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
         }
 
-        .tips {
-            background: rgba(200,133,58,0.06);
-            border-left: 3px solid var(--accent);
-            border-radius: 0 8px 8px 0;
-            padding: 12px 16px;
-            margin-top: 16px;
+        .prompt-box {
+            background: var(--coffee-dark);
+            border: 1px solid var(--coffee-medium);
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            margin-bottom: 10px;
         }
-        .tips p {
-            font-size: 11.5px;
-            color: var(--text-muted);
-            line-height: 1.6;
+        .prompt-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--coffee-light); margin-bottom: 10px; font-weight: 700; }
+        .prompt-text { font-family: 'Courier New', monospace; font-size: 13px; color: var(--cream); line-height: 1.75; white-space: pre-wrap; word-break: break-word; }
+
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            position: absolute;
+            top: 14px;
+            right: 14px;
         }
+        .copy-btn, .dl-prompt-btn {
+            background: var(--coffee-medium);
+            color: var(--cream);
+            border: none;
+            border-radius: 6px;
+            padding: 5px 11px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.4px;
+            transition: all 0.15s;
+        }
+        .copy-btn:hover, .dl-prompt-btn:hover { background: var(--coffee-light); }
+        .copy-btn.copied { background: var(--success); color: #fff; }
+        .dl-prompt-btn { background: rgba(200,133,58,0.35); }
+        .dl-prompt-btn:hover { background: rgba(200,133,58,0.55); }
+
+        .platforms { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+        .platform-badge { font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: 700; letter-spacing: 0.5px; }
+        .pb-runway { background: #1a1a2e; color: #e94560; }
+        .pb-kling  { background: #0f3460; color: #e94560; }
+        .pb-sora   { background: #1a1a1a; color: #fff; }
+        .pb-pika   { background: #6c3fe0; color: #fff; }
+
+        .tips { background: rgba(200,133,58,0.06); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 14px; }
+        .tips p { font-size: 11.5px; color: var(--text-muted); line-height: 1.6; }
         .tips strong { color: var(--coffee-medium); }
 
-        /* ─── PLATFORM BADGES ─────────────────────────── */
-        .platforms {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-        .platform-badge {
-            font-size: 10px;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-        .pb-runway  { background: #1a1a2e; color: #e94560; }
-        .pb-kling   { background: #0f3460; color: #e94560; }
-        .pb-sora    { background: #1a1a1a; color: #fff; }
-        .pb-pika    { background: #6c3fe0; color: #fff; }
-
-        /* ─── FOOTER ──────────────────────────────────── */
-        footer {
-            text-align: center;
-            padding: 24px;
-            color: var(--coffee-medium);
-            font-size: 11px;
-            letter-spacing: 1px;
-        }
+        footer { text-align: center; padding: 22px; color: var(--coffee-medium); font-size: 11px; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="brand">
-        <span class="brand-icon">☕</span>
-        <div class="brand-text">
-            <h1>KapsamKafe</h1>
-            <p>Duvar Yazısı Video Üreteci</p>
+    <div class="header-inner">
+        <div class="brand">
+            <span class="brand-icon">☕</span>
+            <div class="brand-text">
+                <h1>KapsamKafe</h1>
+                <p>Duvar Yazısı Video Üreteci</p>
+            </div>
         </div>
+        <button class="btn-download-html" onclick="downloadHTML()" title="Bu sayfayı bilgisayarına kaydet">
+            ⬇ Sayfayı İndir
+        </button>
     </div>
-    <div class="tagline">Cümlenizi girin · Stil seçin · Video promptu üretin</div>
+    <div class="tagline">Cümlenizi girin · Stil seçin · Her seferinde farklı prompt</div>
 </header>
 
 <main>
 <div class="card">
 
-    <!-- CÜMLE GİRİŞİ -->
+    <!-- CÜMLE -->
     <div class="input-group">
         <div class="section-label">✍️ Cümlenizi Yazın</div>
         <textarea id="sentence" placeholder="Örn: Bugün güzel bir gün, kahven sıcaksa sorun yok..." maxlength="200"></textarea>
         <div class="char-count"><span id="charCount">0</span> / 200 karakter</div>
     </div>
 
-    <!-- DUVAR STİLİ -->
+    <!-- STİL -->
     <div class="section-label">🎨 Duvar Stili</div>
-    <div class="style-grid" id="styleGrid">
-
+    <div class="style-grid">
         <label class="style-card selected">
             <input type="radio" name="wallStyle" value="tahta" checked>
             <span class="style-emoji">🖊️</span>
             <div class="style-name">Kara Tahta</div>
             <div class="style-desc">Tebeşir yazısı</div>
         </label>
-
         <label class="style-card">
             <input type="radio" name="wallStyle" value="tugla">
             <span class="style-emoji">🧱</span>
             <div class="style-name">Tuğla Duvar</div>
             <div class="style-desc">Boyalı el yazısı</div>
         </label>
-
         <label class="style-card">
             <input type="radio" name="wallStyle" value="neon">
             <span class="style-emoji">💡</span>
             <div class="style-name">Neon Tabela</div>
             <div class="style-desc">Parlayan ışık</div>
         </label>
-
         <label class="style-card">
             <input type="radio" name="wallStyle" value="ahsap">
             <span class="style-emoji">🪵</span>
             <div class="style-name">Ahşap Levha</div>
             <div class="style-desc">Oymalı / yazılı</div>
         </label>
-
         <label class="style-card">
             <input type="radio" name="wallStyle" value="sprey">
             <span class="style-emoji">🎭</span>
             <div class="style-name">Sprey Grafiti</div>
             <div class="style-desc">Sokak sanatı</div>
         </label>
-
         <label class="style-card">
             <input type="radio" name="wallStyle" value="vintage">
             <span class="style-emoji">📜</span>
             <div class="style-name">Vintage Tabela</div>
             <div class="style-desc">Eski metal/emaye</div>
         </label>
-
     </div>
 
-    <!-- ATMOSFER TONU -->
+    <!-- ATMOSFER -->
     <div class="section-label">🌡️ Atmosfer</div>
-    <div class="tone-row" id="toneRow">
+    <div class="tone-row">
         <button class="tone-btn active" data-tone="sicak">☕ Sıcak & Samimi</button>
         <button class="tone-btn" data-tone="huzurlu">🌿 Huzurlu & Sakin</button>
         <button class="tone-btn" data-tone="nostaljik">📷 Nostaljik</button>
@@ -448,25 +387,31 @@
     </div>
 
     <!-- OLUŞTUR -->
-    <button class="btn-generate" onclick="generatePrompt()">
-        ☕ Video Promptu Üret
-    </button>
+    <button class="btn-generate" onclick="generatePrompt()">🎲 Video Promptu Üret</button>
 
     <!-- ÇIKTI -->
     <div id="output-section">
         <div class="divider"></div>
+        <div class="output-header">
+            <div id="style-badge-row"></div>
+            <div class="seed-badge" id="seedBadge"></div>
+        </div>
 
-        <div id="style-badge-row"></div>
-
-        <div class="prompt-box" id="promptBoxEN">
-            <div class="prompt-label">🇬🇧 English Prompt (AI Video için)</div>
-            <button class="copy-btn" onclick="copyPrompt('promptEN', this)">Kopyala</button>
+        <div class="prompt-box">
+            <div class="prompt-label">🇬🇧 English Prompt — AI Video için</div>
+            <div class="btn-row">
+                <button class="dl-prompt-btn" onclick="downloadPrompt('promptEN', 'en')">⬇ TXT</button>
+                <button class="copy-btn" onclick="copyPrompt('promptEN', this)">Kopyala</button>
+            </div>
             <div class="prompt-text" id="promptEN"></div>
         </div>
 
-        <div class="prompt-box" id="promptBoxTR">
+        <div class="prompt-box">
             <div class="prompt-label">🇹🇷 Türkçe Prompt</div>
-            <button class="copy-btn" onclick="copyPrompt('promptTR', this)">Kopyala</button>
+            <div class="btn-row">
+                <button class="dl-prompt-btn" onclick="downloadPrompt('promptTR', 'tr')">⬇ TXT</button>
+                <button class="copy-btn" onclick="copyPrompt('promptTR', this)">Kopyala</button>
+            </div>
             <div class="prompt-text" id="promptTR"></div>
         </div>
 
@@ -487,173 +432,290 @@
 <footer>KapsamKafe · Duvar Yazısı Video Üreteci · Sadece size özel ☕</footer>
 
 <script>
-/* ─────────────────────────────────────────────────
-   STYLE DEFINITIONS
-───────────────────────────────────────────────── */
-const STYLES = {
-    tahta: {
-        label: '🖊️ Kara Tahta · Tebeşir',
-        en: (txt, tone) => `
-Cinematic short video. Interior of a cozy, warmly lit Istanbul coffee shop called "KapsamKafe". ${TONES[tone].en}
+/* ══════════════════════════════════════════
+   RANDOM HELPER
+══════════════════════════════════════════ */
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 
-The camera starts with a soft bokeh shot of steaming coffee cups, then slowly pans and pulls back to reveal a large vintage blackboard wall. Written in imperfect, handcrafted white chalk lettering, the following text is clearly legible:
+/* ══════════════════════════════════════════
+   RANDOM VARIATION POOLS
+══════════════════════════════════════════ */
+const V = {
 
-"${txt}"
+    /* Videonun hangi detayla açılacağı */
+    openingShot: [
+        'steaming espresso cup on a wooden table',
+        'close-up of coffee swirling in a ceramic mug',
+        'a book lying open next to a latte art cup',
+        'two hands warming around a coffee glass',
+        'rain on a café window, warm light inside',
+        'a half-eaten croissant on a small plate beside a coffee',
+        'soft steam rising from a French press',
+        'a vintage spoon resting on a saucer',
+        'dried flowers in a small vase on the counter',
+        'a barista\'s hands placing a cup on the bar',
+    ],
 
-The chalk letters are slightly uneven, warm and human. Small chalk dust particles float in the air, caught in the warm Edison bulb light streaming from above. The text "${txt}" remains the focal point throughout.
+    openingTR: [
+        'buharlanan espresso fincanının yakın çekimi',
+        'seramik kupada dönen kahve',
+        'kitabın yanındaki latte art bardağı',
+        'kahve bardağını ısıtan eller',
+        'kafe camındaki yağmur, içerideki sıcak ışık',
+        'fincanın yanındaki küçük tabakta kruvasan',
+        'French press\'ten yükselen buhar',
+        'tabakta dinlenen vintage kaşık',
+        'tezgah üzerindeki küçük vazo kurumuş çiçekler',
+        'baristanın bardağı tezgaha bırakması',
+    ],
 
-Camera movement: slow, gentle dolly backward reveal. Shallow depth of field. Grain texture. Warm golden hour lighting. 4K cinematic quality. No people in frame.
-        `.trim(),
-        tr: (txt, tone) => `
-Kısa sinematik video. "${txt}" yazısının kara tahta üzerine tebeşirle yazıldığı ${TONES[tone].tr} İstanbul kahvesi "KapsamKafe" iç mekanı.
+    /* Kamera hareketleri */
+    cameraEN: [
+        'slow dolly backward to reveal',
+        'gentle horizontal tracking shot across',
+        'smooth crane shot descending to focus on',
+        'soft push-in toward',
+        'slow 360° orbit around',
+        'steady handheld drift revealing',
+        'slow rack focus from foreground cup to',
+        'subtle Dutch tilt settling on',
+        'graceful slide from left to right revealing',
+        'slow tilt upward revealing',
+    ],
 
-Kamera önce buğulu kahve fincanlarından başlar, yavaşça geri çekilerek büyük vintage kara tahtayı açığa çıkarır. Tahtada net okunan el yazısıyla: "${txt}"
+    cameraTR: [
+        'yavaşça geri çekilerek açığa çıkarır',
+        'soldan sağa nazik bir yatay hareketle gösterir',
+        'vinç çekiminde aşağı inerek üzerine odaklanır',
+        'yavaşça yaklaşarak büyütür',
+        'etrafında yavaş 360° döner',
+        'el kamerası sürüklenişiyle açığa çıkarır',
+        'ön planın fincanından arka plana odak değişimi',
+        'hafif açılı kamerayla üzerine yerleşir',
+        'soldan sağa kayganlıkla süzülür',
+        'yavaş yukarı tilt ile ortaya çıkarır',
+    ],
 
-Işıklandırma: Edison ampullerinin sıcak sarı ışığı. Hafif tahta tozu. 4K sinematik kalite.
-        `.trim(),
-        tip: 'Kara tahta stili için <strong>Runway Gen-3</strong> veya <strong>Kling AI</strong> önerilir. Prompt\'u "Reference motion: slow pull-back" ile başlatın.'
+    /* Işıklandırma */
+    lightEN: [
+        'warm Edison bulb light from above, golden hues',
+        'soft afternoon light streaming through tall windows',
+        'candlelight flickering on nearby tables',
+        'dim pendant lamps casting golden pools of light',
+        'overcast daylight through frosted glass, diffused and soft',
+        'a single spotlight from the ceiling, dramatic and focused',
+        'early morning light, pale and quiet',
+        'dusk light filtering through linen curtains, amber and warm',
+        'a mix of neon from outside and warm interior light',
+        'fairy lights strung above, twinkling gently',
+    ],
+
+    lightTR: [
+        'Edison ampullerinin sıcak altın ışığı',
+        'uzun camlardan süzülen yumuşak öğleden sonra ışığı',
+        'yakın masalarda titreşen mum ışığı',
+        'sarı ışık halkaları yaratan loş sarkıt lambalar',
+        'buzlu camdan gelen bulutlu gün ışığı, yayılmış ve yumuşak',
+        'tavandan tek spot ışık, dramatik ve odaklı',
+        'sabahın erken saatlerinde soluk ve sessiz ışık',
+        'keten perdelerden süzülen alacakaranlık amber ışığı',
+        'dışarıdan gelen neon ile içerinin sıcak ışığı karışımı',
+        'üstte asılı hafifçe titreyen peri ışıkları',
+    ],
+
+    /* Ortam detayları */
+    ambientEN: [
+        'Soft jazz barely audible in the background',
+        'The gentle clinking of spoons on ceramic',
+        'Quiet café chatter, distant and muffled',
+        'Absolute silence — only the hiss of an espresso machine',
+        'Rain on windows, cozy inside',
+        'A record player spinning in the corner',
+        'Wind chimes near an open door',
+        'Pages turning in a nearby book',
+        'The hiss of steaming milk',
+        'A clock ticking softly on the wall',
+    ],
+
+    ambientTR: [
+        'Arka planda zar zor duyulan yumuşak caz',
+        'Seramiğe değen kaşıkların hafif sesi',
+        'Uzaktan ve boğuk kafe sohbeti',
+        'Mutlak sessizlik — sadece espresso makinesinin fısıltısı',
+        'Camda yağmur, içeride sıcaklık',
+        'Köşede dönen pikap',
+        'Açık kapının yanındaki rüzgar çanları',
+        'Yakındaki kitabın çevrilen sayfaları',
+        'Süt buharlama sesi',
+        'Duvardaki saatin hafif tik-takları',
+    ],
+
+    /* Renk gradı */
+    gradeEN: [
+        'warm golden-hour color grade',
+        'soft sepia with lifted shadows',
+        'desaturated vintage film look',
+        'rich earthy tones, deep shadows',
+        'cool-to-warm transition as camera moves',
+        'high contrast black and warm amber',
+        'muted matte finish, cinematic',
+        'warm kodachrome-inspired palette',
+        'slightly overexposed, airy and soft',
+        'deep teal shadows, warm highlights',
+    ],
+
+    gradeTR: [
+        'sıcak altın saat renk gradı',
+        'kaldırılmış gölgelerle yumuşak sepya',
+        'doygunluğu azaltılmış vintage film görünümü',
+        'zengin toprak tonları, derin gölgeler',
+        'kamera hareket ettikçe serin-sıcak geçiş',
+        'yüksek kontrast siyah ve sıcak kehribar',
+        'muted mat bitişli sinematik görüntü',
+        'Kodachrome esinli sıcak palet',
+        'hafif aşık, havadar ve yumuşak',
+        'derin yeşil-mavi gölgeler, sıcak parlak noktalar',
+    ],
+
+    /* Yazı teknik detayı */
+    textDetailEN: {
+        tahta:   ['slightly smudged chalk edges catching the light','chalk dust drifting in the air','a few chalk marks visible from previous writings','the letter strokes thick in the center, feathering at the edges'],
+        tugla:   ['paint slightly dripping at letter edges','brush texture visible in every stroke','the brick showing through semi-transparent white paint','a second coat visible on some letters'],
+        neon:    ['tubes buzzing with a gentle electrical hum','a slow pulse as the neon warms up','slight buzz and flicker authentic to vintage neon','the gas glow casting colorful shadows on the wall'],
+        ahsap:   ['chisel marks visible in the carved letters','the ink settling into the wood grain','the grain crossing through the letters naturally','wood knots framing the text on either side'],
+        sprey:   ['overspray halo around letter edges','stencil edges slightly visible','drip marks on the longer strokes','layered color depth in the thicker letters'],
+        vintage: ['chipped enamel exposing raw metal','rust blooming at the corners','paint crazing visible in the flat areas','rivets holding the sign to the wall catching the light'],
+    },
+    textDetailTR: {
+        tahta:   ['ışığa çarpan hafifçe silinmiş tebeşir kenarları','havada süzülen tebeşir tozu','önceki yazılardan kalan birkaç işaret','harf fırçaları ortada kalın, kenarlarda tüylenen'],
+        tugla:   ['harf kenarlarında hafifçe akan boya','her fırça darbesi görünür','tuğla, yarı saydam beyaz boyanın altından görünüyor','bazı harflerde ikinci kat görünüyor'],
+        neon:    ['hafif elektriksel vızıltı ile titreşen tüpler','ısınırken yavaş nabız atan neon','vintage neona özgü hafif titreme','gazın ışıması duvara renkli gölgeler düşürüyor'],
+        ahsap:   ['oyulan harflerde görünür keski izleri','ahşap damara yerleşen mürekkep','damar çizgileri harflerin içinden doğal geçiyor','metnin iki yanında çerçeveleyen budak noktaları'],
+        sprey:   ['harf kenarlarında aşım halosu','şablon kenarları hafifçe görünür','uzun darbelerdeki akıntı izleri','kalın harflerde katmanlı renk derinliği'],
+        vintage: ['ham metali açığa çıkaran çiplenmiş emaye','köşelerde filizlenen pas','düz alanlarda görünür boya çatlaması','ışığı yakalayan duvara tutturulan perçinler'],
     },
 
-    tugla: {
-        label: '🧱 Tuğla Duvar · Boya',
-        en: (txt, tone) => `
-Cinematic video. Close-up of a rustic exposed brick wall inside a charming Istanbul café, "KapsamKafe". ${TONES[tone].en}
+    /* Yapım kalitesi */
+    qualityEN: ['4K ultra-cinematic','Arri Alexa-style cinematic 4K','35mm film emulation','anamorphic lens, 2.39:1 aspect ratio, cinematic','shot on digital cinema, S-log3 grade'],
+    qualityTR: ['4K ultra sinematik','Arri Alexa tarzı sinematik 4K','35mm film emülasyonu','anamorfik lens, 2.39:1 en-boy oranı','dijital sinema çekim, S-log3 gradı'],
 
-Painted directly onto the warm terracotta brick wall in flowing hand-lettered white paint, the words read:
-
-"${txt}"
-
-The letters are artfully brushed, slightly imperfect—clearly painted by a human hand. The brick texture shows through the paint. Soft warm side-lighting highlights the texture. The camera slowly tracks across the wall, keeping "${txt}" centered and legible throughout.
-
-Camera: slow horizontal tracking shot. Depth of field blurs café interior behind. Warm ambient light. Film grain. Cinematic 4K.
-        `.trim(),
-        tr: (txt, tone) => `
-Sinematik video. "KapsamKafe" iç mekanında eski tuğla duvar üzerine el yazısıyla boyayla yazılmış: "${txt}"
-
-${TONES[tone].tr} Sıcak yan ışıklandırma. Kamera yavaşça duvarda yatay hareket eder, "${txt}" yazısı her zaman odakta kalır. Film tahıllı görüntü. 4K kalite.
-        `.trim(),
-        tip: 'Tuğla duvar için görseli <strong>referans image</strong> olarak yüklerseniz sonuç çok daha gerçekçi olur. Pika veya Runway önerilir.'
-    },
-
-    neon: {
-        label: '💡 Neon Tabela',
-        en: (txt, tone) => `
-Cinematic video. A glowing neon sign inside KapsamKafe Istanbul café. ${TONES[tone].en}
-
-The neon sign reads: "${txt}"
-
-The letters glow in warm amber / soft white neon light, mounted against a dark exposed brick wall. The neon tubes buzz softly with a slight flicker—authentic vintage neon. The glow reflects off nearby coffee cups and wooden surfaces. Camera slowly pushes in toward the sign. The text "${txt}" pulses softly with warm light throughout the video.
-
-Lighting: neon glow as primary source, deep shadows, moody atmosphere. Bokeh café background. Cinematic 4K. Slight lens flare on neon tubes.
-        `.trim(),
-        tr: (txt, tone) => `
-Sinematik video. KapsamKafe'de neon tabela: "${txt}" yazısı sıcak kehribar/beyaz neon ışığıyla parlıyor. ${TONES[tone].tr} Karanlık tuğla duvar arka planı. Neon ışığın kahve fincanlarına yansıması. Kamera yavaşça yaklaşır. 4K sinematik, hafif lens parlaması.
-        `.trim(),
-        tip: '<strong>Neon efekti</strong> için Runway Gen-3 çok başarılı sonuçlar veriyor. "flickering neon, vintage neon sign" anahtar kelimelerini ekleyin.'
-    },
-
-    ahsap: {
-        label: '🪵 Ahşap Levha',
-        en: (txt, tone) => `
-Cinematic video. KapsamKafe café interior. A large reclaimed wood sign hangs on the wall. ${TONES[tone].en}
-
-Carved or hand-painted in dark ink onto warm weathered wood, the sign reads:
-
-"${txt}"
-
-The wood grain is visible. The letters have depth—carved into the surface or painted with thick brushstrokes. Warm overhead lighting casts gentle shadows that emphasize the texture. The sign sways almost imperceptibly. Camera: gentle zoom-in. The text "${txt}" is the clear focal point.
-
-Material: aged oak or pine, natural wood tones, slight patina. Cinematic 4K. Intimate café atmosphere.
-        `.trim(),
-        tr: (txt, tone) => `
-Sinematik video. KapsamKafe'de duvara asılı eski ahşap levha. Kazınmış ya da el boyasıyla yazılmış: "${txt}" ${TONES[tone].tr} Ahşap dokusu, sıcak üst ışıklandırma. Kamera yavaş zoom. 4K sinematik.
-        `.trim(),
-        tip: 'Ahşap levha için <strong>Kling AI</strong> veya <strong>Sora</strong> önerilir. "reclaimed wood, hand-painted sign" ifadelerini mutlaka ekleyin.'
-    },
-
-    sprey: {
-        label: '🎭 Sprey Grafiti',
-        en: (txt, tone) => `
-Cinematic time-lapse / slow-motion video. KapsamKafe Istanbul. An artistic spray-painted mural being revealed on a wall. ${TONES[tone].en}
-
-The text appears painted with street-art style spray technique on a rough concrete or plaster wall:
-
-"${txt}"
-
-The letters are bold, artistic, slightly distressed—spray paint style with subtle drips and texture. The video begins with the wall empty, then reveals the complete text through a cinematic pan. Warm café lighting softens the graffiti aesthetic. The text "${txt}" is large, prominent and fully readable.
-
-Style: urban art meets café warmth. Cinematic 4K. Cool-to-warm color grade.
-        `.trim(),
-        tr: (txt, tone) => `
-Sinematik video. KapsamKafe beton duvarı üzerinde sprey boya grafiti: "${txt}" ${TONES[tone].tr} Kentsel sanat estetiği. Kamera boş duvardan başlayıp yazıyı açığa çıkaran bir pan yapar. 4K, serin-sıcak renk gradasyonu.
-        `.trim(),
-        tip: '<strong>Grafiti stili</strong> için Pika 2.0 veya Runway önerilir. "spray paint reveal, street art" ekleyebilirsiniz.'
-    },
-
-    vintage: {
-        label: '📜 Vintage Metal Tabela',
-        en: (txt, tone) => `
-Cinematic video. A beautiful vintage enamel or tin sign hanging in KapsamKafe, an atmospheric Istanbul café. ${TONES[tone].en}
-
-The sign features retro hand-lettered typography from the 1950s–60s era. The text on the sign reads:
-
-"${txt}"
-
-The sign has aged patina—slight rust spots, chipped enamel edges, authentic vintage wear. Warm directional lighting creates depth. The camera slowly orbits or tracks across the sign. The text "${txt}" is elegantly legible throughout the video.
-
-Color palette: cream, dark green, warm gold. Sepia-warm cinematic grade. 4K quality. Nostalgic, timeless mood.
-        `.trim(),
-        tr: (txt, tone) => `
-Sinematik video. KapsamKafe'de 1950'ler tarzı vintage emaye tabela. Retro el yazısı tipografisiyle: "${txt}" ${TONES[tone].tr} Hafif paslanmış, çiplenmiş emaye kenarlar. Sıcak ışıklandırma. Krem-koyu yeşil-altın renk paleti. 4K nostaljik sinematik görüntü.
-        `.trim(),
-        tip: '<strong>Vintage tabela</strong> için Kling AI mükemmel sonuçlar üretiyor. "1950s enamel sign, vintage patina" ekleyin.'
-    }
+    /* Son vurgu */
+    closingEN: [
+        `The text is the hero of this shot. Every element serves it.`,
+        `Nothing distracts from the text. It owns the frame.`,
+        `The camera always returns to the text as its anchor.`,
+        `The text breathes with the room—alive, present, meant to be read.`,
+        `The viewer's eye is drawn immediately and held by the text.`,
+    ],
+    closingTR: [
+        `Yazı bu çekimin kahramanı. Her şey ona hizmet eder.`,
+        `Hiçbir şey yazıyı gölgeleemez. Kareye o hükmeder.`,
+        `Kamera her zaman yazıya döner, çapasına döner gibi.`,
+        `Yazı odayla birlikte nefes alır — canlı, yerinde, okunmak için.`,
+        `İzleyicinin gözü anında yazıya çekilir ve tutulur.`,
+    ],
 };
 
-/* ─────────────────────────────────────────────────
+/* ══════════════════════════════════════════
    TONES
-───────────────────────────────────────────────── */
+══════════════════════════════════════════ */
 const TONES = {
-    sicak: {
-        en: 'The mood is warm, intimate, welcoming—like your favorite corner table on a rainy afternoon.',
-        tr: 'Sıcak, samimi, davetkar bir atmosfer. Yağmurlu bir öğleden sonranın favori köşe masası gibi.'
-    },
-    huzurlu: {
-        en: 'The atmosphere is calm, peaceful, meditative—the gentle hum of an afternoon café.',
-        tr: 'Sakin, huzurlu, meditasyona açık bir atmosfer. Öğleden sonra bir kafeye özgü sessiz ritim.'
-    },
-    nostaljik: {
-        en: 'A nostalgic, bittersweet mood—like revisiting a beloved old memory through warm sepia hues.',
-        tr: 'Nostaljik, tatlı-hüzünlü bir atmosfer. Sıcak sepya tonlarında eski bir anıya dönüş gibi.'
-    },
-    modern: {
-        en: 'Sleek, contemporary aesthetic—minimal yet warm, a modern café with personality.',
-        tr: 'Şık, çağdaş estetik. Minimal ama sıcak, kişilikli modern kafe havası.'
-    },
-    dramatik: {
-        en: 'Dramatic, cinematic mood—strong contrast, moody shadows, the café as a stage.',
-        tr: 'Dramatik, sinematik atmosfer. Güçlü kontrast, kaygılı gölgeler, sahne olarak kafe.'
-    }
+    sicak:    { en: 'warm, intimate, welcoming—your favorite corner table on a rainy afternoon',       tr: 'sıcak, samimi, davetkar' },
+    huzurlu:  { en: 'calm, peaceful, meditative—the gentle hum of an afternoon café',                  tr: 'sakin, huzurlu, meditasyona açık' },
+    nostaljik:{ en: 'nostalgic, bittersweet—revisiting a beloved old memory through warm sepia',        tr: 'nostaljik, tatlı-hüzünlü' },
+    modern:   { en: 'sleek, contemporary, minimal yet warm—a modern café with personality',             tr: 'şık, minimal ama sıcak, kişilikli' },
+    dramatik: { en: 'dramatic, cinematic—strong contrast, moody shadows, the café as a stage',         tr: 'dramatik, güçlü kontrast, sahne olarak kafe' },
 };
 
-/* ─────────────────────────────────────────────────
-   STATE
-───────────────────────────────────────────────── */
+/* ══════════════════════════════════════════
+   STYLE META
+══════════════════════════════════════════ */
+const STYLE_META = {
+    tahta:   { label:'🖊️ Kara Tahta · Tebeşir',  tip:'<strong>Runway Gen-3</strong> veya <strong>Kling AI</strong> önerilir. "slow pull-back reveal" ekleyin.' },
+    tugla:   { label:'🧱 Tuğla Duvar · Boya',     tip:'Referans görsel yüklerseniz çok daha gerçekçi olur. <strong>Pika 2.0</strong> veya Runway.' },
+    neon:    { label:'💡 Neon Tabela',             tip:'<strong>Runway Gen-3</strong> neon için çok başarılı. "flickering neon, vintage neon sign" mutlaka ekleyin.' },
+    ahsap:   { label:'🪵 Ahşap Levha',             tip:'<strong>Kling AI</strong> veya <strong>Sora</strong>. "reclaimed wood, hand-painted sign" ifadeleri şart.' },
+    sprey:   { label:'🎭 Sprey Grafiti',           tip:'<strong>Pika 2.0</strong> veya Runway. "spray paint reveal, street art style" ekleyin.' },
+    vintage: { label:'📜 Vintage Metal Tabela',    tip:'<strong>Kling AI</strong> mükemmel sonuç veriyor. "1950s enamel sign, vintage patina" ekleyin.' },
+};
+
+/* ══════════════════════════════════════════
+   PROMPT BUILDERS
+══════════════════════════════════════════ */
+function buildEN(txt, styleKey, tone) {
+    const t  = TONES[tone].en;
+    const o  = pick(V.openingShot);
+    const c  = pick(V.cameraEN);
+    const l  = pick(V.lightEN);
+    const a  = pick(V.ambientEN);
+    const g  = pick(V.gradeEN);
+    const td = pick(V.textDetailEN[styleKey]);
+    const q  = pick(V.qualityEN);
+    const cl = pick(V.closingEN);
+
+    const wallDesc = {
+        tahta:   `a large vintage blackboard wall. Written in imperfect, handcrafted white chalk lettering: "${txt}". ${td}.`,
+        tugla:   `a rustic exposed brick wall. Painted directly onto the terracotta brickwork in flowing hand-lettered white paint: "${txt}". ${td}.`,
+        neon:    `a glowing neon sign that reads: "${txt}". The letters pulse in warm amber light mounted against a dark brick wall. ${td}.`,
+        ahsap:   `a large reclaimed wood sign hanging on the wall, reading: "${txt}". ${td}.`,
+        sprey:   `a rough concrete wall with street-art style spray lettering that reads: "${txt}". ${td}.`,
+        vintage: `a vintage enamel tin sign from the 1950s–60s era, hand-lettered to read: "${txt}". ${td}.`,
+    }[styleKey];
+
+    return `Cinematic short video. Interior of KapsamKafe, an atmospheric Istanbul coffee shop. Mood: ${t}.
+
+The shot opens on ${o}. The camera then ${c} ${wallDesc}
+
+Lighting: ${l}. ${a}.
+
+Color grade: ${g}. ${q}. No people in frame.
+
+The text "${txt}" is clearly legible throughout the entire video. ${cl}`.trim();
+}
+
+function buildTR(txt, styleKey, tone) {
+    const t  = TONES[tone].tr;
+    const o  = pick(V.openingTR);
+    const c  = pick(V.cameraTR);
+    const l  = pick(V.lightTR);
+    const a  = pick(V.ambientTR);
+    const g  = pick(V.gradeTR);
+    const td = pick(V.textDetailTR[styleKey]);
+    const q  = pick(V.qualityTR);
+    const cl = pick(V.closingTR);
+
+    const wallDesc = {
+        tahta:   `büyük vintage kara tahta duvarda tebeşirle el yazısıyla yazılmış: "${txt}". ${td}.`,
+        tugla:   `tuğla duvara beyaz boyayla el yazısıyla yazılmış: "${txt}". ${td}.`,
+        neon:    `karanlık duvara monte edilmiş sıcak kehribar ışıklı neon tabela: "${txt}". ${td}.`,
+        ahsap:   `duvara asılı büyük eski ahşap levhada yazıyor: "${txt}". ${td}.`,
+        sprey:   `kaba beton duvara sprey sanatıyla yazılmış: "${txt}". ${td}.`,
+        vintage: `1950'ler el yazısıyla hazırlanmış vintage emaye tabelada yazıyor: "${txt}". ${td}.`,
+    }[styleKey];
+
+    return `Kısa sinematik video. KapsamKafe, atmosferik İstanbul kahvesi. Atmosfer: ${t}.
+
+Çekim ${o} ile açılır. Kamera ${c} ${wallDesc}
+
+Işıklandırma: ${l}. ${a}.
+
+Renk gradı: ${g}. ${q}. Karede kimse yok.
+
+"${txt}" videosu boyunca net okunur. ${cl}`.trim();
+}
+
+/* ══════════════════════════════════════════
+   STATE & INIT
+══════════════════════════════════════════ */
 let selectedTone = 'sicak';
+let lastSeed = 0;
 
-/* ─────────────────────────────────────────────────
-   INIT
-───────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
-
-    // Char counter
     const ta = document.getElementById('sentence');
-    const cc = document.getElementById('charCount');
     ta.addEventListener('input', () => {
-        cc.textContent = ta.value.length;
+        document.getElementById('charCount').textContent = ta.value.length;
     });
 
-    // Style cards
     document.querySelectorAll('.style-card').forEach(card => {
         card.addEventListener('click', () => {
             document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
@@ -661,7 +723,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Tone buttons
     document.querySelectorAll('.tone-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
@@ -671,58 +732,82 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-/* ─────────────────────────────────────────────────
+/* ══════════════════════════════════════════
    GENERATE
-───────────────────────────────────────────────── */
+══════════════════════════════════════════ */
 function generatePrompt() {
     const txt = document.getElementById('sentence').value.trim();
     if (!txt) {
-        document.getElementById('sentence').focus();
-        document.getElementById('sentence').style.borderColor = '#e74c3c';
-        setTimeout(() => document.getElementById('sentence').style.borderColor = '', 1200);
+        const ta = document.getElementById('sentence');
+        ta.focus();
+        ta.style.borderColor = '#e74c3c';
+        setTimeout(() => ta.style.borderColor = '', 1300);
         return;
     }
 
     const styleKey = document.querySelector('input[name="wallStyle"]:checked').value;
-    const style = STYLES[styleKey];
-    const tone  = selectedTone;
+    lastSeed = Date.now();
 
-    const promptEN = style.en(txt, tone);
-    const promptTR = style.tr(txt, tone);
+    const promptEN = buildEN(txt, styleKey, selectedTone);
+    const promptTR = buildTR(txt, styleKey, selectedTone);
 
     document.getElementById('promptEN').textContent = promptEN;
     document.getElementById('promptTR').textContent = promptTR;
 
-    // Badge
-    document.getElementById('style-badge-row').innerHTML =
-        `<div class="style-badge">${style.label}</div>`;
+    const meta = STYLE_META[styleKey];
+    document.getElementById('style-badge-row').innerHTML = `<div class="style-badge">${meta.label}</div>`;
 
-    // Tip
+    const d = new Date(lastSeed);
+    document.getElementById('seedBadge').textContent =
+        `🎲 Varyasyon #${lastSeed % 9999} · ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
+
     document.getElementById('tipBox').innerHTML =
-        `<p>💡 <strong>İpucu:</strong> ${style.tip}</p>`;
+        `<p>💡 <strong>İpucu:</strong> ${meta.tip}</p>`;
 
-    // Show
     const out = document.getElementById('output-section');
     out.style.display = 'block';
     out.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-/* ─────────────────────────────────────────────────
+/* ══════════════════════════════════════════
    COPY
-───────────────────────────────────────────────── */
+══════════════════════════════════════════ */
 function copyPrompt(id, btn) {
-    const text = document.getElementById(id).textContent;
-    navigator.clipboard.writeText(text).then(() => {
-        const original = btn.textContent;
+    navigator.clipboard.writeText(document.getElementById(id).textContent).then(() => {
+        const orig = btn.textContent;
         btn.textContent = '✓ Kopyalandı';
         btn.classList.add('copied');
-        setTimeout(() => {
-            btn.textContent = original;
-            btn.classList.remove('copied');
-        }, 2000);
+        setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
     });
 }
-</script>
 
+/* ══════════════════════════════════════════
+   DOWNLOAD PROMPT AS TXT
+══════════════════════════════════════════ */
+function downloadPrompt(id, lang) {
+    const text = document.getElementById(id).textContent;
+    const txt  = document.getElementById('sentence').value.trim().replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ0-9 ]/g,'').trim().slice(0,30).replace(/ /g,'_');
+    const name = `kapsamkafe_prompt_${lang}_${txt || 'prompt'}.txt`;
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = name; a.click();
+    URL.revokeObjectURL(url);
+}
+
+/* ══════════════════════════════════════════
+   DOWNLOAD THIS HTML PAGE
+══════════════════════════════════════════ */
+function downloadHTML() {
+    const html = document.documentElement.outerHTML;
+    const blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url;
+    a.download = 'kapsamkafe-video-prompt.html';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+</script>
 </body>
 </html>
