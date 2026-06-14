@@ -26,73 +26,106 @@ interface WizardState {
 
 const STEP_LABELS = ['Ürün', 'Stil', 'Hook', 'Setting', 'Avatar', 'Prompt']
 
+// ~10 saniye = 25-35 Türkçe kelime konuşma
+// Hook: 0-3s görsel etki | Ürün: 3-8s pitch | CTA: 8-10s
 function generateTurkishScript(wizard: WizardState): { scene: string; script: string } {
   const product = wizard.productName || 'ürün'
   const hook = wizard.hook?.name || ''
   const setting = wizard.setting?.name || ''
 
-  const settingContext: Record<string, string> = {
-    Bedroom: 'sabah uyanırken yatakta',
-    Kitchen: 'mutfakta kahvaltı yaparken',
-    Street: 'sokakta yürürken',
-    Gym: 'spor salonundan çıkarken',
-    Nature: 'doğada gezerken',
-    Bathroom: 'banyo rutininde',
-    Office: 'ofiste çalışırken',
-    'In Car': 'arabada otururken',
-    'Airplane Wing': 'uçakta',
-    Rooftop: 'çatıda şehre bakarken',
-    'Volcano Rim': 'aşırı bir konumda',
-    'Car Roof': 'arabada',
-    'Train Surf': 'trende',
-    'Tiny Reviewer': 'ürünün yanında',
+  // Her setting için ortam tanımı (Higgsfield sahne dili)
+  const settingVisual: Record<string, string> = {
+    Bedroom:      'yatak odasında, yumuşak pencere ışığı, dağınık yastıklar, sabah veya gece rutini havası',
+    Kitchen:      'mutfak tezgahında, doğal gün ışığı, arka planda mutfak eşyaları, günlük rutin hissi',
+    Street:       'şehir kaldırımında yürürken, el kamerası selfie, arka planda trafik ve vitrinler, spontane his',
+    Gym:          'spor salonu zemininde, parlak ışık, arka planda aletler, antrenman sonrası enerji',
+    Nature:       'parkta veya sahilde, doğal ışık, yeşillik veya açık gökyüzü, aktif outdoor his',
+    Bathroom:     'banyo aynası selfie, vanity ışığı, çini görünür, makyaj/rutin ortası his',
+    Office:       'ofis masası başında, laptop açık, kahve yanında, günün ortasında hızlı paylaşım hissi',
+    'In Car':     'arabanın yolcu veya sürücü koltuğunda, pencere ışığı yüze vuruyor, park halinde ya da yolda',
+    'Airplane Wing': 'uçak kanadının üzerinde irtifada oturuyor, güçlü rüzgar, bulutlar, motor sesi',
+    Rooftop:      'gökdelen çatısının kenarında, şehir silueti arkada, rüzgar saçları hareket ettiriyor, gün batımı',
+    'Volcano Rim':'aktif yanardağın kenarında, aşağıda lav, duman tülleri, tamamen umursamaz tavır',
+    'Car Roof':   'çölde giden arabanın tavanında, golden hour, yol uzanıyor, kamyon geçiyor',
+    'Train Surf': 'hareket eden trenin dışına tutunmuş, selfie çekiyor, rüzgar yüze basıyor',
+    'Tiny Reviewer': 'ürünün yanında durmuş, ürün tam boy, kişi 15 cm boyunda, normal selfie açısı',
   }
 
-  const hookIntro: Record<string, string> = {
-    Spicy: `Kamera yakın çekimle başlar, yavaşça yukarı çekilerek ${product} ortaya çıkar.`,
-    'Product Hit': `${product} aniden çerçeveye uçarak gelir, kişi hafif şaşırır, elinde tutar.`,
-    Interview: `Sokak röportajı havası — biri soruyor, diğeri ${product}'ü fark ederek doğal şekilde tanıtmaya başlıyor.`,
-    'Random Object Mic': `Yukarıdan absürt bir nesne düşer, kişi onu mikrofon gibi kullanarak ${product}'ü anlatmaya başlar.`,
-    'Product Crash': `${product} düşer, kırılıyor gibi görünür — sonra sahne aniden temizlenir, kişi sakin şekilde incelemeye başlar.`,
-    Blizzard: `Aniden iç mekâna fırtına girer, her şey kaosla dolar — ama ${product} sağlam durur.`,
-    'Camera Bump': `Kameraman yanlışlıkla kişiye çarpar, kişi toparlanır ve ${product}'ü doğal şekilde gösterir.`,
-    'Product Dodge': `${product} yüze doğru fırlar, kişi eğilir — tam sonrasında elinde tutarak incelemeye başlar.`,
-    'Epic Fail': `Kişi takla atmaya çalışır, düşer — hiç umursamadan yerden kalkar ve ${product}'ü göstermeye başlar.`,
+  // Her hook için 0-3 saniyelik GÖRSEL AÇILIŞ tarifi (Higgsfield sahne dili)
+  const hookVisual: Record<string, string> = {
+    'Spicy':
+      `[0-3s] Kamera boyun/köprücük kemiğinin aşırı yakın çekimiyle başlar. Yavaşça yukarı tilt, ${product} yüzde/elde ortaya çıkar. Sonra selfie çerçevesine çekilir, sessiz bir duraklama.`,
+    'Product Hit':
+      `[0-3s] ${product} çerçeveye uçarak gelir ve kişiye çarpar. Kişi hafif şaşırır, tepki verir. Bir sonraki karede elinde tutarak kameraya bakar.`,
+    'Interview':
+      `[0-3s] Sokak röportajı kurgusu — bir yabancı soru soruyor. Kişi cevap vermek üzereyken ${product}'ü fark eder, doğal geçiş.`,
+    'Random Object Mic':
+      `[0-3s] Yukarıdan absürt bir nesne (muz, çekiç, oyuncak vb.) kişinin eline düşer. Kişi onu anında ciddi şekilde mikrofon gibi tutar.`,
+    'Product Crash':
+      `[0-3s] ${product} yukarıdan düşer, parçalanıyor gibi görünür ve kaos yaşanır. Keskin bir geçişle sahne anında tertemiz olur, kişi sakin şekilde ürünü tutar.`,
+    'Blizzard':
+      `[0-3s] Rahat iç mekan sahnesi aniden şiddetli imkansız bir tipi fırtınasına kapılır. Her şey uçar, kaos dolar. Fırtına durur — ${product} hâlâ sağlam.`,
+    'Camera Bump':
+      `[0-3s] Kameraman yanlışlıkla kişiye çarparak alnına vurur. Kişi tepki verir, toparlanır ve ${product}'e geçiş yapar.`,
+    'Product Dodge':
+      `[0-3s] ${product} kişinin yüzüne doğru fırlar. Kişi eğilerek kaçınır. Bir sonraki karede ayağa kalkar, ${product} elindedir.`,
+    'Epic Fail':
+      `[0-3s] Kişi takla atmayı dener, başarısız olur ve düşer. Hiç umursamadan yerden kalkar, anında ${product}'ü tutup kameraya bakar.`,
   }
 
-  const ctx = settingContext[setting] || 'kameraya bakarken'
-  const intro = hookIntro[hook] || `${ctx} ${product}'ü kameraya gösteriyor.`
+  // 3-10 saniye için konuşma metni (25-35 Türkçe kelime = ~7 saniye)
+  const pitchScript = getProductPitch(product, wizard.productUrl)
+  const settingDesc = settingVisual[setting] || 'doğal ortamda, el kamerası, gerçek kullanıcı hissi'
+  const hookDesc = hookVisual[hook] || `[0-3s] ${product} çerçeveye girer, kişi doğal tepki verir.`
 
-  const scene = `${intro} Kişi ${ctx}, ${product}'ü kameraya doğru tutuyor ve Türkçe olarak tanıtıyor. Gerçek kullanıcı havası, telefon kamera estetiği, doğal ışık.`
+  const scene =
+`10 saniyelik dikey UGC video (9:16). Türkçe konuşma. Gerçek kullanıcı havası — telefon kamerası estetiği, doğal ışık, kurgu yok.
 
-  const script = `[Türkçe seslendirme]
+ORTAM: ${settingDesc}.
 
-"${product} — bunu çok daha önce keşfetmem gerekirdi.
+HOOK (0-3 saniye):
+${hookDesc}
 
-${getProductPitch(product, wizard.productUrl)}
+ÜRÜN SAHNE (3-10 saniye):
+Kişi ${product}'ü elinde tutarak doğrudan kameraya bakıyor. Selfie açısı. Türkçe konuşuyor. Arka plan: ${settingDesc}. Gerçek biri gibi konuşma tonu — ne çok heyecanlı ne de sıkıcı, samimi.`
 
-Bir dene, pişman olmayacaksın."
+  const script =
+`[0-3s] — Hook sahnesi (konuşma yok, görsel etki)
 
-[Avatar ürünü elinde tutarak kameraya gülümsüyor]`
+[3-10s] — Avatar Türkçe konuşuyor:
+
+"${pitchScript}"
+
+[Avatar ${product}'ü kameraya doğru tutuyor, direkt bakış, hafif gülümseme]
+
+NOT: Seslendirme dili = Türkçe. Tempo doğal, acele etmeden, 7 saniyeye sığacak şekilde.`
 
   return { scene, script }
 }
 
+// 7 saniyelik konuşma ≈ 25-32 Türkçe kelime — UGC dili: samimi, kısa, direkt
 function getProductPitch(productName: string, url: string): string {
   const name = productName.toLowerCase()
-  if (name.includes('gözlük') || name.includes('optik')) {
-    return 'Bu kadar şık, bu kadar uygun fiyatlı bir gözlük görmedim. Gökçen Optik\'te şu an 999 TL\'ye seçili modeller var.'
+
+  if (name.includes('gözlük') || name.includes('optik') || name.includes('güneş')) {
+    return `Şuna bir bakın. ${productName} — şu an ${name.includes('999') ? '999 TL' : 'kampanya fiyatıyla'}. Bu kaliteyi bu fiyata başka yerde bulamazsın. Kaçırmayın.`
   }
-  if (name.includes('serum') || name.includes('cilt') || name.includes('krem')) {
-    return 'Cildim bu kadar güzel görünmemişti. 2 haftada fark yaratan bir ürün.'
+  if (name.includes('serum') || name.includes('cilt') || name.includes('krem') || name.includes('maske')) {
+    return `Cilt bakım rutinime bunu ekledim ve fark inanılmaz. ${productName} — bir hafta içinde göreceksin. Gerçekten işe yarıyor.`
   }
-  if (name.includes('enerji') || name.includes('spor') || name.includes('protein')) {
-    return 'Antrenmandan önce bunu içince farkı hissediyorum. Gerçekten işe yarıyor.'
+  if (name.includes('enerji') || name.includes('spor') || name.includes('protein') || name.includes('supplement')) {
+    return `Antrenmandan önce bunu içmeye başladım. ${productName} — vücudun ne istediğini anlıyor. Tavsiye ederim, gerçekten.`
+  }
+  if (name.includes('kafe') || name.includes('kahve') || name.includes('çay') || name.includes('içecek')) {
+    return `Bu tadı bir defa alınca bırakamıyorsun. ${productName} — bugün denedin mi? Hemen al.`
+  }
+  if (name.includes('giyim') || name.includes('kıyafet') || name.includes('elbise') || name.includes('ayakkabı')) {
+    return `Bunu giyince bakışlar üzerimde. ${productName} — kalitesi, fiyatı, her şeyiyle mükemmel. Al, pişman olmayacaksın.`
   }
   if (url) {
-    return `${productName} — detaylar için linke bak. Bu fiyata bu kalite inanılmaz.`
+    return `${productName} — linkte detaylar var. Bu fiyata bu kalite gerçekten inanılmaz. Stoklarla sınırlı, kaçırma.`
   }
-  return `${productName} — beklediğimden çok daha iyi çıktı. Kesinlikle tavsiye ederim.`
+  return `${productName} — bunu çok daha önce keşfetmem gerekirdi. Hiç beklemediğim kadar iyi. Tavsiye ederim.`
 }
 
 function CopyButton({ text, label }: { text: string; label?: string }) {
