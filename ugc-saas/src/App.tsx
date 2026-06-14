@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import AccessGate from './components/AccessGate'
 import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
 import CreateVideo from './pages/CreateVideo'
@@ -9,9 +10,12 @@ import Pricing from './pages/Pricing'
 import { Page, User, GeneratedVideo, PageProps } from './types'
 import { MOCK_VIDEOS } from './data'
 
+const ACCESS_STORAGE_KEY = 'ugcraft_access'
+
 const STORAGE_KEY = 'ugcraft_videos'
 
 const App: React.FC = () => {
+  const [unlocked, setUnlocked] = useState(() => localStorage.getItem(ACCESS_STORAGE_KEY) === '1')
   const [page, setPage] = useState<Page>('landing')
   const [user, setUser] = useState<User | null>(null)
   const [videos, setVideos] = useState<GeneratedVideo[]>(() => {
@@ -64,6 +68,10 @@ const App: React.FC = () => {
     onLogout: handleLogout,
     addVideo,
     updateVideo,
+  }
+
+  if (!unlocked) {
+    return <AccessGate onUnlock={() => setUnlocked(true)} />
   }
 
   return (
