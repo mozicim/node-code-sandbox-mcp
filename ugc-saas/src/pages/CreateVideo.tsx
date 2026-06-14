@@ -1,15 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import {
   ArrowRight,
   ArrowLeft,
   Check,
-  Loader2,
+  Copy,
   Play,
   Link,
   Sparkles,
-  ChevronRight,
+  ExternalLink,
+  CheckCheck,
 } from 'lucide-react'
-import { PageProps, Preset, Hook, Setting, Avatar, GeneratedVideo } from '../types'
+import { PageProps, Preset, Hook, Setting, Avatar } from '../types'
 import { PRESETS, HOOKS, SETTINGS, AVATARS } from '../data'
 
 type Step = 1 | 2 | 3 | 4 | 5 | 6
@@ -23,16 +24,108 @@ interface WizardState {
   avatar: Avatar | null
 }
 
-const STEP_LABELS = ['Product', 'Style', 'Hook', 'Setting', 'Avatar', 'Generate']
+const STEP_LABELS = ['Ürün', 'Stil', 'Hook', 'Setting', 'Avatar', 'Prompt']
 
-const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVideo, onLogin }) => {
+function generateTurkishScript(wizard: WizardState): { scene: string; script: string } {
+  const product = wizard.productName || 'ürün'
+  const hook = wizard.hook?.name || ''
+  const setting = wizard.setting?.name || ''
+
+  const settingContext: Record<string, string> = {
+    Bedroom: 'sabah uyanırken yatakta',
+    Kitchen: 'mutfakta kahvaltı yaparken',
+    Street: 'sokakta yürürken',
+    Gym: 'spor salonundan çıkarken',
+    Nature: 'doğada gezerken',
+    Bathroom: 'banyo rutininde',
+    Office: 'ofiste çalışırken',
+    'In Car': 'arabada otururken',
+    'Airplane Wing': 'uçakta',
+    Rooftop: 'çatıda şehre bakarken',
+    'Volcano Rim': 'aşırı bir konumda',
+    'Car Roof': 'arabada',
+    'Train Surf': 'trende',
+    'Tiny Reviewer': 'ürünün yanında',
+  }
+
+  const hookIntro: Record<string, string> = {
+    Spicy: `Kamera yakın çekimle başlar, yavaşça yukarı çekilerek ${product} ortaya çıkar.`,
+    'Product Hit': `${product} aniden çerçeveye uçarak gelir, kişi hafif şaşırır, elinde tutar.`,
+    Interview: `Sokak röportajı havası — biri soruyor, diğeri ${product}'ü fark ederek doğal şekilde tanıtmaya başlıyor.`,
+    'Random Object Mic': `Yukarıdan absürt bir nesne düşer, kişi onu mikrofon gibi kullanarak ${product}'ü anlatmaya başlar.`,
+    'Product Crash': `${product} düşer, kırılıyor gibi görünür — sonra sahne aniden temizlenir, kişi sakin şekilde incelemeye başlar.`,
+    Blizzard: `Aniden iç mekâna fırtına girer, her şey kaosla dolar — ama ${product} sağlam durur.`,
+    'Camera Bump': `Kameraman yanlışlıkla kişiye çarpar, kişi toparlanır ve ${product}'ü doğal şekilde gösterir.`,
+    'Product Dodge': `${product} yüze doğru fırlar, kişi eğilir — tam sonrasında elinde tutarak incelemeye başlar.`,
+    'Epic Fail': `Kişi takla atmaya çalışır, düşer — hiç umursamadan yerden kalkar ve ${product}'ü göstermeye başlar.`,
+  }
+
+  const ctx = settingContext[setting] || 'kameraya bakarken'
+  const intro = hookIntro[hook] || `${ctx} ${product}'ü kameraya gösteriyor.`
+
+  const scene = `${intro} Kişi ${ctx}, ${product}'ü kameraya doğru tutuyor ve Türkçe olarak tanıtıyor. Gerçek kullanıcı havası, telefon kamera estetiği, doğal ışık.`
+
+  const script = `[Türkçe seslendirme]
+
+"${product} — bunu çok daha önce keşfetmem gerekirdi.
+
+${getProductPitch(product, wizard.productUrl)}
+
+Bir dene, pişman olmayacaksın."
+
+[Avatar ürünü elinde tutarak kameraya gülümsüyor]`
+
+  return { scene, script }
+}
+
+function getProductPitch(productName: string, url: string): string {
+  const name = productName.toLowerCase()
+  if (name.includes('gözlük') || name.includes('optik')) {
+    return 'Bu kadar şık, bu kadar uygun fiyatlı bir gözlük görmedim. Gökçen Optik\'te şu an 999 TL\'ye seçili modeller var.'
+  }
+  if (name.includes('serum') || name.includes('cilt') || name.includes('krem')) {
+    return 'Cildim bu kadar güzel görünmemişti. 2 haftada fark yaratan bir ürün.'
+  }
+  if (name.includes('enerji') || name.includes('spor') || name.includes('protein')) {
+    return 'Antrenmandan önce bunu içince farkı hissediyorum. Gerçekten işe yarıyor.'
+  }
+  if (url) {
+    return `${productName} — detaylar için linke bak. Bu fiyata bu kalite inanılmaz.`
+  }
+  return `${productName} — beklediğimden çok daha iyi çıktı. Kesinlikle tavsiye ederim.`
+}
+
+function CopyButton({ text, label }: { text: string; label?: string }) {
+  const [copied, setCopied] = useState(false)
+  const handleCopy = useCallback(() => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }, [text])
+  return (
+    <button
+      onClick={handleCopy}
+      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+        copied
+          ? 'bg-green-900/40 text-green-400 border border-green-700/40'
+          : 'bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700 border border-gray-700'
+      }`}
+    >
+      {copied ? <CheckCheck size={13} /> : <Copy size={13} />}
+      {copied ? 'Kopyalandı!' : label || 'Kopyala'}
+    </button>
+  )
+}
+
+const CreateVideo: React.FC<PageProps> = ({ user, onLogin }) => {
   const [step, setStep] = useState<Step>(1)
-  const [generating, setGenerating] = useState(false)
-  const [generated, setGenerated] = useState(false)
-  const [generatedId, setGeneratedId] = useState<string | null>(null)
+  const [promptReady, setPromptReady] = useState(false)
   const [hookFilter, setHookFilter] = useState<'all' | 'stunt' | 'subtle'>('all')
   const [settingFilter, setSettingFilter] = useState<'all' | 'realistic' | 'unrealistic'>('all')
   const [hovered, setHovered] = useState<string | null>(null)
+  const [customScript, setCustomScript] = useState('')
+  const [customScene, setCustomScene] = useState('')
 
   const [wizard, setWizard] = useState<WizardState>({
     productName: '',
@@ -47,11 +140,9 @@ const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVide
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
         <div className="text-5xl mb-4">🔒</div>
-        <h2 className="text-2xl font-bold text-white mb-2">Sign in to Create</h2>
-        <p className="text-gray-400 mb-6">You need an account to generate UGC videos.</p>
-        <button onClick={onLogin} className="btn-primary">
-          Sign in & Start Free
-        </button>
+        <h2 className="text-2xl font-bold text-white mb-2">Giriş yapman gerekiyor</h2>
+        <p className="text-gray-400 mb-6">UGC videoları oluşturmak için hesabına giriş yap.</p>
+        <button onClick={onLogin} className="btn-primary">Ücretsiz Başla</button>
       </div>
     )
   }
@@ -67,67 +158,167 @@ const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVide
     }
   }
 
-  const handleGenerate = async () => {
-    if (!wizard.preset || !wizard.hook || !wizard.setting || !wizard.avatar) return
-    setGenerating(true)
-
-    const id = `vid_${Date.now()}`
-    const newVideo: GeneratedVideo = {
-      id,
-      productName: wizard.productName,
-      productUrl: wizard.productUrl || undefined,
-      preset: wizard.preset,
-      hook: wizard.hook,
-      setting: wizard.setting,
-      avatarName: wizard.avatar.name,
-      status: 'generating',
-      createdAt: new Date().toISOString(),
-    }
-    addVideo(newVideo)
-    setGeneratedId(id)
-
-    // Simulate Higgsfield API call (~10–30 seconds)
-    setTimeout(() => {
-      updateVideo(id, {
-        status: 'completed',
-        thumbnailUrl: wizard.hook!.thumbnail,
-        videoUrl: wizard.hook!.preview,
-        duration: '0:' + (Math.floor(Math.random() * 20) + 20),
-      })
-      setGenerating(false)
-      setGenerated(true)
-    }, 6000)
+  const handleGeneratePrompt = () => {
+    const { scene, script } = generateTurkishScript(wizard)
+    setCustomScene(scene)
+    setCustomScript(script)
+    setPromptReady(true)
   }
 
   const filteredHooks = hookFilter === 'all' ? HOOKS : HOOKS.filter((h) => h.type === hookFilter)
   const filteredSettings = settingFilter === 'all' ? SETTINGS : SETTINGS.filter((s) => s.type === settingFilter)
 
-  if (generated && generatedId) {
+  const fullPromptForCopy = () => {
+    return `=== HİGGSFİELD UGC PROMPT ===
+
+ÜRÜN: ${wizard.productName}${wizard.productUrl ? '\nURL: ' + wizard.productUrl : ''}
+PRESET: ${wizard.preset?.mode}
+HOOK: ${wizard.hook?.name}
+SETTİNG: ${wizard.setting?.name}
+AVATAR: ${wizard.avatar?.name} — ${wizard.avatar?.style}
+
+--- SAHNE TANIMI ---
+${customScene}
+
+--- TÜRKÇE SCRIPT ---
+${customScript}
+`
+  }
+
+  if (promptReady && wizard.hook && wizard.setting && wizard.preset && wizard.avatar) {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4 py-16">
-        <div className="w-16 h-16 bg-green-900/30 rounded-full flex items-center justify-center border border-green-700/40 mb-6">
-          <Check size={32} className="text-green-400" />
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
+        <div className="text-center mb-8">
+          <div className="w-14 h-14 bg-gradient-to-br from-violet-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <Sparkles size={28} className="text-white" />
+          </div>
+          <h1 className="text-2xl font-bold text-white">Higgsfield Promptun Hazır!</h1>
+          <p className="text-gray-400 mt-2">Aşağıdaki her alanı kopyala, Higgsfield'a yapıştır.</p>
         </div>
-        <h2 className="text-3xl font-bold text-white mb-2">Video Generated!</h2>
-        <p className="text-gray-400 mb-8 max-w-md">
-          Your UGC video for <strong className="text-white">{wizard.productName}</strong> has been created.
-          Check your library to view and download it.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4">
-          <button onClick={() => navigate('library')} className="btn-primary flex items-center gap-2">
-            View in Library <ArrowRight size={16} />
-          </button>
+
+        {/* Quick summary */}
+        <div className="flex flex-wrap gap-2 justify-center mb-6">
+          <span className="badge-violet badge">{wizard.preset.emoji} {wizard.preset.mode}</span>
+          <span className="badge bg-gray-800 text-gray-300">Hook: {wizard.hook.name}</span>
+          <span className="badge bg-gray-800 text-gray-300">Setting: {wizard.setting.name}</span>
+          <span className="badge bg-gray-800 text-gray-300">Avatar: {wizard.avatar.name}</span>
+        </div>
+
+        {/* Steps */}
+        <div className="space-y-4 mb-6">
+          {/* Step 1 */}
+          <div className="card p-5">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <span className="w-6 h-6 bg-violet-600 rounded-full flex items-center justify-center text-xs font-bold text-white">1</span>
+                <span className="text-sm font-semibold text-white">Ürün Adı — "Product & App" alanına yaz</span>
+              </div>
+              <CopyButton text={wizard.productName} />
+            </div>
+            <div className="bg-gray-800 rounded-lg px-4 py-3 text-sm text-gray-200 font-mono">
+              {wizard.productName}
+            </div>
+          </div>
+
+          {/* Step 2 */}
+          <div className="card p-5">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <span className="w-6 h-6 bg-violet-600 rounded-full flex items-center justify-center text-xs font-bold text-white">2</span>
+                <span className="text-sm font-semibold text-white">Hook & Setting seç</span>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-gray-800 rounded-lg p-3 flex gap-3 items-center">
+                <img src={wizard.hook.thumbnail} className="w-10 h-14 rounded object-cover flex-shrink-0" alt="" />
+                <div>
+                  <p className="text-xs text-gray-500 mb-0.5">Hook</p>
+                  <p className="text-sm font-semibold text-white">{wizard.hook.name}</p>
+                  <span className={`badge text-xs mt-1 ${wizard.hook.type === 'stunt' ? 'badge-violet' : 'badge-green'}`}>{wizard.hook.type}</span>
+                </div>
+              </div>
+              <div className="bg-gray-800 rounded-lg p-3 flex gap-3 items-center">
+                <img src={wizard.setting.thumbnail} className="w-10 h-10 rounded object-cover flex-shrink-0" alt="" />
+                <div>
+                  <p className="text-xs text-gray-500 mb-0.5">Setting</p>
+                  <p className="text-sm font-semibold text-white">{wizard.setting.name}</p>
+                  <span className={`badge text-xs mt-1 ${wizard.setting.type === 'realistic' ? 'badge-green' : 'badge-yellow'}`}>{wizard.setting.type}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Step 3 - Scene */}
+          <div className="card p-5">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <span className="w-6 h-6 bg-violet-600 rounded-full flex items-center justify-center text-xs font-bold text-white">3</span>
+                <span className="text-sm font-semibold text-white">"Describe what happens" kutusuna yapıştır</span>
+              </div>
+              <CopyButton text={customScene} />
+            </div>
+            <textarea
+              value={customScene}
+              onChange={(e) => setCustomScene(e.target.value)}
+              rows={4}
+              className="input text-sm font-mono resize-none"
+            />
+            <p className="text-xs text-gray-600 mt-1.5">Düzenleyebilirsin ↑</p>
+          </div>
+
+          {/* Step 4 - Script */}
+          <div className="card p-5">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <span className="w-6 h-6 bg-violet-600 rounded-full flex items-center justify-center text-xs font-bold text-white">4</span>
+                <span className="text-sm font-semibold text-white">Türkçe Script — aynı kutuya ekle</span>
+              </div>
+              <CopyButton text={customScript} />
+            </div>
+            <textarea
+              value={customScript}
+              onChange={(e) => setCustomScript(e.target.value)}
+              rows={6}
+              className="input text-sm font-mono resize-none"
+            />
+            <p className="text-xs text-gray-600 mt-1.5">İstediğin gibi değiştirebilirsin ↑</p>
+          </div>
+        </div>
+
+        {/* Copy all + Open Higgsfield */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <CopyButton text={fullPromptForCopy()} label="Tümünü Kopyala" />
+          <a
+            href="https://higgsfield.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 btn-primary text-sm py-3 flex items-center justify-center gap-2"
+          >
+            <ExternalLink size={16} />
+            Higgsfield'ı Aç & Yapıştır
+          </a>
           <button
             onClick={() => {
+              setPromptReady(false)
               setStep(1)
-              setGenerated(false)
-              setGeneratedId(null)
               setWizard({ productName: '', productUrl: '', preset: null, hook: null, setting: null, avatar: null })
             }}
-            className="btn-secondary"
+            className="btn-secondary text-sm py-3"
           >
-            Create Another
+            Yeni Prompt
           </button>
+        </div>
+
+        <div className="mt-6 card p-4 bg-violet-900/20 border-violet-700/40">
+          <p className="text-xs text-violet-300 font-semibold mb-2">💡 Higgsfield'da ne yapacaksın?</p>
+          <ol className="text-xs text-gray-400 space-y-1 list-decimal list-inside">
+            <li>Marketing Studio → New Video → <strong className="text-white">UGC</strong> seç</li>
+            <li>Ürün fotoğrafını yükle (gözlük görseli)</li>
+            <li>Avatar ekle</li>
+            <li><strong className="text-white">Hook: {wizard.hook.name}</strong> + <strong className="text-white">Setting: {wizard.setting.name}</strong> seç</li>
+            <li>"Describe what happens" kutusuna sahne + scripti yapıştır</li>
+            <li>GENERATE bas 🚀</li>
+          </ol>
         </div>
       </div>
     )
@@ -135,10 +326,9 @@ const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVide
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
-      {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-white">Create UGC Video</h1>
-        <p className="text-gray-400 mt-2">Follow the steps to generate your AI-powered UGC video.</p>
+        <h1 className="text-3xl font-bold text-white">UGC Video Oluştur</h1>
+        <p className="text-gray-400 mt-2">Tercihlerini seç, Türkçe Higgsfield promptun hazır olsun.</p>
       </div>
 
       {/* Step indicator */}
@@ -169,7 +359,7 @@ const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVide
                 </span>
               </button>
               {i < STEP_LABELS.length - 1 && (
-                <div className={`h-px w-8 sm:w-12 mx-1 ${done ? 'bg-violet-600' : 'bg-gray-800'}`} />
+                <div className={`h-px w-6 sm:w-10 mx-1 ${done ? 'bg-violet-600' : 'bg-gray-800'}`} />
               )}
             </React.Fragment>
           )
@@ -184,36 +374,33 @@ const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVide
           <div>
             <h2 className="text-xl font-semibold text-white mb-1 flex items-center gap-2">
               <Link size={20} className="text-violet-400" />
-              Add Your Product
+              Ürün Bilgileri
             </h2>
-            <p className="text-gray-400 text-sm mb-6">Enter your product name and optionally paste a URL for AI to analyze.</p>
+            <p className="text-gray-400 text-sm mb-6">Kampanyan için ürün adını ve varsa URL'yi gir.</p>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Product Name <span className="text-red-400">*</span>
+                  Ürün / Kampanya Adı <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="text"
                   className="input"
-                  placeholder="e.g. Glow Face Serum, AirPods Pro, Energy Drink X"
+                  placeholder="örn. Gökçen Optik — Güneş Gözlüğü 999 TL"
                   value={wizard.productName}
                   onChange={(e) => setWizard({ ...wizard, productName: e.target.value })}
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Product URL <span className="text-gray-500 font-normal">(optional)</span>
+                  Web Sitesi / Ürün URL <span className="text-gray-500 font-normal">(opsiyonel)</span>
                 </label>
                 <input
                   type="url"
                   className="input"
-                  placeholder="https://yourstore.com/products/..."
+                  placeholder="https://gokcenoptik.com/..."
                   value={wizard.productUrl}
                   onChange={(e) => setWizard({ ...wizard, productUrl: e.target.value })}
                 />
-                <p className="text-xs text-gray-500 mt-1.5">
-                  Paste a product page URL and our AI will extract colors, images, and context.
-                </p>
               </div>
             </div>
           </div>
@@ -224,9 +411,9 @@ const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVide
           <div>
             <h2 className="text-xl font-semibold text-white mb-1 flex items-center gap-2">
               <Sparkles size={20} className="text-violet-400" />
-              Choose Video Style
+              Video Stili Seç
             </h2>
-            <p className="text-gray-400 text-sm mb-6">What kind of video do you want to create?</p>
+            <p className="text-gray-400 text-sm mb-6">Nasıl bir video yapmak istiyorsun?</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {PRESETS.map((preset) => {
                 const selected = wizard.preset?.slug === preset.slug
@@ -243,11 +430,7 @@ const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVide
                     <div className="text-2xl mb-2">{preset.emoji}</div>
                     <p className="text-sm font-semibold text-white">{preset.mode}</p>
                     <p className="text-xs text-gray-400 mt-0.5">{preset.description}</p>
-                    {selected && (
-                      <div className="mt-2">
-                        <Check size={14} className="text-violet-400" />
-                      </div>
-                    )}
+                    {selected && <Check size={14} className="text-violet-400 mt-2" />}
                   </button>
                 )
               })}
@@ -258,18 +441,13 @@ const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVide
         {/* Step 3: Hook */}
         {step === 3 && (
           <div>
-            <h2 className="text-xl font-semibold text-white mb-1">Choose a Hook</h2>
-            <p className="text-gray-400 text-sm mb-4">The hook is the cinematic opener — it grabs attention in the first second.</p>
+            <h2 className="text-xl font-semibold text-white mb-1">Hook Seç</h2>
+            <p className="text-gray-400 text-sm mb-4">İlk saniyede dikkat çeken açılış sahnesi. Üzerine gelince önizle.</p>
             <div className="flex gap-2 mb-5">
               {(['all', 'stunt', 'subtle'] as const).map((f) => (
-                <button
-                  key={f}
-                  onClick={() => setHookFilter(f)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                    hookFilter === f ? 'bg-violet-600 text-white' : 'border border-gray-700 text-gray-400 hover:text-white'
-                  }`}
-                >
-                  {f.charAt(0).toUpperCase() + f.slice(1)}
+                <button key={f} onClick={() => setHookFilter(f)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${hookFilter === f ? 'bg-violet-600 text-white' : 'border border-gray-700 text-gray-400 hover:text-white'}`}>
+                  {f === 'all' ? 'Tümü' : f === 'stunt' ? 'Stunt' : 'Subtle'}
                 </button>
               ))}
             </div>
@@ -277,15 +455,9 @@ const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVide
               {filteredHooks.map((hook) => {
                 const selected = wizard.hook?.id === hook.id
                 return (
-                  <button
-                    key={hook.id}
-                    onClick={() => setWizard({ ...wizard, hook })}
-                    onMouseEnter={() => setHovered(hook.id)}
-                    onMouseLeave={() => setHovered(null)}
-                    className={`relative rounded-xl overflow-hidden aspect-[9/14] border-2 transition-all text-left ${
-                      selected ? 'border-violet-500 ring-2 ring-violet-500/40' : 'border-gray-700 hover:border-gray-600'
-                    }`}
-                  >
+                  <button key={hook.id} onClick={() => setWizard({ ...wizard, hook })}
+                    onMouseEnter={() => setHovered(hook.id)} onMouseLeave={() => setHovered(null)}
+                    className={`relative rounded-xl overflow-hidden aspect-[9/14] border-2 transition-all text-left ${selected ? 'border-violet-500 ring-2 ring-violet-500/40' : 'border-gray-700 hover:border-gray-600'}`}>
                     <img src={hook.thumbnail} alt={hook.name} className="w-full h-full object-cover" />
                     {hovered === hook.id && (
                       <video src={hook.preview} autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" />
@@ -297,9 +469,7 @@ const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVide
                       </div>
                     )}
                     <div className="absolute bottom-0 p-2.5 w-full">
-                      <div className={`badge mb-1 ${hook.type === 'stunt' ? 'badge-violet' : 'badge-green'}`}>
-                        {hook.type}
-                      </div>
+                      <div className={`badge mb-1 ${hook.type === 'stunt' ? 'badge-violet' : 'badge-green'}`}>{hook.type}</div>
                       <p className="text-xs font-semibold text-white">{hook.name}</p>
                     </div>
                     {hovered === hook.id && (
@@ -317,18 +487,13 @@ const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVide
         {/* Step 4: Setting */}
         {step === 4 && (
           <div>
-            <h2 className="text-xl font-semibold text-white mb-1">Choose a Setting</h2>
-            <p className="text-gray-400 text-sm mb-4">Where does your video take place? Hover to preview.</p>
+            <h2 className="text-xl font-semibold text-white mb-1">Setting Seç</h2>
+            <p className="text-gray-400 text-sm mb-4">Videonun geçtiği ortam. Üzerine gelince önizle.</p>
             <div className="flex gap-2 mb-5">
               {(['all', 'realistic', 'unrealistic'] as const).map((f) => (
-                <button
-                  key={f}
-                  onClick={() => setSettingFilter(f)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                    settingFilter === f ? 'bg-violet-600 text-white' : 'border border-gray-700 text-gray-400 hover:text-white'
-                  }`}
-                >
-                  {f.charAt(0).toUpperCase() + f.slice(1)}
+                <button key={f} onClick={() => setSettingFilter(f)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${settingFilter === f ? 'bg-violet-600 text-white' : 'border border-gray-700 text-gray-400 hover:text-white'}`}>
+                  {f === 'all' ? 'Tümü' : f === 'realistic' ? 'Gerçekçi' : 'Absürt'}
                 </button>
               ))}
             </div>
@@ -336,15 +501,9 @@ const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVide
               {filteredSettings.map((setting) => {
                 const selected = wizard.setting?.id === setting.id
                 return (
-                  <button
-                    key={setting.id}
-                    onClick={() => setWizard({ ...wizard, setting })}
-                    onMouseEnter={() => setHovered(setting.id)}
-                    onMouseLeave={() => setHovered(null)}
-                    className={`relative rounded-xl overflow-hidden aspect-square border-2 transition-all ${
-                      selected ? 'border-violet-500 ring-2 ring-violet-500/40' : 'border-gray-700 hover:border-gray-600'
-                    }`}
-                  >
+                  <button key={setting.id} onClick={() => setWizard({ ...wizard, setting })}
+                    onMouseEnter={() => setHovered(setting.id)} onMouseLeave={() => setHovered(null)}
+                    className={`relative rounded-xl overflow-hidden aspect-square border-2 transition-all ${selected ? 'border-violet-500 ring-2 ring-violet-500/40' : 'border-gray-700 hover:border-gray-600'}`}>
                     <img src={setting.thumbnail} alt={setting.name} className="w-full h-full object-cover" />
                     {hovered === setting.id && (
                       <video src={setting.preview} autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" />
@@ -356,9 +515,7 @@ const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVide
                       </div>
                     )}
                     <div className="absolute bottom-0 p-2 w-full">
-                      <div className={`badge mb-0.5 ${setting.type === 'realistic' ? 'badge-green' : 'badge-yellow'}`}>
-                        {setting.type}
-                      </div>
+                      <div className={`badge mb-0.5 ${setting.type === 'realistic' ? 'badge-green' : 'badge-yellow'}`}>{setting.type}</div>
                       <p className="text-xs font-semibold text-white">{setting.name}</p>
                     </div>
                   </button>
@@ -371,27 +528,16 @@ const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVide
         {/* Step 5: Avatar */}
         {step === 5 && (
           <div>
-            <h2 className="text-xl font-semibold text-white mb-1">Choose an Avatar</h2>
-            <p className="text-gray-400 text-sm mb-6">Pick who will present your product. Custom avatars available on Pro+.</p>
+            <h2 className="text-xl font-semibold text-white mb-1">Avatar Seç</h2>
+            <p className="text-gray-400 text-sm mb-6">Ürünü tanıtacak kişi.</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {AVATARS.map((avatar) => {
                 const selected = wizard.avatar?.id === avatar.id
                 return (
-                  <button
-                    key={avatar.id}
-                    onClick={() => setWizard({ ...wizard, avatar })}
-                    className={`p-4 rounded-xl border-2 transition-all text-center ${
-                      selected
-                        ? 'border-violet-500 bg-violet-900/20 ring-1 ring-violet-500/40'
-                        : 'border-gray-700 hover:border-gray-600 hover:bg-gray-800/40'
-                    }`}
-                  >
+                  <button key={avatar.id} onClick={() => setWizard({ ...wizard, avatar })}
+                    className={`p-4 rounded-xl border-2 transition-all text-center ${selected ? 'border-violet-500 bg-violet-900/20 ring-1 ring-violet-500/40' : 'border-gray-700 hover:border-gray-600 hover:bg-gray-800/40'}`}>
                     <div className="relative w-16 h-16 mx-auto mb-3">
-                      <img
-                        src={avatar.thumbnail}
-                        alt={avatar.name}
-                        className="w-full h-full rounded-full object-cover border-2 border-gray-700"
-                      />
+                      <img src={avatar.thumbnail} alt={avatar.name} className="w-full h-full rounded-full object-cover border-2 border-gray-700" />
                       {selected && (
                         <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-violet-600 rounded-full flex items-center justify-center">
                           <Check size={10} className="text-white" />
@@ -407,16 +553,16 @@ const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVide
           </div>
         )}
 
-        {/* Step 6: Review & Generate */}
+        {/* Step 6: Generate Prompt */}
         {step === 6 && (
           <div>
-            <h2 className="text-xl font-semibold text-white mb-1">Review & Generate</h2>
-            <p className="text-gray-400 text-sm mb-6">Everything look good? Hit generate to create your video.</p>
+            <h2 className="text-xl font-semibold text-white mb-1">Özet & Prompt Oluştur</h2>
+            <p className="text-gray-400 text-sm mb-6">Her şey hazır. "Prompt Oluştur" bas — Higgsfield'a yapıştırılacak Türkçe içerik hazırlanır.</p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
               {[
-                { label: 'Product', value: wizard.productName },
-                { label: 'Video Style', value: `${wizard.preset?.emoji} ${wizard.preset?.mode}` },
+                { label: 'Ürün', value: wizard.productName },
+                { label: 'Stil', value: `${wizard.preset?.emoji} ${wizard.preset?.mode}` },
                 { label: 'Hook', value: wizard.hook?.name, badge: wizard.hook?.type },
                 { label: 'Setting', value: wizard.setting?.name, badge: wizard.setting?.type },
                 { label: 'Avatar', value: wizard.avatar?.name },
@@ -427,107 +573,49 @@ const CreateVideo: React.FC<PageProps> = ({ navigate, user, addVideo, updateVide
                     <p className="text-xs text-gray-500 mb-0.5">{label}</p>
                     <p className="text-sm font-medium text-white flex items-center gap-2">
                       {value}
-                      {badge && (
-                        <span className={`badge ${badge === 'stunt' || badge === 'unrealistic' ? 'badge-yellow' : 'badge-green'}`}>
-                          {badge}
-                        </span>
-                      )}
+                      {badge && <span className={`badge ${badge === 'stunt' || badge === 'unrealistic' ? 'badge-yellow' : 'badge-green'}`}>{badge}</span>}
                     </p>
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Hook + Setting preview */}
-            {wizard.hook && wizard.setting && (
-              <div className="flex gap-3 mb-6">
-                <div className="relative rounded-lg overflow-hidden w-24 h-32 flex-shrink-0">
-                  <img src={wizard.hook.thumbnail} alt="Hook preview" className="w-full h-full object-cover" />
-                  <div className="absolute bottom-0 inset-x-0 bg-black/70 p-1">
-                    <p className="text-xs text-white text-center truncate">{wizard.hook.name}</p>
-                  </div>
-                </div>
-                <div className="relative rounded-lg overflow-hidden w-24 h-32 flex-shrink-0">
-                  <img src={wizard.setting.thumbnail} alt="Setting preview" className="w-full h-full object-cover" />
-                  <div className="absolute bottom-0 inset-x-0 bg-black/70 p-1">
-                    <p className="text-xs text-white text-center truncate">{wizard.setting.name}</p>
-                  </div>
-                </div>
-                <div className="flex-1 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-4xl mb-2">✨</div>
-                    <p className="text-sm text-gray-400">Hook × Setting</p>
-                    <p className="text-xs text-gray-600 mt-0.5">AI blends both seamlessly</p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {generating ? (
-              <div className="text-center py-8">
-                <div className="relative w-16 h-16 mx-auto mb-4">
-                  <Loader2 size={64} className="text-violet-500 animate-spin" />
-                </div>
-                <p className="text-white font-semibold">Generating your video...</p>
-                <p className="text-gray-400 text-sm mt-1">This usually takes 20–60 seconds</p>
-                <div className="flex items-center justify-center gap-1 mt-3">
-                  {['Analyzing product', 'Generating frames', 'Rendering video'].map((s, i) => (
-                    <span key={s} className="text-xs text-gray-500 flex items-center gap-1">
-                      {i > 0 && <ChevronRight size={10} className="text-gray-700" />}
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <button
-                onClick={handleGenerate}
-                className="w-full btn-primary py-4 text-base flex items-center justify-center gap-2"
-              >
-                <Sparkles size={20} />
-                Generate Video
-              </button>
-            )}
+            <button
+              onClick={handleGeneratePrompt}
+              className="w-full btn-primary py-4 text-base flex items-center justify-center gap-2"
+            >
+              <Sparkles size={20} />
+              Türkçe Prompt Oluştur
+            </button>
+            <p className="text-center text-xs text-gray-600 mt-3">Prompt hazırlandıktan sonra düzenleyip Higgsfield'a yapıştırırsın</p>
           </div>
         )}
       </div>
 
-      {/* Navigation buttons */}
-      {!generating && (
-        <div className="flex items-center justify-between mt-6">
+      {/* Navigation */}
+      <div className="flex items-center justify-between mt-6">
+        <button
+          onClick={() => setStep((s) => Math.max(1, s - 1) as Step)}
+          disabled={step === 1}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${step === 1 ? 'opacity-30 cursor-not-allowed text-gray-500' : 'btn-secondary'}`}
+        >
+          <ArrowLeft size={16} />
+          Geri
+        </button>
+
+        <span className="text-xs text-gray-600">{step} / {STEP_LABELS.length}</span>
+
+        {step < 6 ? (
           <button
-            onClick={() => setStep((s) => Math.max(1, s - 1) as Step)}
-            disabled={step === 1}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${
-              step === 1
-                ? 'opacity-30 cursor-not-allowed text-gray-500'
-                : 'btn-secondary'
-            }`}
+            onClick={() => setStep((s) => Math.min(6, s + 1) as Step)}
+            disabled={!canProceed()}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${canProceed() ? 'btn-primary' : 'opacity-40 cursor-not-allowed bg-gray-800 text-gray-500'}`}
           >
-            <ArrowLeft size={16} />
-            Back
+            İleri
+            <ArrowRight size={16} />
           </button>
-
-          <span className="text-xs text-gray-600">Step {step} of {STEP_LABELS.length}</span>
-
-          {step < 6 ? (
-            <button
-              onClick={() => setStep((s) => Math.min(6, s + 1) as Step)}
-              disabled={!canProceed()}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                canProceed()
-                  ? 'btn-primary'
-                  : 'opacity-40 cursor-not-allowed bg-gray-800 text-gray-500'
-              }`}
-            >
-              Next
-              <ArrowRight size={16} />
-            </button>
-          ) : (
-            <div />
-          )}
-        </div>
-      )}
+        ) : <div />}
+      </div>
     </div>
   )
 }
