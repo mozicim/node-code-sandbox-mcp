@@ -26,79 +26,82 @@ interface WizardState {
 
 const STEP_LABELS = ['Ürün', 'Stil', 'Hook', 'Setting', 'Avatar', 'Prompt']
 
-// ~10 saniye = 25-35 Türkçe kelime konuşma
-// Hook: 0-3s görsel etki | Ürün: 3-8s pitch | CTA: 8-10s
+// English prompt + Turkish spoken dialogue embedded inside
+// Hook: 0-3s visual | Pitch: 3-9s speaking | CTA beat: 9-10s
 function generateTurkishScript(wizard: WizardState): { scene: string; script: string } {
-  const product = wizard.productName || 'ürün'
+  const product = wizard.productName || 'product'
   const hook = wizard.hook?.name || ''
   const setting = wizard.setting?.name || ''
 
-  // Her setting için ortam tanımı (Higgsfield sahne dili)
   const settingVisual: Record<string, string> = {
-    Bedroom:      'yatak odasında, yumuşak pencere ışığı, dağınık yastıklar, sabah veya gece rutini havası',
-    Kitchen:      'mutfak tezgahında, doğal gün ışığı, arka planda mutfak eşyaları, günlük rutin hissi',
-    Street:       'şehir kaldırımında yürürken, el kamerası selfie, arka planda trafik ve vitrinler, spontane his',
-    Gym:          'spor salonu zemininde, parlak ışık, arka planda aletler, antrenman sonrası enerji',
-    Nature:       'parkta veya sahilde, doğal ışık, yeşillik veya açık gökyüzü, aktif outdoor his',
-    Bathroom:     'banyo aynası selfie, vanity ışığı, çini görünür, makyaj/rutin ortası his',
-    Office:       'ofis masası başında, laptop açık, kahve yanında, günün ortasında hızlı paylaşım hissi',
-    'In Car':     'arabanın yolcu veya sürücü koltuğunda, pencere ışığı yüze vuruyor, park halinde ya da yolda',
-    'Airplane Wing': 'uçak kanadının üzerinde irtifada oturuyor, güçlü rüzgar, bulutlar, motor sesi',
-    Rooftop:      'gökdelen çatısının kenarında, şehir silueti arkada, rüzgar saçları hareket ettiriyor, gün batımı',
-    'Volcano Rim':'aktif yanardağın kenarında, aşağıda lav, duman tülleri, tamamen umursamaz tavır',
-    'Car Roof':   'çölde giden arabanın tavanında, golden hour, yol uzanıyor, kamyon geçiyor',
-    'Train Surf': 'hareket eden trenin dışına tutunmuş, selfie çekiyor, rüzgar yüze basıyor',
-    'Tiny Reviewer': 'ürünün yanında durmuş, ürün tam boy, kişi 15 cm boyunda, normal selfie açısı',
+    Bedroom:         'in a cozy bedroom, soft window light, unmade bed and pillows visible, relaxed morning or evening vibe',
+    Kitchen:         'standing at a kitchen counter, natural daylight, everyday items in background, mid-day casual energy',
+    Street:          'walking on a city sidewalk, handheld selfie camera, storefronts and traffic in background, spontaneous feel',
+    Gym:             'on the gym floor or near equipment, bright overhead lighting, post-workout energy',
+    Nature:          'outdoors on a trail, park, or beach, natural light, greenery or open sky, active peaceful mood',
+    Bathroom:        'bathroom mirror selfie or front camera, vanity or ring lighting, tiles visible, mid-routine intimate feel',
+    Office:          'at a desk, laptop open, coffee nearby, soft overhead light, quick mid-workday share energy',
+    'In Car':        'selfie from passenger or driver seat, window light on face, parked or cruising, casual tone',
+    'Airplane Wing': 'sitting on an airplane wing mid-flight at altitude, powerful wind, clouds below, engine roar, zero concern',
+    Rooftop:         'on the edge of a skyscraper rooftop, full city skyline stretched behind, golden hour or dusk light, wind in hair',
+    'Volcano Rim':   'sitting casually on the rim of an active volcano, lava bubbling below, smoke drifting, completely unbothered',
+    'Car Roof':      'on the roof of a moving car on a desert highway, golden hour, semi-truck passes, swaying with the road',
+    'Train Surf':    'hanging outside a moving train filming a selfie, wind pressing hard, tracks rushing below',
+    'Tiny Reviewer': 'person shrunk to 15cm standing next to a full-size product, normal selfie framing at impossible scale',
   }
 
-  // Her hook için 0-3 saniyelik GÖRSEL AÇILIŞ tarifi (Higgsfield sahne dili)
   const hookVisual: Record<string, string> = {
     'Spicy':
-      `[0-3s] Kamera boyun/köprücük kemiğinin aşırı yakın çekimiyle başlar. Yavaşça yukarı tilt, ${product} yüzde/elde ortaya çıkar. Sonra selfie çerçevesine çekilir, sessiz bir duraklama.`,
+      `[0–3s] Starts with an extreme close-up of the collarbone/neck. Camera slowly tilts upward to reveal ${product} on the face or in hand. Pulls back into selfie framing. Silent dramatic pause before speaking.`,
     'Product Hit':
-      `[0-3s] ${product} çerçeveye uçarak gelir ve kişiye çarpar. Kişi hafif şaşırır, tepki verir. Bir sonraki karede elinde tutarak kameraya bakar.`,
+      `[0–3s] ${product} flies into frame and hits the person. Brief surprised reaction. Next frame: person holds it naturally, looks at camera, begins speaking.`,
     'Interview':
-      `[0-3s] Sokak röportajı kurgusu — bir yabancı soru soruyor. Kişi cevap vermek üzereyken ${product}'ü fark eder, doğal geçiş.`,
+      `[0–3s] Street interview setup — a stranger asks a question based on the previous stranger's random answer. Confusion builds. Person naturally notices ${product} and pivots into a casual review.`,
     'Random Object Mic':
-      `[0-3s] Yukarıdan absürt bir nesne (muz, çekiç, oyuncak vb.) kişinin eline düşer. Kişi onu anında ciddi şekilde mikrofon gibi tutar.`,
+      `[0–3s] A random absurd object (banana, hammer, toy) falls from above into the person's hand. They immediately use it as a microphone with complete seriousness and begin the review.`,
     'Product Crash':
-      `[0-3s] ${product} yukarıdan düşer, parçalanıyor gibi görünür ve kaos yaşanır. Keskin bir geçişle sahne anında tertemiz olur, kişi sakin şekilde ürünü tutar.`,
+      `[0–3s] ${product} falls from above and appears to shatter, creating chaos. Sharp cut — scene instantly becomes perfectly clean and calm. Person holds ${product} and starts reviewing without missing a beat.`,
     'Blizzard':
-      `[0-3s] Rahat iç mekan sahnesi aniden şiddetli imkansız bir tipi fırtınasına kapılır. Her şey uçar, kaos dolar. Fırtına durur — ${product} hâlâ sağlam.`,
+      `[0–3s] A cozy indoor scene is suddenly hit by a violent impossible blizzard. Objects fly, room fills with chaos. Storm stops — ${product} is still intact and functioning. Person begins review.`,
     'Camera Bump':
-      `[0-3s] Kameraman yanlışlıkla kişiye çarparak alnına vurur. Kişi tepki verir, toparlanır ve ${product}'e geçiş yapar.`,
+      `[0–3s] Camera operator accidentally bumps into the person, hitting their forehead. Brief reaction and recovery. Person naturally transitions into revealing and reviewing ${product}.`,
     'Product Dodge':
-      `[0-3s] ${product} kişinin yüzüne doğru fırlar. Kişi eğilerek kaçınır. Bir sonraki karede ayağa kalkar, ${product} elindedir.`,
+      `[0–3s] ${product} flies directly at the person's face. They quickly duck to avoid it. Next frame: they stand back up holding ${product} as if nothing happened and begin the review.`,
     'Epic Fail':
-      `[0-3s] Kişi takla atmayı dener, başarısız olur ve düşer. Hiç umursamadan yerden kalkar, anında ${product}'ü tutup kameraya bakar.`,
+      `[0–3s] Person attempts a backflip, lands badly, and falls. Without hesitation they stand back up, pull out ${product}, and begin an completely composed review.`,
   }
 
-  // 3-10 saniye için konuşma metni (25-35 Türkçe kelime = ~7 saniye)
-  const pitchScript = getProductPitch(product, wizard.productUrl)
-  const settingDesc = settingVisual[setting] || 'doğal ortamda, el kamerası, gerçek kullanıcı hissi'
-  const hookDesc = hookVisual[hook] || `[0-3s] ${product} çerçeveye girer, kişi doğal tepki verir.`
+  const turkishPitch = getProductPitch(product, wizard.productUrl)
+  const settingDesc = settingVisual[setting] || 'in a natural everyday setting, handheld phone camera, authentic real-user feel'
+  const hookDesc = hookVisual[hook] || `[0–3s] ${product} enters the frame naturally. Person reacts and holds it toward camera.`
 
   const scene =
-`10 saniyelik dikey UGC video (9:16). Türkçe konuşma. Gerçek kullanıcı havası — telefon kamerası estetiği, doğal ışık, kurgu yok.
+`10-second vertical UGC video (9:16 aspect ratio). Authentic real-user feel — handheld phone camera aesthetic, natural lighting, no studio look, no cuts.
 
-ORTAM: ${settingDesc}.
+SETTING: ${settingDesc}.
 
-HOOK (0-3 saniye):
+HOOK (0–3 seconds):
 ${hookDesc}
 
-ÜRÜN SAHNE (3-10 saniye):
-Kişi ${product}'ü elinde tutarak doğrudan kameraya bakıyor. Selfie açısı. Türkçe konuşuyor. Arka plan: ${settingDesc}. Gerçek biri gibi konuşma tonu — ne çok heyecanlı ne de sıkıcı, samimi.`
+PRODUCT SCENE (3–10 seconds):
+Person holds ${product} toward the camera, direct eye contact, speaking in Turkish directly to the viewer. Selfie angle. Background: ${settingDesc}. Tone is natural and genuine — not overly excited, not flat. Like a real person sharing something they actually use.
+
+VOICEOVER LANGUAGE: Turkish
+SPOKEN DIALOGUE (Turkish, embedded in video):
+"${turkishPitch}"
+
+VIDEO SPECS: 10 seconds | 9:16 | UGC style | Turkish spoken audio`
 
   const script =
-`[0-3s] — Hook sahnesi (konuşma yok, görsel etki)
+`[0–3s] HOOK — visual only, no speaking
+${hookDesc}
 
-[3-10s] — Avatar Türkçe konuşuyor:
+[3–10s] PERSON SPEAKS IN TURKISH:
+"${turkishPitch}"
 
-"${pitchScript}"
+[Person holds ${product} toward camera, natural smile, direct eye contact]
 
-[Avatar ${product}'ü kameraya doğru tutuyor, direkt bakış, hafif gülümseme]
-
-NOT: Seslendirme dili = Türkçe. Tempo doğal, acele etmeden, 7 saniyeye sığacak şekilde.`
+LANGUAGE NOTE: Voiceover must be in Turkish. Natural conversational pace — fits comfortably in 7 seconds. Not rushed.`
 
   return { scene, script }
 }
