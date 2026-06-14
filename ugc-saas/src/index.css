@@ -36,7 +36,7 @@
     @apply bg-gray-900 border border-gray-800 rounded-2xl;
   }
   .card-hover {
-    @apply card hover:border-violet-700/50 hover:bg-gray-850 transition-all duration-200 cursor-pointer;
+    @apply card hover:border-violet-700/50 hover:bg-gray-800/50 transition-all duration-200 cursor-pointer;
   }
   .badge {
     @apply text-xs font-medium px-2.5 py-0.5 rounded-full;

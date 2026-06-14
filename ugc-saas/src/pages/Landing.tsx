@@ -7,7 +7,6 @@ import {
   Check,
   Star,
   TrendingUp,
-  Users,
   Video,
   ChevronRight,
 } from 'lucide-react'
