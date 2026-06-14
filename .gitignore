@@ -1,5 +1,2 @@
-node_modules
-dist
-coverage
-logs
-.env
+.vercel/
+.vercel/
