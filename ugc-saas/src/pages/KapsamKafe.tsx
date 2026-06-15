@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Coffee, Copy, Check, Film, ImageIcon, Mic, Zap, Sparkles, LayoutGrid } from 'lucide-react'
+import { Coffee, Copy, Check, Film, ImageIcon, Mic, Zap, Sparkles, LayoutGrid, ScanText } from 'lucide-react'
 import { PageProps } from '../types'
 
 type OutputType = 'image' | 'video' | 'voice'
@@ -15,6 +15,8 @@ interface KState {
   format: string
   tone: string
   placement: string
+  darken: string
+  typography: string
   // voice
   voicePlatform: VoicePlatform
   micType: string
@@ -315,6 +317,102 @@ const AUDIO_HINTS: Record<string, string> = {
   parallax: 'subtle cinematic texture, no melody',
 }
 
+const DARKEN_OPTIONS = [
+  { id: 'none',   label: 'Yok',   en: '' },
+  { id: 'light',  label: 'Hafif', en: '\nBACKGROUND DARKENING: Very subtle vignette — 15-20% opacity dark gradient applied softly behind the text zone only. Background imagery remains fully visible. Just enough to ensure text contrast.' },
+  { id: 'medium', label: 'Orta',  en: '\nBACKGROUND DARKENING: Moderate overlay — 45% semi-transparent dark layer in the text area, fading to transparent at frame edges. Background clearly visible at periphery, text zone darkened for comfortable readability.' },
+  { id: 'strong', label: 'Güçlü', en: '\nBACKGROUND DARKENING: Strong overlay — 65-70% dark layer covering most of the frame, most intense behind the text. Background imagery visible only at extreme corners. Maximum contrast, dramatic text presentation.' },
+]
+
+const TYPOGRAPHY_OPTIONS = [
+  { id: 'sans',        label: 'Modern Sans',   en: 'TYPOGRAPHY: Clean geometric sans-serif — modern, minimal, high legibility at any scale. Even stroke weight, no decorative serifs. Contemporary editorial feel.' },
+  { id: 'serif',       label: 'Klasik Serif',  en: 'TYPOGRAPHY: Elegant serif typeface — classical, literary, refined. Variable stroke weight, subtle serifs. The feeling of a well-designed book or literary magazine masthead.' },
+  { id: 'display',     label: 'Bold Display',  en: 'TYPOGRAPHY: Bold impact display typeface — heavy weight, maximum visual mass. Designed for instant readability. The letters command the frame like an editorial headline or poster.' },
+  { id: 'calligraphic',label: 'Kaligrafik',    en: 'TYPOGRAPHY: Calligraphic brush lettering — each letterform shows the path of a real brush, varying from thick downstrokes to fine upstrokes. The human hand is visible in each letter.' },
+  { id: 'handwritten', label: 'El Yazısı',     en: 'TYPOGRAPHY: Natural handwritten style — slightly irregular letterforms, the authentic warmth of pen or marker. Consistent but not uniform. A personal note, not a printed font.' },
+]
+
+// ─── Söz Analizi ──────────────────────────────────────────────────────────
+
+interface AnalysisResult {
+  label: string
+  reason: string
+  settings: Partial<KState>
+}
+
+function analyzeQuote(quote: string): AnalysisResult {
+  const lower = quote.toLowerCase()
+  const len = quote.trim().length
+
+  const EMOTION_KEYWORDS: Record<string, string[]> = {
+    melankoli: ['yalnız','yalnızlık','acı','kayıp','ayrılık','bitir','ağla','hüzün','gitmek','bitmek','veda','hasret','üzgün','kırık','yorgun','yoruldum','bıktım'],
+    umut:      ['umut','yeni','başlangıç','sabah','ışık','güneş','yüksel','hayaller','gelecek','inan','başar','ileri','değiş','büyü','kazan'],
+    nostalji:  ['geçmiş','hatıra','özlem','zaman','eski','çocukluk','yıllar','unutma','geri','eskiden','o günler','hatırla','özledim'],
+    güç:       ['güç','cesaret','savaş','mücadele','kalk','direniş','dayanmak','pes etme','yık','savaşmak','azim','kararlı'],
+    felsefe:   ['hayat','insan','gerçek','anlam','bilmek','olmak','var','dünya','ölüm','yaşam','evren','düşün','soru','cevap','neden'],
+    estetik:   ['güzel','yıldız','rüya','masal','çiçek','deniz','aşk','sevgi','tutku','gece','ay','gökyüzü','pembe','altın'],
+  }
+
+  const scores: Record<string, number> = {}
+  for (const [emotion, words] of Object.entries(EMOTION_KEYWORDS)) {
+    scores[emotion] = words.filter(w => lower.includes(w)).length
+  }
+
+  const sorted = Object.entries(scores).sort(([, a], [, b]) => b - a)
+  const dominant = sorted[0][1] > 0 ? sorted[0][0] : 'felsefe'
+
+  const EMOTION_MAP: Record<string, { label: string; reason: string; settings: Partial<KState> }> = {
+    melankoli: {
+      label: 'Melankoli / Hüzün',
+      reason: 'Söz duygusal ağırlık taşıyor — karanlık estetik, duvar dokusu ve moody ton bu duyguyu en iyi yansıtır.',
+      settings: { style: 'dark', background: 'wall', tone: 'moody', typography: 'serif' },
+    },
+    umut: {
+      label: 'Umut / İlham',
+      reason: 'Söz ileriye bakıyor — minimal stil, doğa arka planı ve sıcak ton bu enerjiyi destekler.',
+      settings: { style: 'minimal', background: 'nature', tone: 'warm', typography: 'sans' },
+    },
+    nostalji: {
+      label: 'Nostalji / Özlem',
+      reason: 'Söz geçmişe dönüyor — vintage film estetiği, ahşap doku ve sepya ton özlem hissini güçlendirir.',
+      settings: { style: 'vintage', background: 'wood', tone: 'sepia', typography: 'serif' },
+    },
+    güç: {
+      label: 'Güç / Mücadele',
+      reason: 'Söz güç ve direniş içeriyor — grunge estetik, beton yüzey ve siyah-beyaz ton bu enerjiyi somutlaştırır.',
+      settings: { style: 'grunge', background: 'concrete', tone: 'bw', typography: 'display' },
+    },
+    felsefe: {
+      label: 'Felsefe / Derin Düşünce',
+      reason: 'Söz derin bir düşünce taşıyor — wabi-sabi minimalizmi, soyut arka plan ve moody ton en uygun.',
+      settings: { style: 'wabisabi', background: 'abstract', tone: 'moody', typography: 'calligraphic' },
+    },
+    estetik: {
+      label: 'Estetik / Romantik',
+      reason: 'Söz güzellik ve duygu barındırıyor — Art Nouveau organik estetiği, doğa ve sıcak ton en uygun.',
+      settings: { style: 'artnouveau', background: 'nature', tone: 'warm', typography: 'calligraphic' },
+    },
+  }
+
+  const base = EMOTION_MAP[dominant]
+
+  // Placement by length + emotion
+  let placement = 'none'
+  if (len < 55) {
+    placement = dominant === 'güç' ? 'roadSign' : 'neonSign'
+  } else if (len < 110) {
+    placement = dominant === 'nostalji' ? 'buildingFacade' : dominant === 'umut' ? 'billboard' : 'shopSign'
+  } else {
+    placement = dominant === 'melankoli' ? 'bridgeWall' : dominant === 'estetik' ? 'shopWindow' : 'buildingFacade'
+  }
+
+  return {
+    label: base.label,
+    reason: base.reason,
+    settings: { ...base.settings, placement },
+  }
+}
+
 // ─── Voice data ────────────────────────────────────────────────────────────
 
 // Order matters — eyeopen is first because it's proven to work best
@@ -415,6 +513,8 @@ function buildTextPrompt(s: KState): string {
   const tone = TONES.find(x => x.id === s.tone) || TONES[4]
   const motion = MOTIONS.find(x => x.id === s.motion) || MOTIONS[2]
   const q = s.quote.trim() || '[QUOTE TEXT HERE]'
+  const darkenNote = DARKEN_OPTIONS.find(d => d.id === s.darken)?.en || ''
+  const typographyNote = TYPOGRAPHY_OPTIONS.find(t => t.id === s.typography)?.en || TYPOGRAPHY_OPTIONS[0].en
 
   const placementData = s.placement !== 'none' ? PLACEMENT_DATA[s.placement] : null
 
@@ -468,6 +568,8 @@ MICRO-DETAIL REQUIREMENTS (what makes it "vay be"):
 - Text-surface/medium interaction shows complete material physics
 - Atmospheric depth: ${placementData ? 'foreground placement object sharp, mid-ground and background environment in natural depth-of-field' : 'depth of field chosen to maximize emotional weight'}
 
+${typographyNote}${darkenNote}
+
 TECHNICAL SPECS:
 Aspect ratio: ${fmt.ratio} | Ultra-sharp | Photorealistic environmental detail | Award-winning editorial photography composition`
   }
@@ -492,6 +594,8 @@ ${surreal}
 
 TEMPORAL REVEAL:
 ${placementData ? 'Camera opens on the environment, pans or pushes to reveal the placement object and text over 3 seconds. Full text holds 4 seconds. Final second: slight pull back reveals more environmental context.' : 'Camera opens already showing partial text — motion slowly reveals the full quote over 3 seconds. Full text holds 4 seconds. Final second: world continues breathing.'}
+
+${typographyNote}${darkenNote}
 
 TECHNICAL SPECS:
 Aspect ratio: ${fmt.ratio} | 8 seconds | Seamlessly loopable | No hard cuts | No voiceover
@@ -783,6 +887,8 @@ const KapsamKafe: React.FC<PageProps> = () => {
     format: 'reels',
     tone: 'moody',
     placement: 'none',
+    darken: 'none',
+    typography: 'sans',
     voicePlatform: 'grok',
     micType: 'handheld',
     voiceSetting: 'street',
@@ -790,8 +896,18 @@ const KapsamKafe: React.FC<PageProps> = () => {
     gender: 'female',
   })
 
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null)
+
   const set = <K extends keyof KState>(key: K) => (val: KState[K]) =>
     setState(prev => ({ ...prev, [key]: val }))
+
+  const handleAnalyze = () => {
+    if (!state.quote.trim()) return
+    const result = analyzeQuote(state.quote)
+    setState(prev => ({ ...prev, ...result.settings }))
+    setAnalysisResult(result)
+    setTimeout(() => setAnalysisResult(null), 5000)
+  }
 
   const applyHook = (hook: HookTemplate) => {
     setState(prev => ({ ...prev, outputType: hook.outputType, ...hook.settings }))
@@ -895,7 +1011,34 @@ const KapsamKafe: React.FC<PageProps> = () => {
               rows={3}
               className="input w-full resize-none text-sm leading-relaxed"
             />
-            <p className="text-xs text-gray-500 mt-2">{state.quote.length} karakter</p>
+            <div className="flex items-center justify-between mt-2">
+              <p className="text-xs text-gray-500">{state.quote.length} karakter</p>
+              <button
+                onClick={handleAnalyze}
+                disabled={!state.quote.trim()}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                  state.quote.trim()
+                    ? 'bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-700/40'
+                    : 'opacity-30 text-gray-600 border border-gray-700 cursor-not-allowed'
+                }`}
+              >
+                <ScanText size={12} />
+                Söz Analizi
+              </button>
+            </div>
+
+            {/* Analysis result banner */}
+            {analysisResult && (
+              <div className="mt-3 rounded-xl bg-violet-900/30 border border-violet-700/40 px-4 py-3 animate-pulse-once">
+                <div className="flex items-start gap-2">
+                  <Zap size={13} className="text-violet-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-xs font-semibold text-violet-300">{analysisResult.label} tespit edildi</p>
+                    <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">{analysisResult.reason}</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Output type */}
@@ -1100,6 +1243,51 @@ const KapsamKafe: React.FC<PageProps> = () => {
                   </p>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* ── TYPOGRAPHY ── (image + video only) */}
+          {!isVoice && (
+            <div className="card p-5">
+              <p className="text-sm font-semibold text-white mb-3">Tipografi Tarzı</p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {TYPOGRAPHY_OPTIONS.map(t => (
+                  <button
+                    key={t.id}
+                    onClick={() => set('typography')(t.id)}
+                    className={`px-3 py-2.5 rounded-xl text-xs font-medium border transition-all text-left ${
+                      state.typography === t.id
+                        ? 'border-amber-500 bg-amber-900/20 text-amber-300'
+                        : 'border-gray-700 text-gray-400 hover:border-gray-600 hover:text-gray-200'
+                    }`}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── DARKEN ── (image + video only) */}
+          {!isVoice && (
+            <div className="card p-5">
+              <p className="text-sm font-semibold text-white mb-1">Karartma Katsayısı</p>
+              <p className="text-xs text-gray-500 mb-3">Arka planı karartarak yazı okunabilirliğini artırır</p>
+              <div className="grid grid-cols-4 gap-2">
+                {DARKEN_OPTIONS.map(d => (
+                  <button
+                    key={d.id}
+                    onClick={() => set('darken')(d.id)}
+                    className={`py-2.5 rounded-xl text-xs font-medium border transition-all text-center ${
+                      state.darken === d.id
+                        ? 'border-amber-500 bg-amber-900/20 text-amber-300'
+                        : 'border-gray-700 text-gray-400 hover:border-gray-600 hover:text-gray-200'
+                    }`}
+                  >
+                    {d.label}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>
