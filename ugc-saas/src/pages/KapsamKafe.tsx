@@ -274,6 +274,25 @@ const VOICE_MICS = [
 
 // ─── Prompt builders ───────────────────────────────────────────────────────
 
+// How text is physically applied to each surface type
+const TEXT_TECHNIQUES: Record<string, string> = {
+  wall: `The quote is hand-painted directly onto the plaster wall surface with a wide flat brush — imperfect strokes, paint absorbed unevenly into the textured plaster. Slight bristle marks visible in the letterforms. Micro-drips at the base of two or three letters where paint pooled before drying. The letters have physical presence: subtle raised ridges catch raking light, casting tiny shadows on the wall below each letterform. One corner of a letter slightly bleeds into a crack in the plaster. This was painted here — it is part of the wall's history.`,
+  concrete: `The text is spray-painted through a metal stencil onto the raw concrete surface — slight paint bleed under the stencil edges softens letter outlines, the concrete aggregate grain pushes visibly through the thinner parts of each letter. Two places where the stencil lifted early leaving a partial ghost stroke. Settled grime in the letter recesses has darkened them slightly compared to fresh paint around them. Age and city dust cling to the painted surface.`,
+  wood: `The text is burned into the wood using pyrography — char lines follow the natural grain direction, letters slightly feathering where the burn spread along grain fibers. Darker, almost black at the thickest stroke centers, warming to amber where the heat barely touched. The burned surface is tactile: you can imagine running a fingertip along the grooved, slightly roughened channels. Surrounding wood is unaffected — the contrast between burned and natural grain is the visual drama.`,
+  abstract: `The text is brush-painted into the abstract background while the surrounding paint was still wet — letter edges bleed and feather organically into the surrounding color field, the background color bleeds back into two letter strokes in return. Text and environment are genuinely fused, sharing pigment at their borders. Some letters are denser, some nearly translucent where the brush ran thin. This is not a layer on top — it is woven into the painting itself.`,
+  city: `The text exists as faded hand-painted signage on the building wall — outdoor paint cracked and micro-flaking at letter edges, color sun-bleached and desaturated compared to the original dark outline still visible beneath. Layers of city weathering: moisture staining above the tallest letters, soot deposits at the bottom. Been here for years, watched by the street. The city has grown around and past it.`,
+  nature: `The text is carved deep into the stone or bark surface — shadow fills the carved channels completely, making letters readable even without paint. Moss begins colonizing some letterforms at their edges, green threading into the grooves. Lichen spotted nearby. The carving looks weathered, as if done seasons or years ago, the stone around it undisturbed and unchanged. Nature has started to reclaim it.`,
+}
+
+// One surrealist element per visual style — the "vay be" moment
+const SURREAL_ELEMENTS: Record<string, string> = {
+  dark: `SURREALIST ELEMENT: Running through the center of one letter, a hairline crack — and from that crack, an impossible thread of warm golden light escapes, as if a completely different, sunlit world exists just centimeters behind the wall. The crack is the only warm light source in an otherwise cold dark frame. Physics is broken in exactly one place.`,
+  minimal: `SURREALIST ELEMENT: The text casts a perfect, crisp shadow — but the shadow falls toward the light source, not away from it. Everything else in the image obeys correct physics: shadows, highlights, reflections all accurate. Only the text's shadow defies the world. Subtle enough to require a second look. Unsettling once noticed.`,
+  vintage: `SURREALIST ELEMENT: One word in the quote is visibly newer than the rest — the paint there is fresh, still glistening wet, saturated compared to the faded aged letters around it. As if someone returned to this wall just moments ago to add that single word to a quote that has aged for decades. The hand is gone but the brush stroke feels immediate.`,
+  grunge: `SURREALIST ELEMENT: One corner of the painted text is literally peeling away from the wall surface like old paint — curling back to reveal the underside of the paint layer. On that revealed underside, visible in mirror writing, the same quote written again in pencil, smaller, like a draft that came before. The public version and the private one, simultaneously visible.`,
+  neon: `SURREALIST ELEMENT: In a rain puddle visible at the very bottom of frame, the text's neon reflection shows different words — not the same quote, but its unspoken opposite or complement. Both versions readable simultaneously. The surface world and its reflection carry different truths.`,
+}
+
 function buildTextPrompt(s: KState): string {
   const style = STYLES.find(x => x.id === s.style) || STYLES[1]
   const bg = BACKGROUNDS.find(x => x.id === s.background) || BACKGROUNDS[0]
@@ -282,45 +301,73 @@ function buildTextPrompt(s: KState): string {
   const motion = MOTIONS.find(x => x.id === s.motion) || MOTIONS[2]
   const q = s.quote.trim() || '[QUOTE TEXT HERE]'
 
+  const technique = TEXT_TECHNIQUES[s.background] || TEXT_TECHNIQUES.wall
+  const surreal = SURREAL_ELEMENTS[s.style] || SURREAL_ELEMENTS.dark
+
   if (s.outputType === 'image') {
-    return `Aesthetic typography photograph for social media.
+    return `Award-winning fine art photography. Shot on medium format digital. Ultra-sharp. Photorealistic — every surface texture rendered at macro level.
 
-BACKGROUND: ${bg.en}. ${style.en}.
+SURFACE & ENVIRONMENT:
+${bg.en} ${style.en}.
+
 COLOR PALETTE: ${tone.palette}.
-LIGHTING: ${style.lighting}.
+LIGHTING: ${style.lighting}. Raking light chosen to reveal maximum surface texture detail — individual grain, pores, imperfections all visible.
 
-TEXT OVERLAY — centered, large, bold:
+QUOTE TEXT IN THE IMAGE:
 "${q}"
-Font: clean bold sans-serif or elegant serif. Well-spaced letters, strong visual hierarchy. Text is the absolute focal point.
+
+TEXT PHYSICAL INTEGRATION — THIS IS THE MOST IMPORTANT INSTRUCTION:
+${technique}
+CRITICAL: The text is NOT a digital text overlay. It is NOT a font rendered on top of the image. It physically exists on this surface, in this world. The camera is photographing it as part of the real scene. The AI must render text-surface interaction with complete physical fidelity: material absorption, gravity effects, age, texture bleed. If this looks like a font pasted over a background, the image has failed.
+
+${surreal}
 
 COMPOSITION:
-- Text centered with generous breathing room
-- Background softly de-focused where appropriate
-- No people, no objects, no logos, no watermarks
+- Text occupies the dominant visual zone — large, bold, fills the frame with intention
+- Negative space gives letterforms room to breathe
+- Camera angle chosen to maximize text-surface physical relationship
+- No people, no logos, no watermarks, no UI elements
 
-MOOD: ${style.en}.
+MICRO-DETAIL REQUIREMENTS (what makes it "vay be"):
+- Surface texture at macro photography resolution — individual grain visible
+- Text-to-surface interaction shows complete material physics
+- Atmospheric micro-details: dust motes in light shafts, moisture where appropriate
+- Depth of field: text razor-sharp, distant elements softly de-focused
 
 TECHNICAL SPECS:
-Aspect ratio: ${fmt.ratio} | Ultra-sharp text | Photorealistic texture | Instagram/TikTok ready`
+Aspect ratio: ${fmt.ratio} | Medium format quality | Ultra-sharp | Photorealistic | No digital post-processing feel | Award-winning composition`
   }
 
-  return `Cinematic 8-second atmospheric social media video — typography content.
+  return `Award-winning cinematography. Atmospheric short-form video. Every frame a still worth printing.
 
-BACKGROUND: ${bg.en}. ${style.en}.
+SURFACE & ENVIRONMENT:
+${bg.en} ${style.en}.
+
 COLOR PALETTE: ${tone.palette}.
-LIGHTING: ${style.lighting}.
+LIGHTING: ${style.lighting}. Light reveals surface texture throughout.
 
-MOTION: ${motion.en}. Subtle and hypnotic — never distracts from the text.
+MOTION: ${motion.en}. Camera movement serves the text — never obscures it.
 
-TEXT REVEAL — centered:
+QUOTE TEXT IN THE VIDEO:
 "${q}"
-Font: bold readable typeface, high legibility. Fades in softly over 2 seconds, holds for 5 seconds, fades out in the final second.
 
-MOOD: ${style.en}. Contemplative and emotionally resonant.
+TEXT PHYSICAL INTEGRATION — THIS IS THE MOST IMPORTANT INSTRUCTION:
+${technique}
+CRITICAL: The text physically exists on this surface. It is NOT a digital text overlay animated on top. The camera is filming a real location where this text has been written/burned/carved/painted. Material physics apply throughout all motion.
+
+${surreal}
+
+TEMPORAL REVEAL:
+Camera opens already showing partial text — the motion slowly reveals the full quote over 3 seconds. Full text holds readable and dominant for 4 seconds. Environment continues subtle movement in the final second as if the world is still breathing after the words.
+
+MICRO-DETAIL REQUIREMENTS:
+- Surface texture at macro level throughout entire clip
+- Physical text-surface interaction consistent across all frames
+- Atmospheric elements (particles, mist, embers) move through space naturally
 
 TECHNICAL SPECS:
-Aspect ratio: ${fmt.ratio} | 8 seconds | Seamlessly loopable | No hard cuts | TikTok / Instagram Reels ready
-AUDIO: ${AUDIO_HINTS[s.motion] || 'minimal ambient'}, no voiceover, no lyrics`
+Aspect ratio: ${fmt.ratio} | 8 seconds | Seamlessly loopable | No hard cuts | No voiceover
+AUDIO: ${AUDIO_HINTS[s.motion] || 'minimal ambient texture, barely audible — silence preferred'}`
 }
 
 // Higgsfield voice prompt
