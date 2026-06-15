@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Zap, Menu, X, Video, Library, LayoutDashboard, Tag, Coffee } from 'lucide-react'
+import { Zap, Menu, X, Video, Library, LayoutDashboard, Tag, Coffee, Layers } from 'lucide-react'
 import { Page, User } from '../types'
 
 interface NavbarProps {
@@ -20,12 +20,13 @@ const Navbar: React.FC<NavbarProps> = ({ page, navigate, user, onLogin, onLogout
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const links: { label: string; page: Page; icon: React.ReactNode; amber?: boolean }[] = [
+  const links: { label: string; page: Page; icon: React.ReactNode; amber?: boolean; separator?: boolean }[] = [
     { label: 'Dashboard', page: 'dashboard', icon: <LayoutDashboard size={16} /> },
     { label: 'Create', page: 'create', icon: <Video size={16} /> },
     { label: 'Library', page: 'library', icon: <Library size={16} /> },
     { label: 'Pricing', page: 'pricing', icon: <Tag size={16} /> },
-    { label: 'KapsamKafe', page: 'kapsam', icon: <Coffee size={16} />, amber: true },
+    { label: 'KapsamKafe', page: 'kapsam', icon: <Coffee size={16} />, amber: true, separator: true },
+    { label: 'Zincir', page: 'chain', icon: <Layers size={16} />, separator: false },
   ]
 
   return (
@@ -51,9 +52,9 @@ const Navbar: React.FC<NavbarProps> = ({ page, navigate, user, onLogin, onLogout
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1">
-            {links.map((link, i) => (
+            {links.map((link) => (
               <React.Fragment key={link.page}>
-                {i === links.length - 1 && (
+                {link.separator && (
                   <span className="w-px h-5 bg-gray-700 mx-1" />
                 )}
                 <button
