@@ -176,11 +176,24 @@ const HOOK_TEMPLATES: HookTemplate[] = [
 // ─── Image / Video data ────────────────────────────────────────────────────
 
 const STYLES = [
+  // Fotoğrafik & temel
   { id: 'minimal', label: 'Minimal', en: 'clean minimal composition, abundant white space, elegant simplicity', lighting: 'soft diffused natural light, even exposure, no harsh shadows' },
   { id: 'dark', label: 'Dark Aesthetic', en: 'dark and moody atmosphere, dramatic shadows, high contrast, brooding cinematic aesthetic', lighting: 'low-key dramatic lighting, deep blacks, single rim light source' },
-  { id: 'vintage', label: 'Vintage', en: 'vintage aged aesthetic, worn film grain texture, nostalgic faded character', lighting: 'warm golden light, slightly overexposed edges, subtle lens flare' },
+  { id: 'vintage', label: 'Vintage / Analog', en: 'analog film grain texture, nostalgic faded character, Kodak Portra 400 warmth, slightly overexposed edges', lighting: 'warm golden light, soft lens flare, vintage color cast' },
   { id: 'grunge', label: 'Grunge', en: 'grungy urban aesthetic, rough distressed textures, raw and authentic street feel', lighting: 'harsh directional industrial light, strong contrast shadows' },
-  { id: 'neon', label: 'Neon', en: 'neon-lit cyberpunk aesthetic, glowing electric accents, night city energy', lighting: 'neon glow, purple and blue light spill, night scene illumination' },
+  { id: 'neon', label: 'Neon / Cyberpunk', en: 'neon-lit cyberpunk aesthetic, glowing electric accents, night city energy', lighting: 'neon glow, purple and blue light spill, night scene illumination' },
+  // Sanat akımları
+  { id: 'watercolor', label: 'Sulu Boya', en: 'delicate transparent watercolor painting, soft bleeding edges, wet-on-wet organic flow, visible paper grain beneath', lighting: 'diffused even natural daylight, no harsh shadows, gentle brightness preserving color purity' },
+  { id: 'oilpainting', label: 'Yağlı Boya', en: 'rich impasto oil paint, visible brushstroke ridges catching light, glazed color depth, museum-quality Old Masters rendering', lighting: 'dramatic single warm light source, Rembrandt chiaroscuro, deep warm shadows' },
+  { id: 'artnouveau', label: 'Art Nouveau', en: 'Alphonse Mucha-style elegant flowing organic curves, botanical motifs, sinuous decorative borders, ornamental poster aesthetic', lighting: 'soft golden diffused light, warm and even, romantic atmospheric glow' },
+  { id: 'impressionist', label: 'Empresyonizm', en: 'Monet-style loose broken brushstrokes, dappled light, optical color mixing, pigment dabs that coalesce into form from a distance', lighting: 'golden hour outdoor light, dappled and shifting, impressionist luminosity' },
+  { id: 'surreal', label: 'Sürrealizm', en: 'Salvador Dalí-inspired impossible compositions, dreamlike impossible physics, melting matter, subconscious imagery, uncanny precision', lighting: 'multiple contradictory light sources co-existing, theatrical harsh light on impossible scenes' },
+  { id: 'wabisabi', label: 'Wabi-sabi', en: 'imperfect asymmetric beauty, weathered textures, natural decay and patina, quiet minimal philosophy, acceptance of impermanence', lighting: 'muted indirect window light, grey-diffused natural, no drama, quiet subdued presence' },
+  // Sokak & el sanatları
+  { id: 'graffiti', label: 'Grafiti', en: 'bold spray-paint street art letterforms on urban wall, authentic aerosol texture, thick outline with fill, real street aesthetic', lighting: 'flat urban daylight or harsh directional side sun on exterior wall' },
+  { id: 'chalkart', label: 'Tebeşir Sanatı', en: 'colored chalk on dark surface, powdery smudged edges, chalk dust atmosphere, soft mark-making, hand-drawn spontaneity', lighting: 'soft even light, chalk dust particles visibly floating near the surface' },
+  { id: 'lofi', label: 'Lo-fi Sanat', en: 'soft warm retro illustration, cozy late-night lamp atmosphere, muted nostalgia, gentle glow, quiet moment aesthetic', lighting: 'warm lamp light, late evening indoor, soft orange-yellow tone, intimate and dim' },
+  { id: 'calligraphy', label: 'Kaligrafi', en: 'masterful calligraphic letterforms as the central art, ink flow varying thick to gossamer, meditative brush precision, East Asian or Arabic tradition', lighting: 'bright even studio light, paper grain lit to show texture, clean and precise' },
 ]
 
 const BACKGROUNDS = [
@@ -291,6 +304,30 @@ const SURREAL_ELEMENTS: Record<string, string> = {
   vintage: `SURREALIST ELEMENT: One word in the quote is visibly newer than the rest — the paint there is fresh, still glistening wet, saturated compared to the faded aged letters around it. As if someone returned to this wall just moments ago to add that single word to a quote that has aged for decades. The hand is gone but the brush stroke feels immediate.`,
   grunge: `SURREALIST ELEMENT: One corner of the painted text is literally peeling away from the wall surface like old paint — curling back to reveal the underside of the paint layer. On that revealed underside, visible in mirror writing, the same quote written again in pencil, smaller, like a draft that came before. The public version and the private one, simultaneously visible.`,
   neon: `SURREALIST ELEMENT: In a rain puddle visible at the very bottom of frame, the text's neon reflection shows different words — not the same quote, but its unspoken opposite or complement. Both versions readable simultaneously. The surface world and its reflection carry different truths.`,
+  watercolor: `SURREALIST ELEMENT: One section of the watercolor is still visibly wet and actively spreading — the pigment bleeds further outward in real time, letter edges still blooming into the wet paper as if the painting has not yet decided to stop being made. The artwork is alive mid-process.`,
+  oilpainting: `SURREALIST ELEMENT: Exactly one brushstroke in the entire painting is still wet — visible in the specular reflection it catches differently from the dried surrounding paint. This single fresh stroke is in the final word of the quote. The painter left mid-sentence.`,
+  artnouveau: `SURREALIST ELEMENT: The botanical vines framing the composition are imperceptibly, slowly growing — one new tendril has extended and begun curling around the final letter of the quote since the artwork was completed. The border is still alive.`,
+  impressionist: `SURREALIST ELEMENT: The light in this painting changes direction between the top and bottom halves — shadows fall leftward above, rightward below, as if two different suns illuminate the same scene simultaneously. Both are correct. Neither is wrong.`,
+  surreal: `SURREALIST ELEMENT: The quote text itself melts like Dalí's clocks — letterforms drooping and pooling downward with impossible slow-motion gravity, yet remain perfectly, completely readable despite their physically impossible form. The words communicate more clearly for being broken.`,
+  wabisabi: `SURREALIST ELEMENT: The imperfections in the surface — the cracks, the worn marks, the natural color variation — are not random. Look carefully: they form the quote text. It was never painted or written there. Time and weathering themselves wrote these exact words.`,
+  graffiti: `SURREALIST ELEMENT: The graffiti letters cast shadows on the wall — but there is no surface object that would cast them. The shadows exist without the physical paint that should create them. Only the shadows are real. The letters are made of absence.`,
+  chalkart: `SURREALIST ELEMENT: The chalk letters cast no shadow themselves — but the space immediately around each letterform does, making each letter a bright hole of light punched through the dark surface. The text is made of illumination, not of chalk.`,
+  lofi: `SURREALIST ELEMENT: The entire scene appears to exist inside a photograph tucked inside a book — the outer edges of the image curl slightly inward, the color palette has the warm fade of an old print, as if this moment is being viewed through someone else's memory of it.`,
+  calligraphy: `SURREALIST ELEMENT: The final brushstroke of the quote — the very last mark — is still moving. The wet ink continues to spread slowly into the paper fibers, the stroke not yet complete, the calligrapher's hand just departed. You are witnessing the exact moment of creation.`,
+}
+
+// For painterly / drawn styles: text technique is defined by the medium, not the background surface
+const STYLE_TECHNIQUE_OVERRIDE: Record<string, string> = {
+  watercolor: `The quote text is painted in watercolor brush strokes directly into the composition — pigment flows and bleeds organically at letter edges, color pools at stroke curves, dries lighter at stroke centers. Subtle tide-mark rings where water dried on paper surface. Text and background share the same wet medium; they are fused, not layered. The paper surface is visible through the thinner passages. This is a painting on paper.`,
+  oilpainting: `The quote text is painted in thick impasto oil paint — visible brushstroke ridges catch light and cast tiny shadows. Some strokes show translucent glaze over dried underlayer. Mixing marks where strokes meet. The paint has physical volume: a macro lens would reveal the topography of each brushstroke ridge. The background is also oil-painted, same hand, same session.`,
+  artnouveau: `The quote text is designed as an integral part of the Art Nouveau composition — letterforms flow with the same organic line quality as the surrounding botanical motifs. Letters and vines share continuous curving strokes. The text is not separate from the decorative border; they grow from the same source.`,
+  impressionist: `The quote text is rendered in broken Impressionist brushstrokes — up close: pure color dabs. At distance: readable letterforms emerge from optical mixing. The letters have no hard edges, only color density variations that coalesce into words. Text and background dissolve into each other at their borders.`,
+  surreal: `The quote text exists in the painting as physically impossible letterforms — melting, floating, reflected incorrectly, casting wrong shadows, made of materials that cannot hold text. The words are readable despite being physically wrong. The surrealist treatment amplifies the text's emotional weight.`,
+  wabisabi: `The quote text is rendered with deliberate imperfection — irregular spacing, varying weight, inconsistent baselines, some letters barely formed. This imperfection is intentional and beautiful. The marks look as if made by a worn brush, pressed once and not corrected. The empty space around the text is as important as the text itself.`,
+  graffiti: `The quote text is spray-painted in authentic graffiti letterforms — thick outline first, then fill color, then highlights. Slight aerosol overspray beyond letter edges, fade at extremes of each spray pass, micro-drips where paint pooled. The wall surface grain shows through thinner areas. This is outdoor public art made under real conditions.`,
+  chalkart: `The quote text is drawn in colored chalk on the dark surface — chalk powder slightly smudged around each stroke where the hand passed. Some chalk dust floats near the surface caught in the light. The dark ground shows through wherever chalk coverage is thin. Soft, powdery, impermanent edges. If it rained, it would be gone.`,
+  lofi: `The quote text exists as part of a hand-illustrated scene — clean simple outlines, flat color fills, soft glow around bright elements. The letters feel hand-lettered and intentionally imperfect. The illustration style is consistent between text and scene — nothing is more realistic than anything else.`,
+  calligraphy: `The quote text is written with a calligraphy brush in a single decisive session — ink flow varies from rich thick strokes to gossamer-thin hair lines within single letterforms. Brush hairs fan slightly at maximum pressure. Subtle ink pooling at stroke endings. Empty space between and around characters is compositionally active. The white space breathes. Meditative imperfection, not mechanical perfection.`,
 }
 
 function buildTextPrompt(s: KState): string {
@@ -301,59 +338,67 @@ function buildTextPrompt(s: KState): string {
   const motion = MOTIONS.find(x => x.id === s.motion) || MOTIONS[2]
   const q = s.quote.trim() || '[QUOTE TEXT HERE]'
 
-  const technique = TEXT_TECHNIQUES[s.background] || TEXT_TECHNIQUES.wall
+  const hasPaintingOverride = s.style in STYLE_TECHNIQUE_OVERRIDE
+  const technique = hasPaintingOverride
+    ? STYLE_TECHNIQUE_OVERRIDE[s.style]
+    : (TEXT_TECHNIQUES[s.background] || TEXT_TECHNIQUES.wall)
   const surreal = SURREAL_ELEMENTS[s.style] || SURREAL_ELEMENTS.dark
 
-  if (s.outputType === 'image') {
-    return `Award-winning fine art photography. Shot on medium format digital. Ultra-sharp. Photorealistic — every surface texture rendered at macro level.
+  const paintingStyles = new Set(['watercolor','oilpainting','artnouveau','impressionist','surreal','wabisabi','graffiti','chalkart','lofi','calligraphy'])
+  const isPainting = paintingStyles.has(s.style)
+  const mediumLabel = isPainting ? 'Award-winning fine art painting. Hand-crafted medium. Museum quality.' : 'Award-winning fine art photography. Shot on medium format digital. Ultra-sharp. Photorealistic.'
+  const subjectLabel = isPainting
+    ? `SUBJECT OF THE PAINTING: ${bg.en}. Rendered in ${style.en}.`
+    : `SURFACE & ENVIRONMENT: ${bg.en}. ${style.en}.`
 
-SURFACE & ENVIRONMENT:
-${bg.en} ${style.en}.
+  if (s.outputType === 'image') {
+    return `${mediumLabel}
+
+${subjectLabel}
 
 COLOR PALETTE: ${tone.palette}.
-LIGHTING: ${style.lighting}. Raking light chosen to reveal maximum surface texture detail — individual grain, pores, imperfections all visible.
+LIGHTING: ${style.lighting}. Light reveals maximum texture and depth.
 
-QUOTE TEXT IN THE IMAGE:
+QUOTE TEXT IN THE ${isPainting ? 'PAINTING' : 'IMAGE'}:
 "${q}"
 
-TEXT PHYSICAL INTEGRATION — THIS IS THE MOST IMPORTANT INSTRUCTION:
+TEXT INTEGRATION — THE MOST IMPORTANT INSTRUCTION:
 ${technique}
-CRITICAL: The text is NOT a digital text overlay. It is NOT a font rendered on top of the image. It physically exists on this surface, in this world. The camera is photographing it as part of the real scene. The AI must render text-surface interaction with complete physical fidelity: material absorption, gravity effects, age, texture bleed. If this looks like a font pasted over a background, the image has failed.
+CRITICAL: The text is NOT a digital overlay. It is NOT a font rendered on top. It physically ${isPainting ? 'exists within the painted medium' : 'exists on this surface in this world'}. ${isPainting ? 'The AI must render text-medium interaction with full painterly fidelity: pigment behavior, medium absorption, the marks of a real hand.' : 'The AI must render text-surface interaction with complete physical fidelity: material absorption, gravity effects, age, texture bleed.'} If this looks like a font pasted over a background, the image has failed.
 
 ${surreal}
 
 COMPOSITION:
-- Text occupies the dominant visual zone — large, bold, fills the frame with intention
+- Text is the dominant visual element — large, bold, readable, fills the frame with intention
 - Negative space gives letterforms room to breathe
-- Camera angle chosen to maximize text-surface physical relationship
-- No people, no logos, no watermarks, no UI elements
+- ${isPainting ? 'Artistic composition balances text and visual elements' : 'Camera angle maximizes text-surface physical relationship'}
+- No UI elements, no watermarks, no logos
 
 MICRO-DETAIL REQUIREMENTS (what makes it "vay be"):
-- Surface texture at macro photography resolution — individual grain visible
-- Text-to-surface interaction shows complete material physics
-- Atmospheric micro-details: dust motes in light shafts, moisture where appropriate
-- Depth of field: text razor-sharp, distant elements softly de-focused
+- ${isPainting ? 'Medium texture at macro level — individual brushstroke, pigment grain, paper/canvas fibers visible' : 'Surface texture at macro photography resolution — individual grain, pores, imperfections visible'}
+- Text-${isPainting ? 'medium' : 'surface'} interaction shows complete material physics and behavior
+- Atmospheric micro-details appropriate to the medium
+- ${isPainting ? 'Painting style consistent throughout — no photographic elements' : 'Depth of field: text razor-sharp, distant elements softly de-focused'}
 
 TECHNICAL SPECS:
-Aspect ratio: ${fmt.ratio} | Medium format quality | Ultra-sharp | Photorealistic | No digital post-processing feel | Award-winning composition`
+Aspect ratio: ${fmt.ratio} | Exceptional craft quality | ${isPainting ? 'Painterly realism, no digital feel' : 'Photorealistic, no digital feel'} | Award-winning composition`
   }
 
   return `Award-winning cinematography. Atmospheric short-form video. Every frame a still worth printing.
 
-SURFACE & ENVIRONMENT:
-${bg.en} ${style.en}.
+${subjectLabel}
 
 COLOR PALETTE: ${tone.palette}.
-LIGHTING: ${style.lighting}. Light reveals surface texture throughout.
+LIGHTING: ${style.lighting}. Light reveals texture throughout.
 
 MOTION: ${motion.en}. Camera movement serves the text — never obscures it.
 
 QUOTE TEXT IN THE VIDEO:
 "${q}"
 
-TEXT PHYSICAL INTEGRATION — THIS IS THE MOST IMPORTANT INSTRUCTION:
+TEXT INTEGRATION — THE MOST IMPORTANT INSTRUCTION:
 ${technique}
-CRITICAL: The text physically exists on this surface. It is NOT a digital text overlay animated on top. The camera is filming a real location where this text has been written/burned/carved/painted. Material physics apply throughout all motion.
+CRITICAL: The text physically exists ${isPainting ? 'within the painted composition' : 'on this surface'}. It is NOT a digital overlay animated on top. ${isPainting ? 'The camera films a painting where this text is integrated into the medium itself.' : 'The camera films a real location where this text has been written/burned/carved/painted.'} Material physics apply throughout all motion.
 
 ${surreal}
 
@@ -361,8 +406,8 @@ TEMPORAL REVEAL:
 Camera opens already showing partial text — the motion slowly reveals the full quote over 3 seconds. Full text holds readable and dominant for 4 seconds. Environment continues subtle movement in the final second as if the world is still breathing after the words.
 
 MICRO-DETAIL REQUIREMENTS:
-- Surface texture at macro level throughout entire clip
-- Physical text-surface interaction consistent across all frames
+- ${isPainting ? 'Medium texture at macro level throughout — brushstroke, pigment, canvas grain consistent' : 'Surface texture at macro level throughout entire clip'}
+- Text integration with ${isPainting ? 'medium' : 'surface'} remains physically consistent across all frames
 - Atmospheric elements (particles, mist, embers) move through space naturally
 
 TECHNICAL SPECS:
