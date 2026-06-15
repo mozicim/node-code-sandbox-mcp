@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Coffee, Copy, Check, Film, ImageIcon, Mic, Zap } from 'lucide-react'
+import { Coffee, Copy, Check, Film, ImageIcon, Mic, Zap, Sparkles, LayoutGrid } from 'lucide-react'
 import { PageProps } from '../types'
 
 type OutputType = 'image' | 'video' | 'voice'
@@ -21,6 +21,157 @@ interface KState {
   voiceHook: string
   gender: 'male' | 'female'
 }
+
+type KTab = 'builder' | 'gallery'
+
+// ─── Hook Gallery data ─────────────────────────────────────────────────────
+
+interface HookTemplate {
+  id: string
+  name: string
+  type: 'carpici' | 'yumusak'
+  emoji: string
+  gradient: string
+  accentColor: string
+  description: string
+  outputType: OutputType
+  settings: Partial<KState>
+}
+
+const HOOK_TEMPLATES: HookTemplate[] = [
+  {
+    id: 'duvar-kesfi',
+    name: 'Duvar Keşfi',
+    type: 'carpici',
+    emoji: '🧱',
+    gradient: 'linear-gradient(135deg, #1c1917 0%, #292524 50%, #1c1917 100%)',
+    accentColor: 'border-orange-700/60',
+    description: 'Kamera ağır çekimde tekstürlü duvara doğru ilerler, söz yavaşça belirmeye başlar.',
+    outputType: 'video',
+    settings: { style: 'dark', background: 'wall', motion: 'slowzoom', tone: 'moody', format: 'reels' },
+  },
+  {
+    id: 'mum-isigi',
+    name: 'Mum Işığı',
+    type: 'yumusak',
+    emoji: '🕯️',
+    gradient: 'linear-gradient(135deg, #78350f 0%, #92400e 50%, #451a03 100%)',
+    accentColor: 'border-amber-600/60',
+    description: 'Titreşen mum aydınlığı, sıcak ahşap zemin üzerinde yazıyı nazikçe çerçeveler.',
+    outputType: 'image',
+    settings: { style: 'vintage', background: 'wood', tone: 'warm', format: 'reels' },
+  },
+  {
+    id: 'yagmur-cami',
+    name: 'Yağmur Camı',
+    type: 'yumusak',
+    emoji: '🌧️',
+    gradient: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%)',
+    accentColor: 'border-blue-700/60',
+    description: 'Camdan akan yağmur damlaları arasında şehir ışıkları bokeh yapar, söz öne çıkar.',
+    outputType: 'video',
+    settings: { style: 'minimal', background: 'city', motion: 'rain', tone: 'cool', format: 'reels' },
+  },
+  {
+    id: 'neon-gece',
+    name: 'Neon Gece',
+    type: 'carpici',
+    emoji: '💜',
+    gradient: 'linear-gradient(135deg, #3b0764 0%, #6b21a8 50%, #86198f 100%)',
+    accentColor: 'border-purple-500/60',
+    description: 'Neon ışıklar parlayan gece sahnesinde yazı adeta elektrik gibi çarpar.',
+    outputType: 'image',
+    settings: { style: 'neon', background: 'city', tone: 'moody', format: 'reels' },
+  },
+  {
+    id: 'beton-ruh',
+    name: 'Beton Ruh',
+    type: 'carpici',
+    emoji: '🏗️',
+    gradient: 'linear-gradient(135deg, #27272a 0%, #3f3f46 50%, #18181b 100%)',
+    accentColor: 'border-zinc-500/60',
+    description: 'Ham beton doku üzerinde yüksek kontrast siyah-beyaz estetik — sert ve güçlü.',
+    outputType: 'image',
+    settings: { style: 'grunge', background: 'concrete', tone: 'bw', format: 'reels' },
+  },
+  {
+    id: 'orman-nefesi',
+    name: 'Orman Nefesi',
+    type: 'yumusak',
+    emoji: '🌿',
+    gradient: 'linear-gradient(135deg, #064e3b 0%, #065f46 50%, #022c22 100%)',
+    accentColor: 'border-emerald-600/60',
+    description: 'Doğa arka planı, yeşilin huzurlu derinliği — ruh sezgisine seslenen bir açılış.',
+    outputType: 'image',
+    settings: { style: 'minimal', background: 'nature', tone: 'warm', format: 'reels' },
+  },
+  {
+    id: 'duman-perdesi',
+    name: 'Duman Perdesi',
+    type: 'carpici',
+    emoji: '🌫️',
+    gradient: 'linear-gradient(135deg, #111827 0%, #1f2937 50%, #030712 100%)',
+    accentColor: 'border-gray-500/60',
+    description: 'Atmosferik duman tülü yavaşça çekilir, arkasında söz belirir — dramatik ve gizemli.',
+    outputType: 'video',
+    settings: { style: 'dark', background: 'abstract', motion: 'smoke', tone: 'moody', format: 'reels' },
+  },
+  {
+    id: 'sabah-isigi',
+    name: 'Sabah Işığı',
+    type: 'yumusak',
+    emoji: '☀️',
+    gradient: 'linear-gradient(135deg, #92400e 0%, #b45309 50%, #78350f 100%)',
+    accentColor: 'border-yellow-600/60',
+    description: 'Altın sabah güneşi doğa manzarasına yavaş zoom ile yaklaşır — umut dolu açılış.',
+    outputType: 'video',
+    settings: { style: 'minimal', background: 'nature', motion: 'slowzoom', tone: 'warm', format: 'reels' },
+  },
+  {
+    id: 'goz-acilisi',
+    name: 'Göz Açılışı',
+    type: 'carpici',
+    emoji: '👁️',
+    gradient: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #0f0a2e 100%)',
+    accentColor: 'border-violet-500/60',
+    description: 'Gözler kapalı, derin bir an — sonra yavaşça kameraya bakış. En etkili UGC girişi.',
+    outputType: 'voice',
+    settings: { voiceHook: 'eyeopen', voiceSetting: 'street', micType: 'handheld' },
+  },
+  {
+    id: 'derin-nefes',
+    name: 'Derin Nefes',
+    type: 'yumusak',
+    emoji: '🌊',
+    gradient: 'linear-gradient(135deg, #0c4a6e 0%, #075985 50%, #082f49 100%)',
+    accentColor: 'border-cyan-600/60',
+    description: 'Sessizce derin bir nefes, gözler kaldırılır — sakin ve içten bir başlangıç.',
+    outputType: 'voice',
+    settings: { voiceHook: 'deepbreath', voiceSetting: 'home', micType: 'usb' },
+  },
+  {
+    id: 'yuz-yakan-plan',
+    name: 'Yüz Yakın Plan',
+    type: 'carpici',
+    emoji: '🎬',
+    gradient: 'linear-gradient(135deg, #881337 0%, #9f1239 50%, #4c0519 100%)',
+    accentColor: 'border-rose-600/60',
+    description: 'Önce gözlere ekstrem yakın plan, sonra geriye çekilerek kişi ortaya çıkar.',
+    outputType: 'voice',
+    settings: { voiceHook: 'faceclose', voiceSetting: 'podcast', micType: 'vintage' },
+  },
+  {
+    id: 'defter-kapanisi',
+    name: 'Defter Kapanışı',
+    type: 'yumusak',
+    emoji: '📓',
+    gradient: 'linear-gradient(135deg, #78350f 0%, #92400e 40%, #1c1917 100%)',
+    accentColor: 'border-amber-700/60',
+    description: 'El yavaşça defteri kapatır, sonra kameraya bakar — düşünceli ve içe dönük.',
+    outputType: 'voice',
+    settings: { voiceHook: 'bookclose', voiceSetting: 'cafe', micType: 'handheld' },
+  },
+]
 
 // ─── Image / Video data ────────────────────────────────────────────────────
 
@@ -323,9 +474,131 @@ function OptionGrid({
   )
 }
 
+// ─── Hook Gallery component ────────────────────────────────────────────────
+
+type GalleryFilter = 'all' | 'carpici' | 'yumusak'
+
+function HookGallery({
+  onSelect,
+}: {
+  onSelect: (t: HookTemplate) => void
+}) {
+  const [filter, setFilter] = useState<GalleryFilter>('all')
+  const [hovered, setHovered] = useState<string | null>(null)
+
+  const filtered =
+    filter === 'all'
+      ? HOOK_TEMPLATES
+      : HOOK_TEMPLATES.filter(h => h.type === filter)
+
+  const FILTERS: { id: GalleryFilter; label: string }[] = [
+    { id: 'all', label: 'Tümü' },
+    { id: 'carpici', label: 'Çarpıcı' },
+    { id: 'yumusak', label: 'Yumuşak' },
+  ]
+
+  return (
+    <div>
+      <p className="text-sm text-gray-400 mb-5">
+        İlk saniyede dikkat çeken açılış şablonu. Üzerine gelince önizle, tıkla ve uygula.
+      </p>
+
+      {/* Filter pills */}
+      <div className="flex gap-2 mb-6">
+        {FILTERS.map(f => (
+          <button
+            key={f.id}
+            onClick={() => setFilter(f.id)}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+              filter === f.id
+                ? 'bg-amber-600 text-white shadow-lg shadow-amber-900/30'
+                : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
+            }`}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        {filtered.map(hook => (
+          <button
+            key={hook.id}
+            onClick={() => onSelect(hook)}
+            onMouseEnter={() => setHovered(hook.id)}
+            onMouseLeave={() => setHovered(null)}
+            className={`group relative rounded-2xl overflow-hidden border-2 transition-all duration-200 text-left focus:outline-none ${
+              hook.accentColor
+            } hover:scale-[1.02] hover:shadow-2xl hover:shadow-black/40`}
+          >
+            {/* Thumbnail */}
+            <div
+              className="relative w-full aspect-[3/4]"
+              style={{ background: hook.gradient }}
+            >
+              {/* Noise texture overlay */}
+              <div className="absolute inset-0 opacity-[0.03]" style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+              }} />
+
+              {/* Center emoji */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span
+                  className={`text-5xl transition-all duration-300 ${
+                    hovered === hook.id ? 'scale-110 drop-shadow-2xl' : 'scale-100'
+                  }`}
+                >
+                  {hook.emoji}
+                </span>
+              </div>
+
+              {/* Type badge */}
+              <div className="absolute top-2.5 left-2.5">
+                <span
+                  className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide ${
+                    hook.type === 'carpici'
+                      ? 'bg-violet-600/90 text-white'
+                      : 'bg-emerald-700/90 text-white'
+                  }`}
+                >
+                  {hook.type === 'carpici' ? 'çarpıcı' : 'yumuşak'}
+                </span>
+              </div>
+
+              {/* Output type badge */}
+              <div className="absolute top-2.5 right-2.5">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-black/50 text-gray-300 backdrop-blur-sm">
+                  {hook.outputType === 'voice' ? '🎙 sesli' : hook.outputType === 'video' ? '🎬 video' : '🖼 görsel'}
+                </span>
+              </div>
+
+              {/* Hover description overlay */}
+              <div
+                className={`absolute inset-0 flex items-end p-3 transition-opacity duration-200 ${
+                  hovered === hook.id ? 'opacity-100' : 'opacity-0'
+                }`}
+                style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%)' }}
+              >
+                <p className="text-[11px] text-gray-200 leading-snug">{hook.description}</p>
+              </div>
+            </div>
+
+            {/* Card footer */}
+            <div className="px-3 py-2.5 bg-gray-900">
+              <p className="text-sm font-semibold text-white truncate">{hook.name}</p>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ─── Main component ────────────────────────────────────────────────────────
 
 const KapsamKafe: React.FC<PageProps> = () => {
+  const [tab, setTab] = useState<KTab>('builder')
   const [state, setState] = useState<KState>({
     quote: '',
     outputType: 'image',
@@ -343,6 +616,11 @@ const KapsamKafe: React.FC<PageProps> = () => {
 
   const set = <K extends keyof KState>(key: K) => (val: KState[K]) =>
     setState(prev => ({ ...prev, [key]: val }))
+
+  const applyHook = (hook: HookTemplate) => {
+    setState(prev => ({ ...prev, outputType: hook.outputType, ...hook.settings }))
+    setTab('builder')
+  }
 
   const prompt = getPrompt(state)
   const hasQuote = state.quote.trim().length > 0
@@ -392,6 +670,39 @@ const KapsamKafe: React.FC<PageProps> = () => {
         </p>
       </div>
 
+      {/* Tab switcher */}
+      <div className="flex gap-2 p-1 bg-gray-900 rounded-2xl border border-gray-800 mb-8 max-w-sm mx-auto">
+        <button
+          onClick={() => setTab('builder')}
+          className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+            tab === 'builder'
+              ? 'bg-amber-600 text-white shadow-lg shadow-amber-900/30'
+              : 'text-gray-400 hover:text-white'
+          }`}
+        >
+          <Sparkles size={14} />
+          Prompt Üretici
+        </button>
+        <button
+          onClick={() => setTab('gallery')}
+          className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+            tab === 'gallery'
+              ? 'bg-amber-600 text-white shadow-lg shadow-amber-900/30'
+              : 'text-gray-400 hover:text-white'
+          }`}
+        >
+          <LayoutGrid size={14} />
+          Hook Galerisi
+        </button>
+      </div>
+
+      {/* Hook Gallery tab */}
+      {tab === 'gallery' && (
+        <HookGallery onSelect={applyHook} />
+      )}
+
+      {/* Builder tab */}
+      {tab === 'builder' && (
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:items-start gap-8">
         {/* LEFT: Controls */}
         <div className="space-y-5">
@@ -657,6 +968,7 @@ const KapsamKafe: React.FC<PageProps> = () => {
           </div>
         </div>
       </div>
+      )}
     </div>
   )
 }
