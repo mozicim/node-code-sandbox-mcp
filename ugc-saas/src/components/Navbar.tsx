@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Zap, Menu, X, Video, Library, LayoutDashboard, Tag } from 'lucide-react'
+import { Zap, Menu, X, Video, Library, LayoutDashboard, Tag, Coffee } from 'lucide-react'
 import { Page, User } from '../types'
 
 interface NavbarProps {
@@ -20,11 +20,12 @@ const Navbar: React.FC<NavbarProps> = ({ page, navigate, user, onLogin, onLogout
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const links: { label: string; page: Page; icon: React.ReactNode }[] = [
+  const links: { label: string; page: Page; icon: React.ReactNode; amber?: boolean }[] = [
     { label: 'Dashboard', page: 'dashboard', icon: <LayoutDashboard size={16} /> },
     { label: 'Create', page: 'create', icon: <Video size={16} /> },
     { label: 'Library', page: 'library', icon: <Library size={16} /> },
     { label: 'Pricing', page: 'pricing', icon: <Tag size={16} /> },
+    { label: 'KapsamKafe', page: 'kapsam', icon: <Coffee size={16} />, amber: true },
   ]
 
   return (
@@ -50,19 +51,25 @@ const Navbar: React.FC<NavbarProps> = ({ page, navigate, user, onLogin, onLogout
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1">
-            {links.map((link) => (
-              <button
-                key={link.page}
-                onClick={() => navigate(link.page)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  page === link.page
-                    ? 'bg-violet-900/40 text-violet-300'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-800'
-                }`}
-              >
-                {link.icon}
-                {link.label}
-              </button>
+            {links.map((link, i) => (
+              <React.Fragment key={link.page}>
+                {i === links.length - 1 && (
+                  <span className="w-px h-5 bg-gray-700 mx-1" />
+                )}
+                <button
+                  onClick={() => navigate(link.page)}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    page === link.page
+                      ? link.amber
+                        ? 'bg-amber-900/40 text-amber-300'
+                        : 'bg-violet-900/40 text-violet-300'
+                      : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                  }`}
+                >
+                  {link.icon}
+                  {link.label}
+                </button>
+              </React.Fragment>
             ))}
           </nav>
 
@@ -120,7 +127,9 @@ const Navbar: React.FC<NavbarProps> = ({ page, navigate, user, onLogin, onLogout
               onClick={() => { navigate(link.page); setMobileOpen(false) }}
               className={`w-full flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
                 page === link.page
-                  ? 'bg-violet-900/40 text-violet-300'
+                  ? link.amber
+                    ? 'bg-amber-900/40 text-amber-300'
+                    : 'bg-violet-900/40 text-violet-300'
                   : 'text-gray-400 hover:text-white hover:bg-gray-800'
               }`}
             >

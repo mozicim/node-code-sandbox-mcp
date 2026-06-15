@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard'
 import CreateVideo from './pages/CreateVideo'
 import VideoLibrary from './pages/VideoLibrary'
 import Pricing from './pages/Pricing'
+import KapsamKafe from './pages/KapsamKafe'
 import { Page, User, GeneratedVideo, PageProps } from './types'
 import { MOCK_VIDEOS } from './data'
 
@@ -83,6 +84,7 @@ const App: React.FC = () => {
         {page === 'create' && <CreateVideo {...pageProps} />}
         {page === 'library' && <VideoLibrary {...pageProps} />}
         {page === 'pricing' && <Pricing {...pageProps} />}
+        {page === 'kapsam' && <KapsamKafe {...pageProps} />}
       </main>
       <Footer navigate={navigate} />
     </div>
