@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { Coffee, Copy, Check, Film, ImageIcon, Mic } from 'lucide-react'
+import { Coffee, Copy, Check, Film, ImageIcon, Mic, Zap } from 'lucide-react'
 import { PageProps } from '../types'
 
 type OutputType = 'image' | 'video' | 'voice'
+type VoicePlatform = 'grok' | 'higgsfield'
 
 interface KState {
   quote: string
@@ -14,6 +15,7 @@ interface KState {
   format: string
   tone: string
   // voice
+  voicePlatform: VoicePlatform
   micType: string
   voiceSetting: string
   voiceHook: string
@@ -73,7 +75,13 @@ const AUDIO_HINTS: Record<string, string> = {
 
 // ─── Voice data ────────────────────────────────────────────────────────────
 
+// Order matters — eyeopen is first because it's proven to work best
 const VOICE_HOOKS = [
+  {
+    id: 'eyeopen',
+    label: 'Göz Açılışı',
+    en: 'Person stands with eyes gently closed, head slightly lowered — a private moment of stillness [0–2s]. Eyes open slowly and deliberately, making unhurried direct eye contact with the camera [2–3s].',
+  },
   {
     id: 'deepbreath',
     label: 'Derin Nefes',
@@ -82,7 +90,7 @@ const VOICE_HOOKS = [
   {
     id: 'faceclose',
     label: 'Yüz Yakın Plan',
-    en: 'Extreme close-up on the speaker\'s eyes — camera holds for 2 seconds. Slowly pulls back to reveal the person at their recording setup. [0–3s]',
+    en: 'Extreme close-up on the speaker\'s eyes — camera holds for 2 seconds. Slowly pulls back to reveal the person at their setup. [0–3s]',
   },
   {
     id: 'micreveal',
@@ -94,26 +102,21 @@ const VOICE_HOOKS = [
     label: 'Defter Kapanışı',
     en: 'Person holds an open notebook. Pauses. Slowly and deliberately closes it. Looks up directly into the camera. [0–3s]',
   },
-  {
-    id: 'walkinto',
-    label: 'Çerçeveye Giriş',
-    en: 'Frame begins empty — just the setting visible. Person walks calmly into frame from the side and settles naturally in front of the camera. [0–3s]',
-  },
 ]
 
 const VOICE_SETTINGS = [
+  { id: 'street', label: 'Sokak', en: 'urban street setting — blurred city buildings in background, soft natural daylight, gentle bokeh depth of field. Authentic and unplanned feel.' },
   { id: 'podcast', label: 'Podcast Odası', en: 'cozy intimate podcast booth — warm table lamp, overflowing bookshelves, dark wooden desk, a coffee cup in the corner' },
   { id: 'studio', label: 'Kayıt Stüdyosu', en: 'professional recording studio with dark acoustic foam panels, soft overhead studio lighting — polished and intentional' },
   { id: 'cafe', label: 'Kafe Köşesi', en: 'quiet corner of a café — warm ambient light, blurred patrons in background, wooden table, steam rising from a cup' },
   { id: 'rooftop', label: 'Çatı Katı', en: 'rooftop terrace at golden hour — city skyline softly out of focus in the background, warm late-afternoon light' },
   { id: 'home', label: 'Ev Stüdyosu', en: 'personal home recording setup — cozy bedroom or study corner, ring light glow, intimate and authentic' },
-  { id: 'street', label: 'Sokak', en: 'urban street corner — city life gently blurred in background, natural daylight, authentic urban energy' },
 ]
 
 const VOICE_MICS = [
-  { id: 'vintage', label: 'Vintage Kondenser', en: 'holds a classic large-diaphragm condenser microphone on a boom arm — warm, retro, timeless look' },
+  { id: 'handheld', label: 'El Kondenser', en: 'holds a handheld condenser microphone with a shock mount — natural grip, authentic street reporter feel' },
+  { id: 'vintage', label: 'Vintage Stand', en: 'positioned at a classic large-diaphragm condenser microphone on a boom stand — warm, retro, timeless look' },
   { id: 'usb', label: 'Modern Mikrofon', en: 'positioned at a sleek modern USB studio microphone on a desk stand — clean and professional' },
-  { id: 'handheld', label: 'El Mikrofonu', en: 'holds a dynamic handheld microphone, comfortable natural grip, speaks directly into it' },
   { id: 'ring', label: 'Ring Mikrofon', en: 'positioned with a selfie ring-light microphone setup — modern content creator look, soft ring-light halo visible' },
   { id: 'none', label: 'Mikrofonsuz', en: 'no microphone — speaks openly and directly into the camera in an honest documentary style' },
 ]
@@ -169,7 +172,8 @@ Aspect ratio: ${fmt.ratio} | 8 seconds | Seamlessly loopable | No hard cuts | Ti
 AUDIO: ${AUDIO_HINTS[s.motion] || 'minimal ambient'}, no voiceover, no lyrics`
 }
 
-function buildVoicePrompt(s: KState): string {
+// Higgsfield voice prompt
+function buildHighgsfieldVoicePrompt(s: KState): string {
   const hook = VOICE_HOOKS.find(x => x.id === s.voiceHook) || VOICE_HOOKS[0]
   const setting = VOICE_SETTINGS.find(x => x.id === s.voiceSetting) || VOICE_SETTINGS[0]
   const mic = VOICE_MICS.find(x => x.id === s.micType) || VOICE_MICS[0]
@@ -187,11 +191,64 @@ SPEAKING SCENE (3–10 seconds):
 ${person} ${mic.en}. Direct and sincere eye contact with camera. Calm, unhurried delivery — sharing a personal thought with a close friend. Selfie angle or gentle low-angle shot.
 
 VOICEOVER LANGUAGE: Turkish
-SPOKEN DIALOGUE (Turkish, read aloud naturally over 7 seconds):
+SPOKEN DIALOGUE (Turkish, read naturally over 7 seconds):
 "${q}"
+
+ENDING: After the final word, 1 second of silent direct eye contact with camera — presence without words, powerful natural close.
 
 TONE: Intimate and thoughtful. Spoken-word poetry feel. Not scripted — a genuine quiet moment.
 VIDEO SPECS: 10 seconds | 9:16 vertical | Turkish spoken audio | No cuts | Single continuous take`
+}
+
+// Grok (Aurora) voice prompt — based on actual video analysis of proven output
+function buildGrokVoicePrompt(s: KState): string {
+  const hook = VOICE_HOOKS.find(x => x.id === s.voiceHook) || VOICE_HOOKS[0]
+  const setting = VOICE_SETTINGS.find(x => x.id === s.voiceSetting) || VOICE_SETTINGS[0]
+  const mic = VOICE_MICS.find(x => x.id === s.micType) || VOICE_MICS[0]
+  const person = s.gender === 'male' ? 'Young man' : 'Young woman'
+  const q = s.quote.trim() || '[QUOTE TEXT HERE]'
+
+  const outdoorSettings = ['street', 'rooftop']
+  const isOutdoor = outdoorSettings.includes(s.voiceSetting)
+
+  const lighting = isOutdoor
+    ? 'soft natural outdoor daylight with a hint of golden warmth. No studio lights, no ring light. Natural and unforced.'
+    : 'warm ambient interior light — soft, intimate, no harsh shadows. Natural and lived-in feel.'
+
+  return `Hyperrealistic cinematic 10-second vertical video. 4K ultra-detailed. Authentic outdoor quote reading.
+
+SUBJECT: ${person} — natural appearance, no commercial gloss. Casual everyday clothing (simple knit sweater or basic tee), long natural hair, minimal or no visible makeup. Real person aesthetic, not a model.
+
+SETTING: ${setting.en}.
+
+HOOK (0–3s):
+${hook.en}
+
+SPEAKING SCENE (3–10s):
+Person ${mic.en}. Speaks directly and calmly to camera. Lips move naturally with the spoken text. Very subtle, authentic body micro-movement — slight shift of weight, natural breath.
+
+CAMERA: Near-imperceptible handheld micro-tremor — feels found not filmed. During the final 3 seconds, barely drifts 2–3mm closer. Natural, not mechanical.
+
+LIGHTING: ${lighting}
+
+COLOR GRADE: Slightly desaturated, warm cinematic tone, very subtle film grain. Not over-processed.
+
+VOICEOVER LANGUAGE: Turkish
+SPOKEN DIALOGUE (Turkish, read aloud naturally):
+"${q}"
+
+ENDING: After the last word, 1–2 seconds of silent direct eye contact with the camera. No expression change — just presence. Powerful, unhurried close.
+
+TECHNICAL SPECS:
+9:16 vertical | 10 seconds | 4K | Hyperrealistic | Film grain: very subtle | Single continuous take | No cuts
+
+POST-PRODUCTION NOTE: Add the Turkish quote as a text overlay in CapCut, InShot, or similar editing app after generation. Use a clean white or off-white minimal font.`
+}
+
+function buildVoicePrompt(s: KState): string {
+  return s.voicePlatform === 'grok'
+    ? buildGrokVoicePrompt(s)
+    : buildHighgsfieldVoicePrompt(s)
 }
 
 function getPrompt(s: KState): string {
@@ -277,9 +334,10 @@ const KapsamKafe: React.FC<PageProps> = () => {
     motion: 'particles',
     format: 'reels',
     tone: 'moody',
-    micType: 'vintage',
-    voiceSetting: 'podcast',
-    voiceHook: 'deepbreath',
+    voicePlatform: 'grok',
+    micType: 'handheld',
+    voiceSetting: 'street',
+    voiceHook: 'eyeopen',
     gender: 'female',
   })
 
@@ -296,20 +354,20 @@ const KapsamKafe: React.FC<PageProps> = () => {
     { id: 'voice' as OutputType, label: 'Sesli Okuma', icon: <Mic size={16} />, desc: 'UGC tarzı konuşma' },
   ]
 
-  const promptLabel = isVoice ? 'Sesli Okuma Prompt' : state.outputType === 'image' ? 'Görsel Prompt' : 'Video Prompt'
+  const promptLabel = isVoice
+    ? `Sesli Okuma Prompt (${state.voicePlatform === 'grok' ? 'Grok' : 'Higgsfield'})`
+    : state.outputType === 'image' ? 'Görsel Prompt' : 'Video Prompt'
+
   const promptIcon = isVoice
     ? <Mic size={14} className="text-amber-400" />
     : state.outputType === 'image'
     ? <ImageIcon size={14} className="text-amber-400" />
     : <Film size={14} className="text-amber-400" />
 
-  const voiceTips = [
-    'Yazını gir, mikrofon ve ortam seç',
-    'Promptu kopyala',
-    'Higgsfield → UGC / Video sekmesine gir',
-    'Promptu yapıştır, avatar seç, üret',
-    'İndir → TikTok / Instagram\'a yükle',
-  ]
+  const voiceTips = state.voicePlatform === 'grok'
+    ? ['Yazını gir, platform = Grok seç', 'Promptu kopyala', 'Grok → Aurora Video → yapıştır ve üret', 'Sonra CapCut\'ta Türkçe yazıyı overlay ekle', 'TikTok / Instagram\'a yükle']
+    : ['Yazını gir, platform = Higgsfield seç', 'Promptu kopyala', 'Higgsfield → UGC sekmesi → yapıştır', 'Avatar seç ve üret', 'İndir → TikTok / Instagram\'a yükle']
+
   const genericTips = [
     'Yazını gir, stil ve arka planı seç',
     'Promptu kopyala',
@@ -330,7 +388,7 @@ const KapsamKafe: React.FC<PageProps> = () => {
           İçerik <span className="text-amber-400">Üretici</span>
         </h1>
         <p className="text-gray-400 text-lg max-w-xl mx-auto">
-          Estetik görsel, video veya sesli okuma — TikTok ve Instagram için Higgsfield'e hazır prompt.
+          Estetik görsel, video veya sesli okuma — TikTok ve Instagram için hazır prompt.
         </p>
       </div>
 
@@ -378,6 +436,40 @@ const KapsamKafe: React.FC<PageProps> = () => {
           {/* ── VOICE controls ── */}
           {isVoice && (
             <>
+              {/* Platform selector */}
+              <div className="card p-5">
+                <p className="text-sm font-semibold text-white mb-1">Platform</p>
+                <p className="text-xs text-gray-500 mb-3">Grok = Aurora Video · Higgsfield = UGC preset</p>
+                <div className="grid grid-cols-2 gap-3">
+                  {([
+                    { id: 'grok' as VoicePlatform, label: 'Grok', sub: 'Aurora Video' },
+                    { id: 'higgsfield' as VoicePlatform, label: 'Higgsfield', sub: 'UGC Preset' },
+                  ]).map(p => (
+                    <button
+                      key={p.id}
+                      onClick={() => set('voicePlatform')(p.id)}
+                      className={`flex flex-col items-center gap-1 py-3 rounded-xl border-2 transition-all ${
+                        state.voicePlatform === p.id
+                          ? 'border-amber-500 bg-amber-900/20 text-amber-300'
+                          : 'border-gray-700 text-gray-400 hover:border-gray-600 hover:text-gray-200'
+                      }`}
+                    >
+                      <span className="font-semibold text-sm">{p.label}</span>
+                      <span className="text-[10px] opacity-60">{p.sub}</span>
+                    </button>
+                  ))}
+                </div>
+
+                {state.voicePlatform === 'grok' && (
+                  <div className="mt-3 rounded-lg bg-violet-900/20 border border-violet-700/30 px-3 py-2">
+                    <p className="text-xs text-violet-300 flex items-center gap-1.5">
+                      <Zap size={11} />
+                      Grok formatı — gerçek üretilen videodan optimize edildi
+                    </p>
+                  </div>
+                )}
+              </div>
+
               {/* Gender */}
               <div className="card p-5">
                 <p className="text-sm font-semibold text-white mb-3">Karakter</p>
@@ -413,7 +505,8 @@ const KapsamKafe: React.FC<PageProps> = () => {
 
               {/* Voice Setting */}
               <div className="card p-5">
-                <p className="text-sm font-semibold text-white mb-3">Ortam</p>
+                <p className="text-sm font-semibold text-white mb-1">Ortam</p>
+                <p className="text-xs text-gray-500 mb-3">Sokak = en güçlü sonuç (test edildi)</p>
                 <OptionGrid
                   options={VOICE_SETTINGS.map(s => ({ id: s.id, label: s.label }))}
                   selected={state.voiceSetting}
@@ -424,7 +517,7 @@ const KapsamKafe: React.FC<PageProps> = () => {
               {/* Voice Hook */}
               <div className="card p-5">
                 <p className="text-sm font-semibold text-white mb-1">Giriş (Hook)</p>
-                <p className="text-xs text-gray-500 mb-3">İlk 0–3 saniyenin görsel açılışı</p>
+                <p className="text-xs text-gray-500 mb-3">İlk 0–3 saniyenin görsel açılışı · Göz Açılışı = en etkili</p>
                 <OptionGrid
                   options={VOICE_HOOKS.map(h => ({ id: h.id, label: h.label }))}
                   selected={state.voiceHook}
@@ -499,7 +592,7 @@ const KapsamKafe: React.FC<PageProps> = () => {
               {hasQuote && <CopyBtn text={prompt} />}
             </div>
             <pre
-              className={`text-xs font-mono whitespace-pre-wrap leading-relaxed rounded-xl p-4 border border-gray-800 max-h-[440px] overflow-y-auto ${
+              className={`text-xs font-mono whitespace-pre-wrap leading-relaxed rounded-xl p-4 border border-gray-800 max-h-[460px] overflow-y-auto ${
                 hasQuote ? 'text-gray-300 bg-gray-950' : 'text-gray-600 bg-gray-900/50'
               }`}
             >
@@ -518,15 +611,34 @@ const KapsamKafe: React.FC<PageProps> = () => {
             </div>
           )}
 
-          {/* Sesli okuma bilgi kartı */}
-          {isVoice && (
+          {/* Grok specific tip */}
+          {isVoice && state.voicePlatform === 'grok' && (
+            <div className="rounded-xl border border-violet-700/30 bg-violet-900/10 p-4 space-y-2">
+              <p className="text-xs font-semibold text-violet-300 flex items-center gap-1.5">
+                <Zap size={12} />
+                Grok Sonrası Adım
+              </p>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                Grok görsel üretir ama metin overlay eklemez. Videoyu indirdikten sonra <strong className="text-white">CapCut</strong> veya <strong className="text-white">InShot</strong>'a al — Türkçe sözü beyaz minimal fontla ekle. Bu sözü de kopyala:
+              </p>
+              {hasQuote && (
+                <div className="bg-gray-900 rounded-lg px-3 py-2 flex items-center justify-between gap-2">
+                  <span className="text-xs text-amber-200 font-medium truncate">"{state.quote}"</span>
+                  <CopyBtn text={state.quote} />
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Sesli okuma info */}
+          {isVoice && state.voicePlatform === 'higgsfield' && (
             <div className="rounded-xl border border-amber-700/30 bg-amber-900/10 p-4">
               <p className="text-xs font-semibold text-amber-400 mb-1 flex items-center gap-1.5">
                 <Mic size={12} />
-                Sesli Okuma Modu
+                Higgsfield Kullanımı
               </p>
               <p className="text-xs text-gray-400 leading-relaxed">
-                Higgsfield'de <strong className="text-white">UGC</strong> veya <strong className="text-white">Video</strong> sekmesini kullan. Avatar seç, promptu yapıştır — avatar seçtiğin Türkçe sözü doğal şekilde okuyacak.
+                Higgsfield → <strong className="text-white">UGC</strong> sekmesi. Avatar seç, promptu yapıştır. Avatar seçtiğin Türkçe sözü doğal şekilde okuyacak.
               </p>
             </div>
           )}
