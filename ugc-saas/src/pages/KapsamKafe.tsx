@@ -14,6 +14,7 @@ interface KState {
   motion: string
   format: string
   tone: string
+  placement: string
   // voice
   voicePlatform: VoicePlatform
   micType: string
@@ -228,6 +229,83 @@ const TONES = [
   { id: 'moody', label: 'Moody', palette: 'deep teal, dark violet, forest green, mysterious layered shadows' },
 ]
 
+const PLACEMENTS = [
+  { id: 'none',           label: 'Serbest',          emoji: '✕', desc: 'Arka plan bazlı' },
+  { id: 'billboard',      label: 'Reklam Panosu',     emoji: '📋', desc: 'Büyük sokak afişi' },
+  { id: 'shopSign',       label: 'Cadde Tabelası',    emoji: '🪧', desc: 'Asılı dükkan tabelası' },
+  { id: 'roadSign',       label: 'İşaret Levhası',    emoji: '🚧', desc: 'Metal yol levhası' },
+  { id: 'shopWindow',     label: 'Vitrin Camı',       emoji: '🏪', desc: 'Mağaza camı üzeri' },
+  { id: 'neonSign',       label: 'Neon Tabela',       emoji: '💡', desc: 'Neon tüp tabela' },
+  { id: 'metroWall',      label: 'Metro Duvarı',      emoji: '🚇', desc: 'Yeraltı istasyon duvarı' },
+  { id: 'bridgeWall',     label: 'Köprü / Altı',      emoji: '🌉', desc: 'Köprü destek duvarı' },
+  { id: 'pavement',       label: 'Kaldırım',          emoji: '🚶', desc: 'Yaya yolu / kaldırım' },
+  { id: 'buildingFacade', label: 'Bina Cephesi',      emoji: '🏢', desc: 'Eski bina dış cephe' },
+]
+
+interface PlacementData {
+  env: string
+  textTech: string
+  camera: string
+  surreal: string
+}
+
+const PLACEMENT_DATA: Record<string, PlacementData> = {
+  billboard: {
+    env: 'Large outdoor billboard structure on a busy urban intersection — steel truss frame with internally illuminated lightbox face, mounted 8 meters above street level. Istanbul or European city. Golden afternoon sun rakes across the billboard surface at 45 degrees. Traffic, pedestrians, building facades visible below in shallow bokeh.',
+    textTech: 'The quote text appears as large-format professionally printed vinyl lettering on the illuminated billboard face — designed for readability at street distance. The vinyl surface has a slight matte sheen catching ambient light unevenly. Rivet heads visible at the panel join seams. Subtle weathering at the lower corners from months of outdoor exposure: slight UV yellowing of the white areas, one edge of the vinyl microlifting from moisture cycling. This has been here for weeks.',
+    camera: 'Camera at street level looking up at a 15-degree angle — the billboard dominates the upper 60% of frame. The aluminum frame structure is visible at edges. Foreground bokeh of streetlights or tree branches. Classic advertising photography perspective from the sidewalk below.',
+    surreal: 'SURREALIST ELEMENT: Every other billboard visible in the scene is lit with its normal advertisement. Only this one is completely dark and unlit — and yet the quote text on it is clearly readable, as if self-illuminated from within the letters themselves. No power source visible. The text provides its own light.',
+  },
+  shopSign: {
+    env: 'European-style pedestrian shopping street — cobblestone, historic buildings with ornate facades. A hanging mounted shop sign bracket extends from a building facade at eye level, the sign swinging imperceptibly in a breath of air. Other shop signs, awnings, and shutters recede in warm afternoon bokeh. The street is quiet; late afternoon.',
+    textTech: 'The quote text is router-carved deep into a thick painted wooden hanging sign, the carved channels then hand-painted in contrasting color with a fine brush. Slight paint accumulation pools at the bottom of the carved channels where gravity pulled wet paint. The sign face shows wood grain visible through the background paint coat. Small chips at two corners from years of gentle swinging. The iron hanging bracket above shows rust streaking where paint has worn through at the mounting point.',
+    camera: 'Eye-level street view — the sign fills the center frame, hanging naturally on its bracket. Short depth of field keeps cobblestones and distant shops as soft bokeh behind. The light source is behind and above, giving the sign face a slight rim.',
+    surreal: 'SURREALIST ELEMENT: The shop behind this sign has no interior — looking through the glass door reveals only the back of the sign from inside, the entire building depth nothing but the thickness of this single sign. The structure exists only to hold these words.',
+  },
+  roadSign: {
+    env: 'Open road junction or city intersection. A galvanized steel sign pole rises from a concrete base at the roadside. Sky behind — partly cloudy, dramatic afternoon light. Trees or urban buildings at soft distance. Real roadside environment, real asphalt, real painted road markings visible at the bottom of frame.',
+    textTech: 'The quote text appears as retroreflective vinyl lettering applied to an aluminum road sign panel — the vinyl has the distinctive very slightly raised edge where it meets the sign face, visible on close inspection. Retroreflective glass beads in the material catch the light source and return it directly, making the letters glow even in daylight. Mounting bolt holes visible at each corner. Sign face shows minor scratches from road debris. One corner has a small dent from something thrown or fallen against it. This is a real sign on a real pole.',
+    camera: 'Slightly low angle looking up the pole toward the sign, sky behind with dramatic cloud. The sign fills 50% of frame, pole visible below, sky above. Or: direct face-on at sign height with road and environment receding behind in natural perspective.',
+    surreal: 'SURREALIST ELEMENT: This sign points in all directions simultaneously — every cardinal direction arrow on the panel\'s edge all point outward from it. And every directional arrow leads to the same destination, which is only described by the quote text. Every road leads here.',
+  },
+  shopWindow: {
+    env: 'Boutique storefront on a quiet street at dusk. Large display window — inside: warm amber light, tasteful product display or empty beautiful interior space. Outside: the street\'s reflection ghosted on the glass — parked cars, the opposite building, the last light of day. The glass creates three simultaneous layers: text, interior, reflection.',
+    textTech: 'The quote text is applied to the interior side of the glass — visible from outside as forward-reading because the glass reverses it back. Applied using white paint pen or frosted vinyl decal with professional precision: letter edges are crisp but slightly textured at micro scale, very fine gaps at two corners where the applicator lifted early. The glass surface lays ambient street reflections directly over the text — the words exist simultaneously with the ghosted images of the street reflected in the pane.',
+    camera: 'From the street, standing at glass-face distance. The three-layer composition: text in the immediate foreground plane, warm interior scene in middle ground, faint street reflections as overlay. Natural perspective, eye level.',
+    surreal: 'SURREALIST ELEMENT: The reflection in the window shows a different street than the one you are standing on — a street that no longer exists, identifiable from old city photographs. The text floats between the present and a vanished past simultaneously.',
+  },
+  neonSign: {
+    env: 'Night scene. The neon sign is mounted on a exterior building wall or suspended in a window visible from the street. Recent rain: the pavement below is wet and reflective, the neon colors puddle and stretch on every surface. Other building lights and distant traffic in soft bokeh. Perfect rainy-night city atmosphere.',
+    textTech: 'The quote text is spelled out in bent glass neon tubes — each letter formed by a continuous bent tube, colored gas illuminated inside, glass visible as glass: the tube thickness, the slight blue-white glow at the very tip where the electrode is, the bend radii at direction changes. The neon light spills onto the mounting surface behind it creating a diffuse colored halo. Small black electrical wire runs to a transformer hidden at one end. One short section of one letter is very slightly dimmer — an imperfection in the gas fill that makes it unmistakably real.',
+    camera: 'Medium shot from the wet street, sign at center frame. The wet pavement below reflects the neon in distorted color pools. Bokeh city lights behind. Classic wet-night photography with real environmental response.',
+    surreal: 'SURREALIST ELEMENT: The neon tubes spell different words depending on which eye you use — left eye reads one version, right eye another. Closing alternating eyes reveals two different quotes living in the same physical sign. The glass bends light differently for different perspectives.',
+  },
+  metroWall: {
+    env: 'Underground metro station — platform level or station corridor. Tiled wall surface: either classic white subway tile or decorative station mosaic. Dramatic overhead fluorescent or contemporary LED station lighting. Distant platform curve, rail edge visible at one side. Sparse commuters blurred in the far distance. Istanbul Metro, Paris Métro, or similar atmospheric underground transit.',
+    textTech: 'The quote text is integrated into the station wall as a tile mosaic installation — each letter formed by colored ceramic tiles set into the wall at the time of the station\'s construction. The grout lines run through the letterforms as they run through everything else on this wall. The tile surface has the characteristic glaze sheen of fired ceramic, catching overhead light differently at different angles. The tiles and grout have accumulated decades of station atmosphere: slight yellowing of grout lines, the surface worn smooth at touch height. This text has been here since the station opened.',
+    camera: 'Straight-on perspective facing the wall, text centered. The corridor or platform extends behind with decreasing detail. Station lighting creates even illumination with slight over-brightness from overhead fixtures. The tiled floor reflection visible at the bottom of frame.',
+    surreal: 'SURREALIST ELEMENT: The mosaic text appears to extend deeper into the wall than the tiles are thick — as if the letters continue for meters into the structure behind the surface. You could reach through the grout and the letters would not end. The wall is a doorway the depth of the quote.',
+  },
+  bridgeWall: {
+    env: 'City bridge support pillar or underpass — raw concrete and steel. The underpass tunnel extends in both directions, daylight visible as a bright rectangle at one or both ends. Concrete pillar surfaces, angular structural geometry. Ground: asphalt or gravel with urban debris. The space has the particular acoustic of concrete enclosure. Authentic, unglamorous, real urban infrastructure.',
+    textTech: 'The quote text is spray-painted directly on the bridge concrete — a mural-scale piece with careful outlines and solid-filled letterforms. But all the authentic characteristics of outdoor spray work are present: aerosol fade at the outermost reaches of each spray pass, micro-drips at two letter bases where the can lingered, the concrete\'s aggregate texture showing through the thinner paint passes. The concrete around the text carries years of general grime and moisture-staining that predates the paint; the paint sits on top of all that history. Additional smaller tags and marks exist at the periphery — this wall has many authors.',
+    camera: 'From inside the underpass, looking at the painted wall at medium distance. Daylight from the tunnel opening at one side casts a natural gradient across the scene. Ground-level perspective. The geometry of the underpass frames the shot.',
+    surreal: 'SURREALIST ELEMENT: The spray-painted text is visible on this wall from inside the underpass. But looking at the same wall from outside — from the bridge above or the street beside — the paint is not there. It exists only from this specific angle, in this specific enclosed space. It was painted only for someone standing exactly here.',
+  },
+  pavement: {
+    env: 'City sidewalk or pedestrian plaza — textured concrete or stone paving, real urban environment. The pavement extends to building facades, storefronts, or a public square. Overcast or filtered daylight creates even shadowless illumination across the ground plane. Pedestrians\' feet and lower legs visible at the periphery, blurred in motion.',
+    textTech: 'The quote text is written on the pavement in colored chalk — broad chalked strokes with soft powdery edges where the chalk body compressed and spread under writing pressure. Slight smudging around letter edges where a foot has brushed past. Chalk dust collected in the pavement texture\'s surface crevices around and within the letterforms, making the letters shimmer slightly. The concrete or stone surface texture shows clearly through and between the chalk strokes. This text was written today and will survive until the rain.',
+    camera: 'Elevated perspective looking straight down (bird\'s eye) or at a shallow 25-degree angle across the pavement. The text fills the ground-plane foreground. Building bases or pedestrian activity at the edges. The classic street-pavement-art photography angle.',
+    surreal: 'SURREALIST ELEMENT: The chalk letters cast no shadow even in direct sunlight — but the spaces between the letters do cast shadows, as if the letterforms are holes of light cut through the chalk and the pavement, revealing brightness beneath the surface.',
+  },
+  buildingFacade: {
+    env: 'Old building exterior — brick or weathered plaster facade, three to five stories. The street in front: cobblestone or worn asphalt, parked cars or a passing pedestrian at soft-focus distance. The building is historic and lived-in: window shutters at various states of use, a drainpipe, window boxes. Part of a real neighborhood. Istanbul historic district, European street, or Mediterranean old town.',
+    textTech: 'The quote text is a large hand-painted sign on the building exterior — applied by a professional sign painter decades ago. The paint has aged significantly: color faded and desaturated from UV exposure, the surface cracked in fine networks where the paint dried and contracted over years, edges very slightly lifting from the wall substrate at their furthest extent. Newer layers of building grime and weathering have settled over the paint surface, further antiquing it. The wall behind shows through in worn areas. This sign has been read by people who are no longer alive. The building has been repainted around it but not over it.',
+    camera: 'Street-level view looking up at the building facade at a natural pedestrian perspective. The sign occupies the middle section of the building between ground floor and upper windows. Buildings or sky at the periphery. The environment feels like it was walked past rather than photographed.',
+    surreal: 'SURREALIST ELEMENT: This painted sign exists on the building but appears in no city map, property record, historical archive, or photograph ever taken of this street. It is invisible to cameras unless the photographer stands at exactly this point and looks at exactly this angle. You found something that cannot be documented.',
+  },
+}
+
 const AUDIO_HINTS: Record<string, string> = {
   rain: 'soft rain ambience, no music',
   fire: 'gentle fire crackling, no music',
@@ -338,58 +416,68 @@ function buildTextPrompt(s: KState): string {
   const motion = MOTIONS.find(x => x.id === s.motion) || MOTIONS[2]
   const q = s.quote.trim() || '[QUOTE TEXT HERE]'
 
+  const placementData = s.placement !== 'none' ? PLACEMENT_DATA[s.placement] : null
+
   const hasPaintingOverride = s.style in STYLE_TECHNIQUE_OVERRIDE
-  const technique = hasPaintingOverride
-    ? STYLE_TECHNIQUE_OVERRIDE[s.style]
-    : (TEXT_TECHNIQUES[s.background] || TEXT_TECHNIQUES.wall)
-  const surreal = SURREAL_ELEMENTS[s.style] || SURREAL_ELEMENTS.dark
+  const technique = placementData
+    ? placementData.textTech
+    : hasPaintingOverride
+      ? STYLE_TECHNIQUE_OVERRIDE[s.style]
+      : (TEXT_TECHNIQUES[s.background] || TEXT_TECHNIQUES.wall)
+
+  const surreal = placementData
+    ? placementData.surreal
+    : (SURREAL_ELEMENTS[s.style] || SURREAL_ELEMENTS.dark)
 
   const paintingStyles = new Set(['watercolor','oilpainting','artnouveau','impressionist','surreal','wabisabi','graffiti','chalkart','lofi','calligraphy'])
-  const isPainting = paintingStyles.has(s.style)
-  const mediumLabel = isPainting ? 'Award-winning fine art painting. Hand-crafted medium. Museum quality.' : 'Award-winning fine art photography. Shot on medium format digital. Ultra-sharp. Photorealistic.'
-  const subjectLabel = isPainting
-    ? `SUBJECT OF THE PAINTING: ${bg.en}. Rendered in ${style.en}.`
-    : `SURFACE & ENVIRONMENT: ${bg.en}. ${style.en}.`
+  const isPainting = !placementData && paintingStyles.has(s.style)
+  const mediumLabel = isPainting
+    ? 'Award-winning fine art painting. Hand-crafted medium. Museum quality.'
+    : 'Hyperrealistic photographic scene. Medium format digital. Ultra-sharp. Every surface detail rendered at macro level.'
+  const subjectLabel = placementData
+    ? `REAL-WORLD LOCATION & PLACEMENT:\n${placementData.env}`
+    : isPainting
+      ? `SUBJECT OF THE PAINTING: ${bg.en}. Rendered in ${style.en}.`
+      : `SURFACE & ENVIRONMENT: ${bg.en}. ${style.en}.`
+  const cameraNote = placementData ? `\nCAMERA POSITION: ${placementData.camera}` : ''
 
   if (s.outputType === 'image') {
     return `${mediumLabel}
 
-${subjectLabel}
+${subjectLabel}${cameraNote}
 
-COLOR PALETTE: ${tone.palette}.
-LIGHTING: ${style.lighting}. Light reveals maximum texture and depth.
+COLOR PALETTE: ${placementData ? `${tone.palette}. Atmospheric color grade appropriate to the location time of day.` : tone.palette}.
+LIGHTING: ${placementData ? 'Natural environmental lighting consistent with the location and time of day described above.' : `${style.lighting}. Light reveals maximum texture and depth.`}
 
 QUOTE TEXT IN THE ${isPainting ? 'PAINTING' : 'IMAGE'}:
 "${q}"
 
 TEXT INTEGRATION — THE MOST IMPORTANT INSTRUCTION:
 ${technique}
-CRITICAL: The text is NOT a digital overlay. It is NOT a font rendered on top. It physically ${isPainting ? 'exists within the painted medium' : 'exists on this surface in this world'}. ${isPainting ? 'The AI must render text-medium interaction with full painterly fidelity: pigment behavior, medium absorption, the marks of a real hand.' : 'The AI must render text-surface interaction with complete physical fidelity: material absorption, gravity effects, age, texture bleed.'} If this looks like a font pasted over a background, the image has failed.
+CRITICAL: The text is NOT a digital overlay. It is NOT a font rendered on top. It physically exists ${placementData ? 'on this real-world object in this real-world location' : isPainting ? 'within the painted medium' : 'on this surface in this world'}. If this looks like a font pasted over a background, the image has failed. The text must have physical presence — material interaction, environmental wear, lighting response.
 
 ${surreal}
 
 COMPOSITION:
-- Text is the dominant visual element — large, bold, readable, fills the frame with intention
-- Negative space gives letterforms room to breathe
-- ${isPainting ? 'Artistic composition balances text and visual elements' : 'Camera angle maximizes text-surface physical relationship'}
+- Text is the dominant visual element — large, bold, fully readable
+- ${placementData ? 'Environment and placement object frame the text naturally — the location gives the text context and scale' : isPainting ? 'Artistic composition balances text and painted elements' : 'Camera angle maximizes text-surface physical relationship'}
 - No UI elements, no watermarks, no logos
 
 MICRO-DETAIL REQUIREMENTS (what makes it "vay be"):
-- ${isPainting ? 'Medium texture at macro level — individual brushstroke, pigment grain, paper/canvas fibers visible' : 'Surface texture at macro photography resolution — individual grain, pores, imperfections visible'}
-- Text-${isPainting ? 'medium' : 'surface'} interaction shows complete material physics and behavior
-- Atmospheric micro-details appropriate to the medium
-- ${isPainting ? 'Painting style consistent throughout — no photographic elements' : 'Depth of field: text razor-sharp, distant elements softly de-focused'}
+- ${placementData ? 'Location materials rendered at macro detail level — surface texture, weathering, lighting response all physically accurate' : isPainting ? 'Medium texture at macro level — individual brushstroke, pigment grain, paper/canvas fibers visible' : 'Surface texture at macro photography resolution — individual grain, pores, imperfections visible'}
+- Text-surface/medium interaction shows complete material physics
+- Atmospheric depth: ${placementData ? 'foreground placement object sharp, mid-ground and background environment in natural depth-of-field' : 'depth of field chosen to maximize emotional weight'}
 
 TECHNICAL SPECS:
-Aspect ratio: ${fmt.ratio} | Exceptional craft quality | ${isPainting ? 'Painterly realism, no digital feel' : 'Photorealistic, no digital feel'} | Award-winning composition`
+Aspect ratio: ${fmt.ratio} | Ultra-sharp | Photorealistic environmental detail | Award-winning editorial photography composition`
   }
 
   return `Award-winning cinematography. Atmospheric short-form video. Every frame a still worth printing.
 
-${subjectLabel}
+${subjectLabel}${cameraNote}
 
-COLOR PALETTE: ${tone.palette}.
-LIGHTING: ${style.lighting}. Light reveals texture throughout.
+COLOR PALETTE: ${placementData ? `${tone.palette}. Environmental color grade.` : tone.palette}.
+LIGHTING: ${placementData ? 'Natural environmental lighting for this location.' : `${style.lighting}. Light reveals texture throughout.`}
 
 MOTION: ${motion.en}. Camera movement serves the text — never obscures it.
 
@@ -398,21 +486,16 @@ QUOTE TEXT IN THE VIDEO:
 
 TEXT INTEGRATION — THE MOST IMPORTANT INSTRUCTION:
 ${technique}
-CRITICAL: The text physically exists ${isPainting ? 'within the painted composition' : 'on this surface'}. It is NOT a digital overlay animated on top. ${isPainting ? 'The camera films a painting where this text is integrated into the medium itself.' : 'The camera films a real location where this text has been written/burned/carved/painted.'} Material physics apply throughout all motion.
+CRITICAL: The text physically exists on ${placementData ? 'this real-world object in a real location — the camera films this place' : isPainting ? 'the painted canvas — the camera films this artwork' : 'this surface — the camera films a real place where this was written'}. It is NOT a digital overlay animated on top. Material physics apply throughout all motion.
 
 ${surreal}
 
 TEMPORAL REVEAL:
-Camera opens already showing partial text — the motion slowly reveals the full quote over 3 seconds. Full text holds readable and dominant for 4 seconds. Environment continues subtle movement in the final second as if the world is still breathing after the words.
-
-MICRO-DETAIL REQUIREMENTS:
-- ${isPainting ? 'Medium texture at macro level throughout — brushstroke, pigment, canvas grain consistent' : 'Surface texture at macro level throughout entire clip'}
-- Text integration with ${isPainting ? 'medium' : 'surface'} remains physically consistent across all frames
-- Atmospheric elements (particles, mist, embers) move through space naturally
+${placementData ? 'Camera opens on the environment, pans or pushes to reveal the placement object and text over 3 seconds. Full text holds 4 seconds. Final second: slight pull back reveals more environmental context.' : 'Camera opens already showing partial text — motion slowly reveals the full quote over 3 seconds. Full text holds 4 seconds. Final second: world continues breathing.'}
 
 TECHNICAL SPECS:
 Aspect ratio: ${fmt.ratio} | 8 seconds | Seamlessly loopable | No hard cuts | No voiceover
-AUDIO: ${AUDIO_HINTS[s.motion] || 'minimal ambient texture, barely audible — silence preferred'}`
+AUDIO: ${AUDIO_HINTS[s.motion] || 'ambient environmental audio, no music — the location sounds'}`
 }
 
 // Higgsfield voice prompt
@@ -699,6 +782,7 @@ const KapsamKafe: React.FC<PageProps> = () => {
     motion: 'particles',
     format: 'reels',
     tone: 'moody',
+    placement: 'none',
     voicePlatform: 'grok',
     micType: 'handheld',
     voiceSetting: 'street',
@@ -980,6 +1064,43 @@ const KapsamKafe: React.FC<PageProps> = () => {
                 />
               </div>
             </>
+          )}
+
+          {/* ── REAL-WORLD PLACEMENT ── (image + video only) */}
+          {!isVoice && (
+            <div className="card p-5 border border-amber-700/30 bg-amber-900/5">
+              <p className="text-sm font-semibold text-white mb-1 flex items-center gap-2">
+                <span className="text-amber-400">📍</span>
+                Gerçek Dünya Yerleşimi
+              </p>
+              <p className="text-xs text-gray-500 mb-3">
+                Seçilirse yazı bu gerçek dünya yüzeyinde görünür — reklam panosu, tabela, neon, metro...
+              </p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {PLACEMENTS.map(p => (
+                  <button
+                    key={p.id}
+                    onClick={() => set('placement')(p.id)}
+                    className={`px-3 py-2.5 rounded-xl text-xs font-medium border transition-all text-left ${
+                      state.placement === p.id
+                        ? 'border-amber-500 bg-amber-900/30 text-amber-200'
+                        : 'border-gray-700 text-gray-400 hover:border-amber-700/50 hover:text-gray-200'
+                    }`}
+                  >
+                    <span className="mr-1.5">{p.emoji}</span>
+                    <span className="block truncate font-semibold">{p.label}</span>
+                    <span className="text-[10px] opacity-60">{p.desc}</span>
+                  </button>
+                ))}
+              </div>
+              {state.placement !== 'none' && (
+                <div className="mt-3 rounded-lg bg-amber-900/20 border border-amber-700/30 px-3 py-2">
+                  <p className="text-xs text-amber-300">
+                    ✓ Yerleşim aktif — prompt bu ortam için optimize edildi
+                  </p>
+                </div>
+              )}
+            </div>
           )}
         </div>
 
