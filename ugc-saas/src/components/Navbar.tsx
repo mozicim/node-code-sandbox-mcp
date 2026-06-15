@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Zap, Menu, X, Video, Library, LayoutDashboard, Tag, Coffee, Layers } from 'lucide-react'
+import { Zap, Menu, X, Video, Library, LayoutDashboard, Tag, Coffee, Layers, TrendingUp } from 'lucide-react'
 import { Page, User } from '../types'
 
 interface NavbarProps {
@@ -27,6 +27,7 @@ const Navbar: React.FC<NavbarProps> = ({ page, navigate, user, onLogin, onLogout
     { label: 'Pricing', page: 'pricing', icon: <Tag size={16} /> },
     { label: 'KapsamKafe', page: 'kapsam', icon: <Coffee size={16} />, amber: true, separator: true },
     { label: 'Zincir', page: 'chain', icon: <Layers size={16} />, separator: false },
+    { label: 'Viral', page: 'viral', icon: <TrendingUp size={16} />, separator: false },
   ]
 
   return (

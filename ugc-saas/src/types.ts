@@ -57,7 +57,7 @@ export interface User {
   avatar?: string
 }
 
-export type Page = 'landing' | 'dashboard' | 'create' | 'library' | 'pricing' | 'kapsam' | 'chain'
+export type Page = 'landing' | 'dashboard' | 'create' | 'library' | 'pricing' | 'kapsam' | 'chain' | 'viral'
 
 export interface PageProps {
   navigate: (page: Page) => void
