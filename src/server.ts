@@ -25,6 +25,9 @@ import { setServerInstance, logger } from './logger.ts';
 import getDependencyTypes, {
   argSchema as getDependencyTypesSchema,
 } from './tools/getDependencyTypes.ts';
+import getTurkeyTrends, {
+  argSchema as trendTrackingSchema,
+} from './tools/trendTracking.ts';
 
 export const serverRunId = randomUUID();
 setServerRunId(serverRunId);
@@ -109,6 +112,24 @@ server.tool(
   `,
   getDependencyTypesSchema,
   getDependencyTypes
+);
+
+server.tool(
+  'get_turkey_trends',
+  `Türkiye için X/Twitter, Instagram ve TikTok'taki güncel trendleri getirir.
+
+Platform seçenekleri:
+  • "x"         — X/Twitter Türkiye trendleri (X_BEARER_TOKEN env gerekli)
+  • "tiktok"    — TikTok Türkiye trend hashtag'leri (ücretsiz, opsiyonel: RAPIDAPI_KEY)
+  • "instagram" — Instagram Türkiye trend hashtag'leri (INSTAGRAM_SESSION_ID env gerekli)
+  • "all"       — Üç platform birden
+
+Ortam değişkenleri:
+  X_BEARER_TOKEN         — Twitter API Bearer Token (developer.twitter.com'dan alın)
+  INSTAGRAM_SESSION_ID   — Instagram oturum çerezi
+  RAPIDAPI_KEY           — RapidAPI anahtarı (TikTok yedek kaynağı için)`,
+  trendTrackingSchema,
+  getTurkeyTrends
 );
 
 // Register Gemini AI tool
