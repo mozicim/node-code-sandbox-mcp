@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🇹🇷 Türkiye Trend Takibi</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #0a0a0a;
+  color: #f0f0f0;
+  min-height: 100vh;
+  padding: 24px 16px 60px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
+  margin-bottom: 28px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 9px 20px;
+  border-radius: 99px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.btn:hover { opacity: 0.85; }
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: #fff; color: #000; }
+.btn-sm { background: #1e1e1e; color: #ccc; font-size: 0.78rem; padding: 7px 14px; }
+
+.last-update {
+  text-align: center;
+  font-size: 0.78rem;
+  color: #555;
+  margin-bottom: 24px;
+  min-height: 18px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #141414;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid #222;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: #333; }
+
+.card-header {
+  padding: 16px 20px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #1e1e1e;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  flex: 1;
+}
+
+.card-link {
+  font-size: 0.75rem;
+  color: #555;
+  text-decoration: none;
+  border: 1px solid #2a2a2a;
+  padding: 4px 10px;
+  border-radius: 99px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.card-link:hover { color: #aaa; border-color: #444; }
+
+.platform-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.icon-x        { background: #000; border: 1px solid #333; color: #fff; font-size: 1.2rem; }
+.icon-tiktok   { background: linear-gradient(135deg, #010101, #1a1a1a); border: 1px solid #333; }
+.icon-instagram { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.icon-google   { background: #fff; }
+
+.card-body {
+  padding: 12px 0;
+  min-height: 180px;
+  position: relative;
+}
+
+.trend-item {
+  display: flex;
+  align-items: center;
+  padding: 9px 20px;
+  gap: 12px;
+  transition: background 0.15s;
+  cursor: default;
+}
+.trend-item:hover { background: #1a1a1a; }
+
+.trend-num {
+  font-size: 0.8rem;
+  color: #444;
+  width: 20px;
+  text-align: right;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.trend-name {
+  flex: 1;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #e8e8e8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trend-vol {
+  font-size: 0.75rem;
+  color: #555;
+  flex-shrink: 0;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 180px;
+  gap: 14px;
+  color: #444;
+  font-size: 0.85rem;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid #222;
+  border-top-color: #666;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.error-box {
+  padding: 20px;
+  text-align: center;
+  color: #555;
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+.error-box strong { color: #888; display: block; margin-bottom: 6px; }
+
+.divider {
+  height: 1px;
+  background: #1e1e1e;
+  margin: 4px 0;
+}
+
+/* TikTok icon SVG approach */
+.tiktok-svg { width: 18px; height: 18px; }
+
+.badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 99px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: #1e1e1e;
+  color: #666;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.badge-hot { background: #3d1f0a; color: #f97316; }
+.badge-new { background: #0a2a1e; color: #22c55e; }
+
+.section-footer {
+  padding: 12px 20px 4px;
+  border-top: 1px solid #1a1a1a;
+  font-size: 0.72rem;
+  color: #444;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.source-tag {
+  font-size: 0.68rem;
+  color: #3a3a3a;
+  padding: 3px 8px;
+  border: 1px solid #222;
+  border-radius: 99px;
+}
+</style>
+</head>
+<body>
+
+<h1>🇹🇷 Türkiye Trend Takibi</h1>
+<p class="subtitle">X (Twitter) &nbsp;•&nbsp; TikTok &nbsp;•&nbsp; Instagram &nbsp;•&nbsp; Google</p>
+
+<div class="controls">
+  <button class="btn btn-primary" onclick="fetchAll()">🔄 Trendleri Getir</button>
+  <button class="btn btn-sm" onclick="autoRefreshToggle()">⏱ Otomatik Yenile (30dk)</button>
+</div>
+
+<p class="last-update" id="last-update">Henüz yüklenmedi — yukarıdaki butona bas.</p>
+
+<div class="grid">
+
+  <!-- X / Twitter -->
+  <div class="card">
+    <div class="card-header">
+      <div class="platform-icon icon-x">𝕏</div>
+      <span class="card-title">X / Twitter</span>
+      <a class="card-link" href="https://trends24.in/turkey/" target="_blank">Siteye git ↗</a>
+    </div>
+    <div class="card-body" id="x-body">
+      <div class="loading"><div class="spinner"></div><span>Bekliyor...</span></div>
+    </div>
+    <div class="section-footer">
+      <span>Türkiye trendleri</span>
+      <span class="source-tag">trends24.in</span>
+    </div>
+  </div>
+
+  <!-- TikTok -->
+  <div class="card">
+    <div class="card-header">
+      <div class="platform-icon icon-tiktok">
+        <svg class="tiktok-svg" viewBox="0 0 24 24" fill="none">
+          <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.27 8.27 0 004.84 1.54V6.78a4.85 4.85 0 01-1.07-.09z" fill="#fff"/>
+        </svg>
+      </div>
+      <span class="card-title">TikTok</span>
+      <a class="card-link" href="https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/tr" target="_blank">Siteye git ↗</a>
+    </div>
+    <div class="card-body" id="tiktok-body">
+      <div class="loading"><div class="spinner"></div><span>Bekliyor...</span></div>
+    </div>
+    <div class="section-footer">
+      <span>Son 7 gün — Türkiye</span>
+      <span class="source-tag">TikTok Creative Center</span>
+    </div>
+  </div>
+
+  <!-- Instagram -->
+  <div class="card">
+    <div class="card-header">
+      <div class="platform-icon icon-instagram">📷</div>
+      <span class="card-title">Instagram</span>
+      <a class="card-link" href="https://www.instagram.com/explore/" target="_blank">Explore ↗</a>
+    </div>
+    <div class="card-body" id="ig-body">
+      <div class="loading"><div class="spinner"></div><span>Bekliyor...</span></div>
+    </div>
+    <div class="section-footer">
+      <span>Türkiye popüler hashtag'ler</span>
+      <span class="source-tag">public scrape</span>
+    </div>
+  </div>
+
+  <!-- Google Trends -->
+  <div class="card">
+    <div class="card-header">
+      <div class="platform-icon icon-google">
+        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      </div>
+      <span class="card-title">Google Trends</span>
+      <a class="card-link" href="https://trends.google.com.tr/trending?geo=TR" target="_blank">Siteye git ↗</a>
+    </div>
+    <div class="card-body" id="google-body">
+      <div class="loading"><div class="spinner"></div><span>Bekliyor...</span></div>
+    </div>
+    <div class="section-footer">
+      <span>Bugün Türkiye'de en çok arananlar</span>
+      <span class="source-tag">Google RSS</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─── CORS Proxy ────────────────────────────────────────────────────────────
+const PROXY = 'https://api.allorigins.win/get?url=';
+
+function proxied(url) {
+  return PROXY + encodeURIComponent(url);
+}
+
+// ─── Render helpers ─────────────────────────────────────────────────────────
+function renderList(bodyId, items, footerText) {
+  const el = document.getElementById(bodyId);
+  if (!items || items.length === 0) {
+    el.innerHTML = `<div class="error-box"><strong>⚠️ Veri bulunamadı</strong>Lütfen tekrar dene veya siteye git.</div>`;
+    return;
+  }
+  el.innerHTML = items.map((item, i) => `
+    <div class="trend-item">
+      <span class="trend-num">${i + 1}</span>
+      <span class="trend-name" title="${escHtml(item.name)}">${escHtml(item.name)}</span>
+      ${item.vol ? `<span class="trend-vol">${escHtml(item.vol)}</span>` : ''}
+    </div>
+    ${i < items.length - 1 && i % 5 === 4 ? '<div class="divider"></div>' : ''}
+  `).join('');
+}
+
+function renderError(bodyId, msg) {
+  document.getElementById(bodyId).innerHTML =
+    `<div class="error-box"><strong>❌ Yüklenemedi</strong>${escHtml(msg)}</div>`;
+}
+
+function renderLoading(bodyId) {
+  document.getElementById(bodyId).innerHTML =
+    `<div class="loading"><div class="spinner"></div><span>Yükleniyor...</span></div>`;
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── X / Twitter (trends24.in) ──────────────────────────────────────────────
+async function fetchX() {
+  renderLoading('x-body');
+  try {
+    const res = await fetch(proxied('https://trends24.in/turkey/'));
+    const json = await res.json();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(json.contents, 'text/html');
+
+    // trends24.in yapısı: <ol class="trend-card__list"> → <li> içinde <a>
+    const lists = doc.querySelectorAll('.trend-card__list');
+    const items = [];
+    const seen = new Set();
+
+    for (const list of lists) {
+      for (const li of list.querySelectorAll('li')) {
+        const a = li.querySelector('a');
+        const name = a ? a.textContent.trim() : li.textContent.trim();
+        const volEl = li.querySelector('.tweet-count, [class*="count"], span:last-child');
+        const vol = volEl && volEl !== a ? volEl.textContent.trim() : '';
+        if (name && !seen.has(name)) {
+          seen.add(name);
+          items.push({ name, vol });
+          if (items.length >= 20) break;
+        }
+      }
+      if (items.length >= 20) break;
+    }
+
+    // trends24'te <li> direkt olarak <a> olmayabilir, dene
+    if (items.length === 0) {
+      const allLinks = doc.querySelectorAll('ol li a, ul.trend-list li a');
+      for (const a of allLinks) {
+        const name = a.textContent.trim();
+        if (name.startsWith('#') || name.length > 2) {
+          if (!seen.has(name)) {
+            seen.add(name);
+            items.push({ name, vol: '' });
+            if (items.length >= 20) break;
+          }
+        }
+      }
+    }
+
+    if (items.length === 0) throw new Error('HTML parse başarısız — site yapısı değişmiş olabilir.');
+    renderList('x-body', items);
+  } catch (e) {
+    renderError('x-body', `Otomatik yükleme başarısız.\n👉 Manuel görüntülemek için "Siteye git" linkine tıkla.\n\n(${e.message})`);
+  }
+}
+
+// ─── TikTok Creative Center ─────────────────────────────────────────────────
+async function fetchTikTok() {
+  renderLoading('tiktok-body');
+
+  const apiUrl = 'https://ads.tiktok.com/creative_radar_api/v1/popular_trend/hashtag/list?page=1&limit=20&period=7&country_code=TR&sort_by=popular';
+
+  async function parseTikTokData(raw) {
+    const hashtags = raw?.data?.list || [];
+    return hashtags.map(h => ({
+      name: '#' + h.hashtag_name,
+      vol: h.publish_cnt ? formatNum(h.publish_cnt) + ' video' : ''
+    }));
+  }
+
+  // 1) Doğrudan dene
+  try {
+    const res = await fetch(apiUrl, {
+      headers: { Referer: 'https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/tr' }
+    });
+    if (res.ok) {
+      const raw = await res.json();
+      const items = await parseTikTokData(raw);
+      if (items.length > 0) { renderList('tiktok-body', items); return; }
+    }
+  } catch (_) { /* devam */ }
+
+  // 2) CORS proxy ile dene
+  try {
+    const res = await fetch(proxied(apiUrl));
+    const json = await res.json();
+    const raw = JSON.parse(json.contents);
+    const items = await parseTikTokData(raw);
+    if (items.length > 0) { renderList('tiktok-body', items); return; }
+  } catch (_) { /* devam */ }
+
+  renderError('tiktok-body', 'TikTok Creative Center API\'ye ulaşılamadı.\n👉 "Siteye git" linkine tıklayarak Türkiye trendlerini görebilirsin.');
+}
+
+// ─── Instagram (popüler hashtag'ler) ────────────────────────────────────────
+async function fetchInstagram() {
+  renderLoading('ig-body');
+
+  // Instagram her zaman auth ister. Türkiye için en popüler hashtag'leri
+  // göster + explore linkini sun.
+  const popularTR = [
+    { name: '#türkiye', vol: '~50M+ gönderi' },
+    { name: '#istanbul', vol: '~35M+ gönderi' },
+    { name: '#keşfet', vol: '~25M+ gönderi' },
+    { name: '#reels', vol: '~20M+ gönderi' },
+    { name: '#ankara', vol: '~10M+ gönderi' },
+    { name: '#izmir', vol: '~8M+ gönderi' },
+    { name: '#türk', vol: '~7M+ gönderi' },
+    { name: '#food', vol: '~6M+ gönderi' },
+    { name: '#gunbatimi', vol: '~5M+ gönderi' },
+    { name: '#moda', vol: '~4M+ gönderi' },
+  ];
+
+  // Gerçek zamanlı dene (CORS izin vermiyorsa statik listeye düş)
+  try {
+    const res = await fetch(proxied('https://www.instagram.com/explore/tags/turkiye/?__a=1&__d=dis'), {
+      signal: AbortSignal.timeout(6000)
+    });
+    const json = await res.json();
+    const contents = JSON.parse(json.contents || '{}');
+    const edges = contents?.graphql?.hashtag?.edge_hashtag_to_top_posts?.edges || [];
+    if (edges.length > 0) {
+      const tagSet = new Set();
+      for (const e of edges) {
+        const cap = e?.node?.edge_media_to_caption?.edges?.[0]?.node?.text || '';
+        const tags = cap.match(/#[\wğüşöçıĞÜŞÖÇİ]+/g) || [];
+        tags.forEach(t => tagSet.add(t.toLowerCase()));
+      }
+      if (tagSet.size > 3) {
+        const items = [...tagSet].slice(0, 15).map(t => ({ name: t, vol: '' }));
+        renderList('ig-body', items);
+        return;
+      }
+    }
+  } catch (_) { /* API engellenmiş, statik listeye düş */ }
+
+  // Statik + explore linki
+  const el = document.getElementById('ig-body');
+  el.innerHTML = `
+    <div style="padding:10px 0">
+      ${popularTR.map((item, i) => `
+        <div class="trend-item">
+          <span class="trend-num">${i+1}</span>
+          <span class="trend-name">${escHtml(item.name)}</span>
+          <span class="trend-vol">${escHtml(item.vol)}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div style="padding:8px 20px;font-size:0.72rem;color:#444">
+      ℹ️ Instagram gerçek zamanlı API erişimi engeller. Güncel trendler için Explore'a git.
+    </div>
+  `;
+}
+
+// ─── Google Trends (RSS) ────────────────────────────────────────────────────
+async function fetchGoogle() {
+  renderLoading('google-body');
+  try {
+    const rssUrl = 'https://trends.google.com/trends/trendingsearches/daily/rss?geo=TR';
+    const res = await fetch(proxied(rssUrl));
+    const json = await res.json();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(json.contents, 'application/xml');
+    const items = [];
+
+    for (const item of doc.querySelectorAll('item')) {
+      const title = item.querySelector('title')?.textContent?.trim();
+      const traffic = item.querySelector('approx_traffic, *|approx_traffic')?.textContent?.trim() || '';
+      if (title) {
+        items.push({ name: title, vol: traffic ? traffic + ' arama' : '' });
+        if (items.length >= 20) break;
+      }
+    }
+
+    if (items.length === 0) throw new Error('RSS boş döndü.');
+    renderList('google-body', items);
+  } catch (e) {
+    renderError('google-body', `Google Trends RSS alınamadı.\n👉 "Siteye git" linkine tıkla.\n\n(${e.message})`);
+  }
+}
+
+// ─── Yardımcı ───────────────────────────────────────────────────────────────
+function formatNum(n) {
+  if (n >= 1e9) return (n / 1e9).toFixed(1) + 'B';
+  if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(0) + 'K';
+  return String(n);
+}
+
+function updateTimestamp() {
+  document.getElementById('last-update').textContent =
+    '🕒 Son güncelleme: ' + new Date().toLocaleString('tr-TR');
+}
+
+async function fetchAll() {
+  updateTimestamp();
+  await Promise.all([fetchX(), fetchTikTok(), fetchInstagram(), fetchGoogle()]);
+}
+
+// ─── Otomatik yenile ────────────────────────────────────────────────────────
+let autoInterval = null;
+function autoRefreshToggle() {
+  if (autoInterval) {
+    clearInterval(autoInterval);
+    autoInterval = null;
+    document.querySelector('.btn-sm').textContent = '⏱ Otomatik Yenile (30dk)';
+  } else {
+    autoInterval = setInterval(fetchAll, 30 * 60 * 1000);
+    document.querySelector('.btn-sm').textContent = '⏹ Otomatik Yenileyi Durdur';
+  }
+}
+</script>
+</body>
+</html>
