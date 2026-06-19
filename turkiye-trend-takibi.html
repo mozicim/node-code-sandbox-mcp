@@ -6,148 +6,80 @@
 <title>🇹🇷 Türkiye Trend Takibi</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: #0a0a0a;
   color: #f0f0f0;
   min-height: 100vh;
-  padding: 24px 16px 60px;
+  padding: 20px 14px 60px;
 }
+h1 { text-align:center; font-size:1.6rem; font-weight:700; margin-bottom:4px; }
+.subtitle { text-align:center; color:#666; font-size:0.82rem; margin-bottom:20px; }
 
-h1 {
-  text-align: center;
-  font-size: 1.7rem;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-.subtitle {
-  text-align: center;
-  color: #666;
-  font-size: 0.85rem;
-  margin-bottom: 22px;
-}
-.controls {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-}
-.btn {
-  padding: 10px 22px;
-  border-radius: 99px;
-  border: none;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: opacity 0.2s, transform 0.1s;
-}
-.btn:active { transform: scale(0.97); }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.btn-primary { background: #fff; color: #000; }
-.btn-sm { background: #1e1e1e; color: #aaa; font-size: 0.8rem; }
+.controls { display:flex; justify-content:center; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+.btn { padding:9px 20px; border-radius:99px; border:none; cursor:pointer; font-size:0.88rem; font-weight:600; transition:opacity .2s; }
+.btn:active { opacity:.75; }
+.btn-primary { background:#fff; color:#000; }
+.btn-sm { background:#1c1c1c; color:#aaa; }
 
-.status-bar {
-  text-align: center;
-  font-size: 0.76rem;
-  color: #555;
-  margin-bottom: 24px;
-  min-height: 18px;
-}
+.status { text-align:center; font-size:0.74rem; color:#555; margin-bottom:20px; min-height:16px; }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 18px;
-  max-width: 1100px;
-  margin: 0 auto;
-}
+.grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:16px; max-width:1100px; margin:0 auto; }
 
-.card {
-  background: #141414;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid #222;
-}
+.card { background:#111; border-radius:16px; overflow:hidden; border:1px solid #1e1e1e; }
+.card-header { padding:13px 16px 11px; display:flex; align-items:center; gap:10px; border-bottom:1px solid #1a1a1a; }
+.card-title { font-size:.95rem; font-weight:700; flex:1; }
+.card-link { font-size:.7rem; color:#555; text-decoration:none; border:1px solid #252525; padding:3px 9px; border-radius:99px; white-space:nowrap; }
+.card-link:hover { color:#aaa; }
 
-.card-header {
-  padding: 14px 18px 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border-bottom: 1px solid #1e1e1e;
-}
-.card-title { font-size: 1rem; font-weight: 700; flex: 1; }
-.card-link {
-  font-size: 0.72rem;
-  color: #555;
-  text-decoration: none;
-  border: 1px solid #2a2a2a;
-  padding: 4px 10px;
-  border-radius: 99px;
-}
-.card-link:hover { color: #999; }
+.picon { width:30px; height:30px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:.95rem; flex-shrink:0; }
+.px   { background:#000; border:1px solid #333; color:#fff; font-size:1.05rem; font-weight:900; }
+.ptt  { background:#111; border:1px solid #2a2a2a; }
+.pig  { background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+.pgoo { background:#fff; }
 
-.picon {
-  width: 32px; height: 32px;
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1rem; font-weight: 900; flex-shrink: 0;
-}
-.picon-x        { background: #000; border: 1px solid #333; color: #fff; font-size: 1.15rem; }
-.picon-tiktok   { background: #111; border: 1px solid #333; }
-.picon-ig       { background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
-.picon-google   { background: #fff; }
+.card-body { min-height:200px; position:relative; }
 
-.card-body { padding: 6px 0; min-height: 220px; position: relative; }
+/* trend listesi */
+.tlist { padding:4px 0; }
+.titem { display:flex; align-items:center; padding:7px 16px; gap:10px; transition:background .12s; }
+.titem:hover { background:#171717; }
+.tnum { font-size:.75rem; color:#3a3a3a; width:17px; text-align:right; flex-shrink:0; }
+.tname { flex:1; font-size:.9rem; font-weight:500; color:#e0e0e0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tvol { font-size:.7rem; color:#4a4a4a; flex-shrink:0; }
 
-.item {
-  display: flex; align-items: center;
-  padding: 8px 18px; gap: 12px;
-  transition: background 0.12s;
+/* iframe */
+.iframe-wrap { position:relative; background:#000; }
+.iframe-wrap iframe { width:100%; border:none; display:block; background:#fff; }
+.iframe-cover {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:12px; background:#111; color:#555; font-size:.82rem; text-align:center; padding:20px;
 }
-.item:hover { background: #1a1a1a; }
-.item-num {
-  font-size: 0.78rem; color: #444;
-  width: 18px; text-align: right; flex-shrink: 0;
+.open-btn {
+  display:inline-flex; align-items:center; gap:6px;
+  background:#1a1a1a; border:1px solid #2a2a2a;
+  color:#ccc; text-decoration:none; padding:10px 20px;
+  border-radius:99px; font-size:.85rem; font-weight:600;
+  transition:background .15s;
 }
-.item-name {
-  flex: 1; font-size: 0.93rem; font-weight: 500; color: #e5e5e5;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.item-vol { font-size: 0.72rem; color: #555; flex-shrink: 0; }
+.open-btn:hover { background:#222; }
 
-.state {
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  height: 220px; gap: 12px;
-  color: #444; font-size: 0.82rem; text-align: center;
-  padding: 0 20px;
-}
-.spinner {
-  width: 26px; height: 26px;
-  border: 2px solid #222; border-top-color: #555;
-  border-radius: 50%;
-  animation: spin 0.9s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+/* state */
+.state { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:200px; gap:10px; color:#444; font-size:.8rem; text-align:center; padding:16px; }
+.spinner { width:24px; height:24px; border:2px solid #1e1e1e; border-top-color:#555; border-radius:50%; animation:spin .8s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
 
-.err-icon { font-size: 1.8rem; }
-.err-msg { color: #555; font-size: 0.8rem; line-height: 1.55; white-space: pre-wrap; }
-.err-link {
-  display: inline-block; margin-top: 10px;
-  padding: 7px 16px; border-radius: 99px;
-  background: #1e1e1e; color: #999; font-size: 0.78rem;
-  text-decoration: none;
-}
+.card-foot { padding:8px 16px 5px; border-top:1px solid #171717; font-size:.66rem; color:#333; display:flex; justify-content:space-between; }
 
-.card-footer {
-  padding: 10px 18px 6px;
-  border-top: 1px solid #1a1a1a;
-  font-size: 0.68rem; color: #3a3a3a;
-  display: flex; justify-content: space-between;
-}
+.note { padding:6px 16px 5px; font-size:.67rem; color:#333; text-align:center; }
+
+/* tabs (X için) */
+.tabs { display:flex; gap:1px; background:#000; }
+.tab { flex:1; padding:9px; text-align:center; font-size:.78rem; color:#555; cursor:pointer; background:#111; transition:color .15s; }
+.tab.active { color:#fff; border-bottom:2px solid #fff; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
 </style>
 </head>
 <body>
@@ -156,51 +88,93 @@ h1 {
 <p class="subtitle">X • TikTok • Instagram • Google</p>
 
 <div class="controls">
-  <button class="btn btn-primary" id="btn-refresh" onclick="fetchAll()">🔄 Yenile</button>
-  <button class="btn btn-sm" id="btn-auto" onclick="toggleAuto()">⏱ Otomatik Yenile</button>
+  <button class="btn btn-primary" id="btnRefresh" onclick="fetchAll()">🔄 Yenile</button>
+  <button class="btn btn-sm" id="btnAuto" onclick="toggleAuto()">⏱ Otomatik (30dk)</button>
 </div>
-<p class="status-bar" id="status">Yükleniyor...</p>
+<p class="status" id="status">Yükleniyor...</p>
 
 <div class="grid">
 
+  <!-- ── X / Twitter ─────────────────────────── -->
   <div class="card">
     <div class="card-header">
-      <div class="picon picon-x">𝕏</div>
+      <div class="picon px">𝕏</div>
       <span class="card-title">X / Twitter</span>
       <a class="card-link" href="https://trends24.in/turkey/" target="_blank">Siteye git ↗</a>
     </div>
-    <div class="card-body" id="x-body"><div class="state"><div class="spinner"></div></div></div>
-    <div class="card-footer"><span>Türkiye trendleri</span><span>trends24.in</span></div>
+
+    <!-- Tab seçici -->
+    <div class="tabs">
+      <div class="tab active" onclick="xTab('embedded')">Gömülü Görünüm</div>
+      <div class="tab" onclick="xTab('api')">Otomatik Çek</div>
+    </div>
+
+    <!-- Gömülü: trends24.in iframe -->
+    <div class="tab-panel active" id="x-embedded">
+      <div class="iframe-wrap">
+        <iframe id="x-iframe"
+          src="https://trends24.in/turkey/"
+          height="380"
+          sandbox="allow-scripts allow-same-origin allow-popups"
+          title="X Türkiye trendleri"
+          onload="iframeLoaded()"
+          onerror="iframeError()">
+        </iframe>
+        <div class="iframe-cover" id="x-iframe-cover" style="display:none">
+          <div>🔗 Site gömülü açılmıyor</div>
+          <a class="open-btn" href="https://trends24.in/turkey/" target="_blank">
+            🐦 X Türkiye Trendlerini Aç ↗
+          </a>
+        </div>
+      </div>
+      <p class="note">↑ Sayfanın tamamını görmek için sola kaydır veya "Siteye git" butonuna bas</p>
+    </div>
+
+    <!-- API: proxy ile çekme -->
+    <div class="tab-panel" id="x-api">
+      <div class="card-body" id="x-api-body">
+        <div class="state"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <div class="card-foot"><span>Türkiye trendleri</span><span>trends24.in</span></div>
   </div>
 
+  <!-- ── TikTok ───────────────────────────────── -->
   <div class="card">
     <div class="card-header">
-      <div class="picon picon-tiktok">
-        <svg width="18" height="18" viewBox="0 0 24 24">
+      <div class="picon ptt">
+        <svg width="17" height="17" viewBox="0 0 24 24">
           <path fill="#fff" d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.27 8.27 0 004.84 1.54V6.78a4.85 4.85 0 01-1.07-.09z"/>
         </svg>
       </div>
       <span class="card-title">TikTok</span>
-      <a class="card-link" href="https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/tr" target="_blank">Siteye git ↗</a>
+      <a class="card-link" href="https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/tr" target="_blank">Creative Center ↗</a>
     </div>
-    <div class="card-body" id="tt-body"><div class="state"><div class="spinner"></div></div></div>
-    <div class="card-footer"><span>Son 7 gün — Türkiye</span><span>Creative Center</span></div>
+    <div class="card-body" id="tt-body">
+      <div class="state"><div class="spinner"></div></div>
+    </div>
+    <div class="card-foot"><span>Son 7 gün — TR</span><span>TikTok Creative Center</span></div>
   </div>
 
+  <!-- ── Instagram ─────────────────────────────── -->
   <div class="card">
     <div class="card-header">
-      <div class="picon picon-ig">📷</div>
+      <div class="picon pig">📷</div>
       <span class="card-title">Instagram</span>
-      <a class="card-link" href="https://www.instagram.com/explore/" target="_blank">Explore ↗</a>
+      <a class="card-link" href="https://www.instagram.com/explore/tags/türkiye/" target="_blank">Explore ↗</a>
     </div>
-    <div class="card-body" id="ig-body"><div class="state"><div class="spinner"></div></div></div>
-    <div class="card-footer"><span>Popüler Türkiye hashtag'leri</span><span>instagram.com</span></div>
+    <div class="card-body" id="ig-body">
+      <div class="state"><div class="spinner"></div></div>
+    </div>
+    <div class="card-foot"><span>Türkiye popüler hashtag'ler</span><span>genel liste</span></div>
   </div>
 
+  <!-- ── Google Trends ─────────────────────────── -->
   <div class="card">
     <div class="card-header">
-      <div class="picon picon-google">
-        <svg width="18" height="18" viewBox="0 0 24 24">
+      <div class="picon pgoo">
+        <svg width="17" height="17" viewBox="0 0 24 24">
           <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
           <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
           <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -210,240 +184,220 @@ h1 {
       <span class="card-title">Google Trends</span>
       <a class="card-link" href="https://trends.google.com.tr/trending?geo=TR" target="_blank">Siteye git ↗</a>
     </div>
-    <div class="card-body" id="g-body"><div class="state"><div class="spinner"></div></div></div>
-    <div class="card-footer"><span>Bugün Türkiye'de en çok arananlar</span><span>Google RSS</span></div>
+    <div class="card-body" id="g-body">
+      <div class="state"><div class="spinner"></div></div>
+    </div>
+    <div class="card-foot"><span>Bugün Türkiye'de en çok arananlar</span><span>Google RSS</span></div>
   </div>
 
 </div>
 
 <script>
-// ── Proxy ──────────────────────────────────────────────────────────────────
-// allorigins: wraps JSON in {contents:"..."}
-// corsproxy : returns raw content
-async function proxyFetch(url, raw = false, ms = 9000) {
-  const sig = () => AbortSignal.timeout(ms);
+// ── helpers ──────────────────────────────────────────────────────────────────
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtN(n){ return n>=1e9?(n/1e9).toFixed(1)+'B':n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?(n/1e3).toFixed(0)+'K':String(n); }
 
-  // 1) allorigins
-  try {
-    const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`, { signal: sig() });
-    if (r.ok) {
-      const j = await r.json();
-      if (j.contents) return raw ? j.contents : j.contents;
-    }
-  } catch {}
-
-  // 2) corsproxy.io
-  try {
-    const r = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`, { signal: sig() });
-    if (r.ok) return await r.text();
-  } catch {}
-
-  // 3) thingproxy
-  try {
-    const r = await fetch(`https://thingproxy.freeboard.io/fetch/${url}`, { signal: sig() });
-    if (r.ok) return await r.text();
-  } catch {}
-
-  return null;
+function showList(id, items){
+  document.getElementById(id).innerHTML = '<div class="tlist">' +
+    items.slice(0,20).map((t,i)=>`
+      <div class="titem">
+        <span class="tnum">${i+1}</span>
+        <span class="tname" title="${esc(t.n)}">${esc(t.n)}</span>
+        ${t.v?`<span class="tvol">${esc(t.v)}</span>`:''}
+      </div>`).join('') +
+    '</div>';
 }
 
-// ── Render ──────────────────────────────────────────────────────────────────
-function renderItems(id, items) {
-  if (!items || !items.length) { renderErr(id, '⚠️', 'Veri bulunamadı.\nSiteye git butonuna bas.', null); return; }
-  document.getElementById(id).innerHTML =
-    items.slice(0, 20).map((t, i) => `
-      <div class="item">
-        <span class="item-num">${i + 1}</span>
-        <span class="item-name" title="${esc(t.name)}">${esc(t.name)}</span>
-        ${t.vol ? `<span class="item-vol">${esc(t.vol)}</span>` : ''}
-      </div>`).join('');
-}
-
-function renderErr(id, icon, msg, href) {
+function showErr(id, msg, href){
   document.getElementById(id).innerHTML = `
     <div class="state">
-      <div class="err-icon">${icon}</div>
-      <div class="err-msg">${esc(msg)}</div>
-      ${href ? `<a class="err-link" href="${href}" target="_blank">Siteyi manuel aç ↗</a>` : ''}
+      <div>🔗</div>
+      <div style="line-height:1.6;color:#555">${esc(msg)}</div>
+      ${href?`<a class="open-btn" href="${href}" target="_blank">Siteyi Aç ↗</a>`:''}
     </div>`;
 }
 
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+async function tryProxy(url, ms=8000){
+  const sig=()=>AbortSignal.timeout(ms);
+  // 1) allorigins
+  try{
+    const r=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,{signal:sig()});
+    if(r.ok){const j=await r.json();if(j.contents)return j.contents;}
+  }catch{}
+  // 2) corsproxy
+  try{
+    const r=await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`,{signal:sig()});
+    if(r.ok)return await r.text();
+  }catch{}
+  return null;
 }
 
-function fmtN(n) {
-  if (n >= 1e9) return (n/1e9).toFixed(1)+'B';
-  if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
-  if (n >= 1e3) return (n/1e3).toFixed(0)+'K';
-  return String(n);
+// ── X iframe ─────────────────────────────────────────────────────────────────
+let iframeTimer = setTimeout(()=>{ iframeError(); }, 8000);
+
+function iframeLoaded(){
+  clearTimeout(iframeTimer);
+  // iframe yüklendi - cover'ı gizle
+  document.getElementById('x-iframe-cover').style.display='none';
+}
+function iframeError(){
+  clearTimeout(iframeTimer);
+  document.getElementById('x-iframe-cover').style.display='flex';
+  document.getElementById('x-iframe').style.display='none';
 }
 
-// ── X / Twitter ─────────────────────────────────────────────────────────────
-async function fetchX() {
-  // Birden fazla kaynak dene
-  const sources = [
-    'https://trends24.in/turkey/',
+function xTab(name){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['embedded','api'][i]===name));
+  document.querySelectorAll('.tab-panel').forEach((p,i)=>p.classList.toggle('active',['x-embedded','x-api'][i]===p.id));
+  if(name==='api') fetchXApi();
+}
+
+async function fetchXApi(){
+  const id='x-api-body';
+  document.getElementById(id).innerHTML='<div class="state"><div class="spinner"></div></div>';
+
+  // trendogate veya trends24 dene
+  const urls=[
     'https://trendogate.com/place/23424969',
+    'https://trends24.in/turkey/',
   ];
 
-  for (const src of sources) {
-    const html = await proxyFetch(src);
-    if (!html) continue;
+  for(const url of urls){
+    const html=await tryProxy(url);
+    if(!html) continue;
+    const doc=new DOMParser().parseFromString(html,'text/html');
+    const items=[]; const seen=new Set();
 
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    const items = [];
-    const seen = new Set();
-
-    // trends24.in & trendogate'de li > a pattern
-    const selectors = [
-      '.trend-card__list li', 'ol.trend-list li', '.trend-item',
-      'li.list-group-item', 'li[class*="trend"]', 'ol li', 'ul.list li'
-    ];
-
-    for (const sel of selectors) {
-      doc.querySelectorAll(sel).forEach(li => {
-        const a = li.querySelector('a') || li;
-        const name = a.textContent.trim().split('\n')[0].trim();
-        if (!name || name.length < 2 || name.length > 80 || seen.has(name)) return;
-        // Nav linklerini filtrele
-        if (/home|login|sign|menu|cookie|privacy|about|contact/i.test(name)) return;
-        seen.add(name);
-        const vol = li.querySelector('[class*="count"],[class*="tweet"],[class*="vol"]')?.textContent.trim() || '';
-        items.push({ name, vol: vol !== name ? vol : '' });
+    // Farklı site yapılarını dene
+    const sels=['ol li','ul.trend-list li','.trend-card__list li','.list-group-item','.trend-item','li[class*="trend"]'];
+    for(const sel of sels){
+      doc.querySelectorAll(sel).forEach(li=>{
+        const a=li.querySelector('a')||li;
+        const n=a.textContent.trim().split('\n')[0].trim();
+        if(!n||n.length<2||n.length>80||seen.has(n)) return;
+        if(/home|login|sign|menu|about|contact|policy|cookie/i.test(n)) return;
+        seen.add(n);
+        const vEl=li.querySelector('[class*="count"],[class*="tweet"],[class*="vol"]');
+        const v=vEl&&vEl.textContent.trim()!==n?vEl.textContent.trim():'';
+        items.push({n,v});
       });
-      if (items.length >= 10) break;
+      if(items.length>=8) break;
     }
-
-    if (items.length >= 5) { renderItems('x-body', items); return; }
+    if(items.length>=5){ showList(id,items); return; }
   }
 
-  renderErr('x-body', '🔗', 'Otomatik yüklenemedi.\nTürkiye trendlerini görmek için\naşağıdaki butona bas:', 'https://trends24.in/turkey/');
+  showErr(id,'Bot koruması nedeniyle\notomatik çekilemiyor.\nGömülü görünümü veya\n"Siteye git" linkini kullan.','https://trends24.in/turkey/');
 }
 
-// ── TikTok ──────────────────────────────────────────────────────────────────
-async function fetchTikTok() {
-  const apiUrl = 'https://ads.tiktok.com/creative_radar_api/v1/popular_trend/hashtag/list?page=1&limit=20&period=7&country_code=TR&sort_by=popular';
+// ── TikTok ───────────────────────────────────────────────────────────────────
+async function fetchTikTok(){
+  const id='tt-body';
+  const apiUrl='https://ads.tiktok.com/creative_radar_api/v1/popular_trend/hashtag/list?page=1&limit=20&period=7&country_code=TR&sort_by=popular';
 
-  // 1) Doğrudan dene (CORS izin verirse)
-  try {
-    const r = await fetch(apiUrl, {
-      headers: { Referer: 'https://ads.tiktok.com/' },
-      signal: AbortSignal.timeout(7000)
+  // doğrudan dene (tarayıcıda çalışabilir)
+  const tryDirect=async()=>{
+    const r=await fetch(apiUrl,{
+      headers:{
+        'User-Agent':'Mozilla/5.0',
+        Referer:'https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/tr',
+        'Accept':'application/json, text/plain, */*',
+      },
+      signal:AbortSignal.timeout(7000)
     });
-    if (r.ok) {
-      const d = await r.json();
-      const list = d?.data?.list || [];
-      if (list.length) {
-        renderItems('tt-body', list.map(h => ({ name: '#' + h.hashtag_name, vol: h.publish_cnt ? fmtN(h.publish_cnt) + ' video' : '' })));
-        return;
-      }
+    if(r.ok){const d=await r.json();return d?.data?.list||[];}
+    return [];
+  };
+
+  const parse=list=>list.map(h=>({n:'#'+h.hashtag_name, v:h.publish_cnt?fmtN(h.publish_cnt)+' video':''}));
+
+  try{
+    let list=await tryDirect();
+    if(list.length){showList(id,parse(list));return;}
+
+    // proxy ile dene
+    const raw=await tryProxy(apiUrl);
+    if(raw){
+      try{
+        const d=JSON.parse(raw);
+        list=d?.data?.list||[];
+        if(list.length){showList(id,parse(list));return;}
+      }catch{}
     }
-  } catch {}
+  }catch{}
 
-  // 2) Proxy ile dene
-  const raw = await proxyFetch(apiUrl);
-  if (raw) {
-    try {
-      const d = JSON.parse(raw);
-      const list = d?.data?.list || [];
-      if (list.length) {
-        renderItems('tt-body', list.map(h => ({ name: '#' + h.hashtag_name, vol: h.publish_cnt ? fmtN(h.publish_cnt) + ' video' : '' })));
-        return;
-      }
-    } catch {}
-  }
-
-  // 3) Yedek: Türkiye için bilinen popüler TikTok hashtag'leri
-  const fallback = [
-    '#keşfet','#türkiye','#fyp','#viral','#foryou',
-    '#istanbul','#türk','#komedi','#müzik','#dans',
-    '#yemek','#güzellik','#spor','#seyahat','#eğlence',
-  ];
-  document.getElementById('tt-body').innerHTML = `
-    ${fallback.map((t,i)=>`<div class="item"><span class="item-num">${i+1}</span><span class="item-name">${t}</span></div>`).join('')}
-    <div style="padding:8px 18px 4px;font-size:0.7rem;color:#3a3a3a">⚠️ API erişilemedi — genel Türkiye hashtag listesi gösteriliyor</div>
-  `;
+  // Statik yedek + link
+  document.getElementById(id).innerHTML=`
+    <div class="tlist">
+      ${['#keşfet','#türkiye','#fyp','#viral','#foryou','#istanbul','#türk','#komedi','#müzik','#dans','#yemek','#güzellik','#spor','#seyahat','#eğlence']
+        .map((t,i)=>`<div class="titem"><span class="tnum">${i+1}</span><span class="tname">${t}</span></div>`).join('')}
+    </div>
+    <div class="note" style="margin-bottom:8px">
+      ⚠️ API'ye ulaşılamadı. Gerçek zamanlı veri için:
+      <br><a class="open-btn" style="display:inline-flex;margin-top:8px;font-size:.75rem;padding:7px 14px"
+        href="https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/tr" target="_blank">
+        TikTok Creative Center'ı Aç ↗
+      </a>
+    </div>`;
 }
 
-// ── Instagram ────────────────────────────────────────────────────────────────
-async function fetchInstagram() {
-  // Instagram her zaman auth gerektirir; popüler TR hashtag'ler + Explore linki
-  const popular = [
-    {name:'#türkiye', vol:'50M+'}, {name:'#istanbul', vol:'35M+'},
-    {name:'#keşfet',  vol:'25M+'}, {name:'#reels',    vol:'20M+'},
-    {name:'#ankara',  vol:'10M+'}, {name:'#izmir',    vol:'8M+'},
-    {name:'#türk',    vol:'7M+'},  {name:'#yemek',    vol:'6M+'},
-    {name:'#moda',    vol:'5M+'},  {name:'#tatil',    vol:'4M+'},
-    {name:'#doğa',    vol:'4M+'},  {name:'#spor',     vol:'3M+'},
-    {name:'#müzik',   vol:'3M+'},  {name:'#aşk',      vol:'2M+'},
-    {name:'#komedi',  vol:'2M+'},
+// ── Instagram ─────────────────────────────────────────────────────────────────
+function fetchInstagram(){
+  const tags=[
+    {n:'#türkiye',v:'50M+'},{n:'#istanbul',v:'35M+'},{n:'#keşfet',v:'25M+'},
+    {n:'#reels',v:'20M+'},{n:'#ankara',v:'10M+'},{n:'#izmir',v:'8M+'},
+    {n:'#türk',v:'7M+'},{n:'#yemek',v:'6M+'},{n:'#moda',v:'5M+'},
+    {n:'#tatil',v:'4M+'},{n:'#doğa',v:'4M+'},{n:'#spor',v:'3M+'},
+    {n:'#müzik',v:'3M+'},{n:'#komedi',v:'2M+'},{n:'#sevgili',v:'2M+'},
   ];
-
-  document.getElementById('ig-body').innerHTML = `
-    ${popular.map((t,i)=>`
-      <div class="item">
-        <span class="item-num">${i+1}</span>
-        <span class="item-name">${esc(t.name)}</span>
-        <span class="item-vol">${esc(t.vol)} gönderi</span>
-      </div>`).join('')}
-    <div style="padding:8px 18px 4px;font-size:0.7rem;color:#3a3a3a">ℹ️ Instagram API kapalı — Explore için "Siteye git"</div>
-  `;
+  document.getElementById('ig-body').innerHTML=`
+    <div class="tlist">
+      ${tags.map((t,i)=>`<div class="titem"><span class="tnum">${i+1}</span><span class="tname">${esc(t.n)}</span><span class="tvol">${esc(t.v)}</span></div>`).join('')}
+    </div>
+    <div class="note">ℹ️ Instagram API erişim kapalı — Explore için "Siteye git"</div>`;
 }
 
-// ── Google Trends ────────────────────────────────────────────────────────────
-async function fetchGoogle() {
-  const rss = 'https://trends.google.com/trends/trendingsearches/daily/rss?geo=TR';
-  const html = await proxyFetch(rss);
-  if (html) {
-    const doc = new DOMParser().parseFromString(html, 'application/xml');
-    const items = [];
-    doc.querySelectorAll('item').forEach(item => {
-      const title = item.querySelector('title')?.textContent?.trim();
-      const traffic = item.querySelector('approx_traffic, *|approx_traffic')?.textContent?.trim() || '';
-      if (title && items.length < 20) items.push({ name: title, vol: traffic ? traffic + ' arama' : '' });
+// ── Google Trends ─────────────────────────────────────────────────────────────
+async function fetchGoogle(){
+  const id='g-body';
+  const raw=await tryProxy('https://trends.google.com/trends/trendingsearches/daily/rss?geo=TR');
+  if(raw){
+    const doc=new DOMParser().parseFromString(raw,'application/xml');
+    const items=[];
+    doc.querySelectorAll('item').forEach(it=>{
+      const n=it.querySelector('title')?.textContent?.trim();
+      const v=it.querySelector('approx_traffic,*|approx_traffic')?.textContent?.trim()||'';
+      if(n&&items.length<20) items.push({n,v:v?v+' arama':''});
     });
-    if (items.length) { renderItems('g-body', items); return; }
+    if(items.length){showList(id,items);return;}
   }
-  renderErr('g-body', '🔗', 'Google Trends RSS alınamadı.\nSiteye giderek kontrol edebilirsin.', 'https://trends.google.com.tr/trending?geo=TR');
+  showErr(id,'Google RSS alınamadı.','https://trends.google.com.tr/trending?geo=TR');
 }
 
-// ── Ana kontrol ──────────────────────────────────────────────────────────────
-let loading = false;
-let autoTimer = null;
+// ── Ana ───────────────────────────────────────────────────────────────────────
+let loading=false, autoTimer=null;
 
-async function fetchAll() {
-  if (loading) return;
-  loading = true;
-  document.getElementById('btn-refresh').disabled = true;
-  document.getElementById('status').textContent = '⏳ Yükleniyor...';
-
-  // Spinner'ları sıfırla
-  ['x-body','tt-body','ig-body','g-body'].forEach(id => {
-    document.getElementById(id).innerHTML = '<div class="state"><div class="spinner"></div></div>';
+async function fetchAll(){
+  if(loading) return;
+  loading=true;
+  document.getElementById('btnRefresh').disabled=true;
+  document.getElementById('status').textContent='⏳ Yükleniyor...';
+  ['tt-body','ig-body','g-body'].forEach(id=>{
+    document.getElementById(id).innerHTML='<div class="state"><div class="spinner"></div></div>';
   });
 
-  await Promise.all([fetchX(), fetchTikTok(), fetchInstagram(), fetchGoogle()]);
+  await Promise.all([fetchTikTok(), fetchInstagram(), fetchGoogle()]);
 
-  document.getElementById('status').textContent =
-    '✅ Son güncelleme: ' + new Date().toLocaleString('tr-TR');
-  document.getElementById('btn-refresh').disabled = false;
-  loading = false;
+  document.getElementById('status').textContent='✅ Son güncelleme: '+new Date().toLocaleString('tr-TR');
+  document.getElementById('btnRefresh').disabled=false;
+  loading=false;
 }
 
-function toggleAuto() {
-  const btn = document.getElementById('btn-auto');
-  if (autoTimer) {
-    clearInterval(autoTimer);
-    autoTimer = null;
-    btn.textContent = '⏱ Otomatik Yenile';
-  } else {
-    autoTimer = setInterval(fetchAll, 30 * 60 * 1000);
-    btn.textContent = '⏹ Otomatik Durdur';
-  }
+function toggleAuto(){
+  const btn=document.getElementById('btnAuto');
+  if(autoTimer){ clearInterval(autoTimer); autoTimer=null; btn.textContent='⏱ Otomatik (30dk)'; }
+  else { autoTimer=setInterval(fetchAll,30*60*1000); btn.textContent='⏹ Durdur'; }
 }
 
-// Sayfa açılınca hemen yükle
 window.addEventListener('DOMContentLoaded', fetchAll);
 </script>
 </body>
